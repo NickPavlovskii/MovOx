@@ -1,19 +1,32 @@
 // router.js
-
 import { createRouter, createWebHistory } from 'vue-router';
-
-// Импортируйте компоненты для маршрутов
+import MyHeader from './components/Header/MyHeader.vue';
 import MovieList from './components/MovieList.vue';
-import   MyHeader from './components/Header/MyHeader.vue';
+import TVShows from './components/Explore/TVShows.vue';
+import MyMovies from './components/Explore/MyMovies.vue';
+
 const routes = [
-  
   {
     path: '/',
-    name: 'Home',
-    component: MovieList,
-    header: MyHeader,
+    components: {
+      default: MovieList,
+      header: MyHeader,
+    },
   },
-  // Добавьте другие маршруты здесь
+  {
+    path: '/movies',
+    components: {
+      default: MyMovies,
+      header: MyHeader,
+    },
+  },
+  {
+    path: '/tv-shows',
+    components: {
+      default: TVShows,
+      header: MyHeader,
+    },
+  },
 ];
 
 const router = createRouter({
@@ -22,4 +35,3 @@ const router = createRouter({
 });
 
 export default router;
-

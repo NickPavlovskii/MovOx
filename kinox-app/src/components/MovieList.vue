@@ -1,52 +1,47 @@
 <template>
-  <div class="container">
-    <div class="ContentWrapper">
-      <h1 class="title">WELCOME</h1>
-      <p>Миллион фильмов и сериалов только для тебя</p>
-      <input type="text" v-model="searchQuery" placeholder="Поиск фильма" class="search-input" />
-    </div>
-
-    <ul class="movie-list">
-      <li v-for="(movie, index) in displayedMovies" :key="movie.externalId.kpHD" :class="{'movie-item': true, 'new-row': index % 5 === 0}">
-        <div class="movie-poster">
-          <img :src="movie.poster.url" alt="Постер фильма" class="poster-image" />
-        </div>
-        <div class="movie-details">
-          <h2 class="movie-name">{{ movie.name }}</h2>
-          <div class="movie-info">
-            <div class="rating-circle">
-              <div class="circle" :style="{ backgroundColor: getColor(movie.rating.kp) }">
-                {{ movie.rating.kp }}
-              </div>
-            </div>
-            <div class="year">{{ movie.year }}</div>
+  <div>
+    <ContentWrapper @search="performSearch" class="ContentWrapper" />
+    <div class="container">
+      <ul class="movie-list">
+        <li v-for="(movie, index) in displayedMovies" :key="movie.externalId.kpHD" :class="{'movie-item': true, 'new-row': index % 5 === 0}">
+          <div class="movie-poster">
+            <img :src="movie.poster.url" alt="Постер фильма" class="poster-image" />
           </div>
-        </div>
-      </li>
-    </ul>
-    <button @click="loadMore" v-if="shouldShowLoadMoreButton" class="load-more-button">Загрузить еще</button>
+          <div class="movie-details">
+            <h2 class="movie-name">{{ movie.name }}</h2>
+            <div class="movie-info">
+              <div class="rating-circle">
+                <div class="circle" :style="{ backgroundColor: getColor(movie.rating.kp) }">
+                  {{ movie.rating.kp }}
+                </div>
+              </div>
+              <div class="year">{{ movie.year }}</div>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+      <button @click="loadMore" v-if="shouldShowLoadMoreButton" class="load-more-button">Загрузить еще</button>
+    </div>
   </div>
 </template>
 
 <script>
-import moviesData from './kinopoisk.json';
+import ContentWrapper from './ContentWrapper.vue';
+import { mapState, mapActions } from 'vuex';
 
 export default {
+  components: {
+    ContentWrapper,
+  },
   data() {
     return {
-      movies: [],
-      searchQuery: '',
       itemsPerPage: 20,
       currentPage: 1,
     };
   },
   computed: {
-    filteredMovies() {
-      const query = this.searchQuery.toLowerCase();
-      return this.movies.filter(movie => {
-        return movie.name.toLowerCase().includes(query);
-      });
-    },
+    ...mapState(['filteredMovies', 'searchQuery']), // Добавить filteredMovies и searchQuery из хранилища Vuex
     displayedMovies() {
       const startIndex = (this.currentPage - 1) * this.itemsPerPage;
       return this.filteredMovies.slice(startIndex, startIndex + this.itemsPerPage);
@@ -56,11 +51,16 @@ export default {
     },
   },
   mounted() {
-    this.movies = moviesData.docs;
+    this.searchMovies();
   },
   methods: {
+    ...mapActions(['searchMovies']),
     loadMore() {
       this.currentPage++;
+    },
+    performSearch(query) {
+      this.$store.commit('setSearchQuery', query); // Использовать мутацию setSearchQuery из хранилища Vuex
+      this.currentPage = 1;
     },
     getColor(rating) {
       if (rating < 5) {
@@ -75,15 +75,19 @@ export default {
 };
 </script>
 
+
 <style scoped>
 .container {
   max-width: 960px;
   margin: 0 auto;
   padding: 20px;
+
+  color: #fff;
 }
 
 .ContentWrapper {
   text-align: center;
+  margin: 0 auto;
 }
 
 .title {
