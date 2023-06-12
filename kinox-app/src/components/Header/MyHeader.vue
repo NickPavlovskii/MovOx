@@ -10,8 +10,16 @@
 
       <div class="group">
         <ul class="menuItems">
-          <router-link to="/movies" class="menuItem"><a>Movies</a></router-link>
-          <router-link to="/tv-shows" class="menuItem"><a>Cartoon</a></router-link>
+          <li >
+            <router-link to="/movies" class="menuItem">
+              <a>Movies</a>
+            </router-link>
+          </li>
+          <li class="menuItem">
+            <router-link to="/tv-shows" class="menuItem">
+              <a>Cartoon</a>
+            </router-link>
+          </li>
         </ul>
         
         <div class="search">
@@ -32,7 +40,7 @@
         </div>
 
         <div class="searchBox" :class="{ active: isSearchActive }">
-    <input type="text" placeholder="Search here..." v-model="searchQuery" @input="performSearch" />
+    <input type="text" placeholder="Search here..." v-model="searchQuery"  @keyup.enter="performSearch" />
   </div>
 
         <div class="mobileMenu">
