@@ -13,7 +13,7 @@
 
 <script>
 // import MovieList from './components/MovieList.vue';
-import MyHeader from './components/Header/MyHeader.vue';
+import  MyHeader from './components/Header/MyHeader.vue';
 
 
 import { mapState, mapActions } from 'vuex';
