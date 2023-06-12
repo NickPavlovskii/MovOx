@@ -26,7 +26,7 @@ export default {
     ...mapState(['movies', 'searchQuery']), // Сопоставление состояния 'movies' из хранилища Vuex
     filteredMovies() {
       return this.movies.filter(movie => {
-        return   movie.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+        return  movie.type = 'movies' &&  movie.name.toLowerCase().includes(this.searchQuery.toLowerCase());
       });
     },
   },

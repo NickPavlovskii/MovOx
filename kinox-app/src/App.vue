@@ -1,27 +1,29 @@
 <template>
   <div id="app">
     <MyHeader @search="updateSearchQuery" />
-
     
-    <MovieList
-      :movies="filteredMovies"
-      :currentPage="currentPage"
-      :totalPages="totalPages"
-      @pageChange="changePage"
-    />
+    <router-view>
+
+      
+    </router-view>
+
+   
   </div>
 </template>
 
 <script>
-import MovieList from './components/MovieList.vue';
+// import MovieList from './components/MovieList.vue';
 import MyHeader from './components/Header/MyHeader.vue';
+
+
 import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'App',
   components: {
-    MovieList,
-    MyHeader
+    // MovieList,
+    MyHeader,
+   
   },
   computed: {
     ...mapState(['filteredMovies']),

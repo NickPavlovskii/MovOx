@@ -6,7 +6,7 @@ const fetchMoviesData = () => {
     setTimeout(() => {
       const moviesData = require('../components/kinopoisk.json');
       resolve(moviesData.docs);
-    }, 500);
+    }, 200);
   });
 };
 const store = createStore({
