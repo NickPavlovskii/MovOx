@@ -1,110 +1,150 @@
 <template>
   <div>
-    <ContentWrapper @search="performSearch" class="ContentWrapper" />
-
-    <div v-if="!searchQuery">
-      <WatchNow />
-      <TopMovie />
-      <MyRecom/>
-      
-    </div>
-
-    <div class="container" v-if="searchQuery">
-      <h2>Наща коллекция</h2>
-      <p>  Вы любите смотреть фильмы онлайн и проводите много времени, прочесывая сайты в поисках чего-нибудь интересного?
-      Тогда вам стоит задержаться у нас</p>
     
-      <ul class="movie-list">
-        <li v-for="(movie, index) in displayedMovies" :key="movie.externalId.kpHD" :class="{'movie-item': true, 'new-row': index % 5 === 0}" style="  cursor: pointer;text-decoration: none; list-style-type: none;">
+   
+    
+      <ContentWrapper @search="performSearch" class="ContentWrapper" />
+      <div v-if="isLoading" class="loader"><MyLoader/></div> <!-- Add loader element -->
+      <div v-else >
 
-              <router-link to="/" style="  cursor: pointer;text-decoration: none; list-style-type: none;"> 
-          <div class="movie-poster">
-           
-                <img :src="movie.poster.url" alt="Постер фильма" class="poster-image" />
+<div v-if="!searchQuery">
+  <WatchNow />
+  <TopMovie />
+  <!-- <MyRecom/> -->
+</div>
 
-            <font-awesome-icon icon="heart" class="heart"/>
-          </div>
-      
-          <div class="movie-details">
-            <circle-progress class="circle_progress"
-            :viewport="true"
-        
-            :on-viewport= "movie.rating.kp.toFixed(1)"
-                :size="60"
-                :background="'white'"
-      :is-gradient="true"
-      :percent=movie.rating.kp*10
-      :gradient="{
-        angle: 90,
-        startColor: '#ff0000',
-        stopColor: '#ffff00'
-    }"
-    :is-bg-shadow="true"
-      :bg-shadow="{
-        inset: true,
-        vertical: 2,
-        horizontal: 2,
-        blur: 4,
-        opacity: .4,
-        color: '#000000'
-    }"
-    :border-width="5"
-      :border-bg-width="5"
-  >
+<div class="container">
+  <h2 class="container_title" v-if="!searchQuery" >Наша коллекция</h2>
+  <h2 class="container_title" v-else>Результаты поиска</h2>
 
-        
-  </circle-progress>
-  <span  class="ratingtext">
-        {{ movie.rating.kp.toFixed(1) }}
-      </span>  
-
-            <h3 class="movie-name">{{ movie.name }} </h3>
-             <!-- ({{ movie.type}}) -->
-       
-             
-              <div class="year">{{ movie.year }}</div>
+  <div class="sort-options">
           
-          </div>
-        </router-link>
-         
-        </li>
-      </ul>
+    <Dropdown 
+      :class="['custom-dropdown', 'w-full', 'md:w-14rem', 'p-dropdown-indigo']"
+      v-model="selectedSortOption" 
+      :options="sortOptions" 
+      optionLabel="label" 
+      optionValue="value" 
+      @change="sortMovies" 
+      placeholder="Сортировать по" 
+      class=" custom-dropdown w-full md:w-14rem">
+    </Dropdown>
+    <font-awesome-icon icon="arrow-up-9-1" v-if="sortOrder === 'asc'" @click="updateSortOrder('desc')" class="icon_select" />
+<font-awesome-icon icon="arrow-up-1-9" v-else @click="updateSortOrder('asc')" class="icon_select"/>
+  </div>
 
-      <button @click="loadMore" v-if="shouldShowLoadMoreButton" class="load-more-button">Загрузить еще</button>
-    </div>
+
+  <ul  class="movie-list"> <!-- Use v-else to show the movie list when not loading -->
+    <li v-for="(movie, index) in displayedMovies" :key="movie.id" :class="{'movie-item': true, 'new-row': index % 5 === 0}">
+     
+        <MovieCard :movie="movie"/>
+     
+    </li>
+  </ul>
+
+  <div class="pagination">
+    <button
+      v-for="pageNumber in totalPages"
+      :key="pageNumber"
+      @click="setCurrentPage(pageNumber)"
+      :class="{'active': pageNumber === currentPage}"
+      class="page-button"
+    >
+      {{ pageNumber }}
+    </button>
+  </div>
+  
+  <div class="jump-pagination">
+    <button
+      v-for="pageNumber in totalJumpPages"
+      :key="pageNumber"
+      @click="setCurrentPage((pageNumber - 1) * 5 + 1)"
+      class="jump-button"
+    >
+      {{ (pageNumber - 1) * 5 + 1 }}-{{ Math.min(pageNumber * 5, totalPages) }}
+    </button>
+  </div>
+</div>
+
+
+
+
+</div>
+    
   </div>
 </template>
 
 <script>
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import ContentWrapper from './main/ContentWrapper.vue';
-import  TopMovie from './main/TopMovie.vue';
-import   WatchNow from './main/WatchNow.vue';
-import   MyRecom from './main/MyRecom.vue';
 
-import { mapState, mapActions } from 'vuex';
-import CircleProgress from "vue3-circle-progress";
-import { faBookmark, faHeart } from '@fortawesome/free-solid-svg-icons'
-library.add(faBookmark)
-library.add(faHeart)
+// import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+// import { library } from '@fortawesome/fontawesome-svg-core'
+import ContentWrapper from './main/ContentWrapper.vue';
+import TopMovie from './main/TopMovie.vue';
+import WatchNow from './main/WatchNow.vue';
+import MyLoader from './MyLoader.vue';
+import MovieCard from './MovieCard.vue';
+import Dropdown from 'primevue/dropdown';
+
+
+// import MyRecom from './main/MyRecom.vue';
+import { mapState, mapActions, mapGetters } from 'vuex';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faArrowUp91,faArrowUp19 } from '@fortawesome/free-solid-svg-icons';
+// import CircleProgress from "vue3-circle-progress";
+// import { faBookmark, faHeart } from '@fortawesome/free-solid-svg-icons'
+library.add(faArrowUp91);
+library.add(faArrowUp19);
+
 export default {
   components: {
-    ContentWrapper,
-    CircleProgress,
     FontAwesomeIcon,
+    ContentWrapper,
+    Dropdown,
+ 
+    // CircleProgress,
+    // FontAwesomeIcon,
     TopMovie,
     WatchNow,
-    MyRecom
+    MyLoader,
+    MovieCard
+    // MyRecom
   },
   data() {
     return {
-      itemsPerPage: 20,
+      itemsPerPage: 21,
       currentPage: 1,
+      sortOptions: [
+      { value: 'Сортировать по', label: 'Сортировать по' },
+        { value: 'year', label: 'Год' },
+        { value: 'rating.kp', label: 'Рейтинг' },
+        { value: 'movieLength', label: 'Длительность' }
+      ],
+      selectedSortOption: 'Сортировать по',
+      sortOrder: 'asc',
+      isLoading: false, // Add isLoading state property
+      
     };
   },
   computed: {
-    ...mapState(['filteredMovies', 'searchQuery']), // Добавить filteredMovies и searchQuery из хранилища Vuex
+    ...mapState(['filteredMovies', 'searchQuery', 'movies']),
+  ...mapGetters(['getMovieById']),
+  movies() {
+      return this.$store.state.movies;
+    },
+  totalMovies() {
+      return this.movies.length;
+    },
+  // movies() {
+  //     // Access the movie list from the Vuex store
+  //     return this.$store.state.movies.movieList;
+  //   },
+    totalPages() {
+      return Math.ceil(this.filteredMovies.length / this.itemsPerPage);
+    },
+    totalJumpPages() {
+      return Math.ceil(this.totalPages / 5);
+    },
     displayedMovies() {
       const startIndex = (this.currentPage - 1) * this.itemsPerPage;
       return this.filteredMovies.slice(startIndex, startIndex + this.itemsPerPage);
@@ -115,51 +155,79 @@ export default {
   },
   mounted() {
     this.searchMovies();
+    this.$store.dispatch('movies/fetchMovieList');
   },
   methods: {
-    ...mapActions(['searchMovies']),
+    // Обработчик нажатия на фильм
+    navigateToLikePage() {
+      this.$router.push({ name: 'bookmarks-ratings' });
+    },
+  
+    ...mapActions(['fetchMovies', 'searchMovies']),
+    updateSortOrder(order) {
+  this.sortOrder = order;
+  this.sortMovies();
+},
+
+    sortMovies() {
+      // Sort the movies array based on the selectedSortOption and sortOrder
+      this.filteredMovies.sort((a, b) => {
+        const aValue = a[this.selectedSortOption];
+        const bValue = b[this.selectedSortOption];
+        if (this.sortOrder === 'asc') {
+          return aValue - bValue;
+        } else {
+          return bValue - aValue;
+        }
+      });
+      this.setCurrentPage(1);
+    },
+
+    setCurrentPage(pageNumber) {
+      this.currentPage = pageNumber;
+    },
     loadMore() {
       this.currentPage++;
     },
     performSearch(query) {
-      this.$store.commit('setSearchQuery', query); // Использовать мутацию setSearchQuery из хранилища Vuex
+      this.$store.commit('setSearchQuery', query);
       this.currentPage = 1;
+      this.setCurrentPage(1);
     },
-    // getColor(rating) {
-    //   if (rating < 5) {
-    //     return ['#ff0000']; // red
-    //   } else if (rating < 8) {
-    //     return ['#ffa500']; // orange
-    //   } else {
-    //     return ['#008000']; // green
-    //   }
-    // },
+
+    setSortOrder(order) {
+      this.sortOrder = order;
+    },
+    async searchMovies() {
+      this.isLoading = true; // Set isLoading to true before starting the request
+      await this.$store.dispatch('searchMovies');
+      this.isLoading = false; // Set isLoading to false after the request is completed
+    },
+    async fetchMovieData() {
+  const movieId = this.$route.params.id;
+  // Используйте ваш метод getMovieById для получения данных о фильме
+  this.movie = this.getMovieById(movieId);
+  // Если фильма нет в хранилище, выполните загрузку данных
+  if (!this.movie) {
+    await this.$store.dispatch('fetchMovie', movieId);
+    this.movie = this.getMovieById(movieId);
+  }
+},
+  },
+  created() {
+    this.fetchMovieData();
   },
 };
 </script>
 
 
+
+
 <style scoped>
+.custom-dropdown{
+ width: 200px;
 
-.circle_progress{
-  position: absolute;
-  bottom: 70px;
-  left: 10px;
-  color: #ffffff;
-
-}
-.circle_progress .percentage{
-  color: black;
-}
-
-.ratingtext {
-  position: relative;
-bottom: 112px;
-margin-left: 26px;
-  font-size: 21px;
-color: #020c1b;
-  font-weight: bold;
-  text-align: center;
+ color: #fff;
 }
 .container {
   max-width: 960px;
@@ -168,6 +236,130 @@ color: #020c1b;
 
   color: #fff;
 }
+.container_title{
+  display: flex; 
+  justify-content: center;
+  letter-spacing: 0.1em;
+  font-family: cursive;
+}
+.sort-options {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.icon_select{
+position: relative;
+top: 2px;
+  width: 40px;
+  font-size: 21px;
+  justify-items: center;
+}
+label {
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+select {
+  padding: 8px 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  transition: border-color 0.3s ease;
+}
+
+select:focus {
+  outline: none;
+  border-color: #8cacc4;
+  box-shadow: 0 0 0 2px rgba(140, 172, 196, 0.2);
+}
+
+option {
+  font-size: 16px;
+}
+.row {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-bottom: 20px;
+    position: relative;
+    bottom: 25px;
+}
+.info {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 15px 0;
+    display: flex;
+}
+.info .infoItem {
+    margin-right: 10px;
+    display: flex;
+    flex-flow: row wrap;
+}
+.icons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-bottom: 10px;
+  }
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 20px;
+  color: #333;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.page-button {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 5px 10px;
+  margin: 0 5px;
+  cursor: pointer;
+  background-color: #f7f7f7;
+}
+
+.page-button:hover {
+  background-color: #e1e1e1;
+}
+
+.page-button.active {
+color: #fff;
+  background: linear-gradient(98.37deg, #f89e00 0.99%, #da2f68 100%);
+}
+.jump-button {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 5px 10px;
+  margin: 0 5px;
+  cursor: pointer;
+  color: #fff;
+  background: #020c1b;
+}
+
+.jump-button:hover {
+  background-color: #e1e1e1;
+}
+
+
+
+
 
 .ContentWrapper {
   text-align: center;
@@ -182,8 +374,8 @@ color: #020c1b;
 .movie-list {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  grid-gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-gap: -30px;
 }
 
 .movie-item {
@@ -195,12 +387,7 @@ color: #020c1b;
 .movie-poster {
   text-align: center;
   border-radius: 8px;
-}
-.heart{
-  position: relative;
-  bottom: 280px;
-  left: 80px;
- color: #020c1b;
+  margin-left: -30px;
 }
 
 
@@ -243,6 +430,9 @@ color: #020c1b;
 
 
 </style>
+
+
+
 
 
 
