@@ -2,10 +2,10 @@
   <div class="container">
     <div>
       <div class="title_container">
-      <h2 class="title">Top 10<font-awesome-icon icon="arrow-right-long" class="longArrow" /></h2>
+      <h2 class="title"> <font-awesome-icon icon="trophy" style=" color: #f89e00;" /> Top 10 </h2> 
       <div class="switchingTabs">
     <div class="tabItems">
-      <span @click="toggleTimeFrame('recent')" class="tabItem" :class="{ 'active': timeFrame === 'recent' }">За несколко лет</span>
+      <span @click="toggleTimeFrame('recent')" class="tabItem" :class="{ 'active': timeFrame === 'recent' }">За год</span>
       <span @click="toggleTimeFrame('all')" class="tabItem" :class="{ 'active': timeFrame === 'all' }">За все время</span>
       <div class="movingBg" :style="{ left: activeTabLeft }"></div>
     </div>
@@ -17,45 +17,9 @@
       <div class="carousel" @mousedown="dragStart" @touchstart="dragStart" @mousemove="dragging" @touchmove="dragging"
         @mouseup="dragStop" @touchend="dragStop" :class="{'dragging': isDragging}">
         <div class="movie-poster" v-for="movie in latestMovies" :key="movie.id">
-          <router-link to="/" style="cursor: pointer;text-decoration: none; list-style-type: none;">
-            <div class="movie-poster">
-              <img :src="movie.poster.url" alt="Постер фильма" class="poster-image" />
-            </div>
-            <div class="movie-details">
-              <circle-progress class="circle_progress"
-                :viewport="true"
-                :on-viewport="movie.rating.kp.toFixed(1)"
-                :size="60"
-                :background="'white'"
-                :is-gradient="true"
-                :percent="movie.rating.kp * 10"
-                :gradient="{
-                  angle: 90,
-                  startColor: '#ff0000',
-                  stopColor: '#ffff00'
-                }"
-                :is-bg-shadow="true"
-                :bg-shadow="{
-                  inset: true,
-                  vertical: 2,
-                  horizontal: 2,
-                  blur: 4,
-                  opacity: .4,
-                  color: '#000000'
-                }"
-                :border-width="5"
-                :border-bg-width="5"
-              ></circle-progress>
-              <span class="ratingtext">
-                {{ movie.rating.kp.toFixed(1) }}
-              </span>
-              <h2 class="movie-name">{{ movie.name }} </h2>
-              <div class="movie-info">
-                <div class="circleRating"></div>
-                <div class="year">{{ movie.year }}</div>
-              </div>
-            </div>
-          </router-link>
+          
+            <MovieCard :movie="movie" />
+          
         </div>
       </div>
       <i id="right" @click="scrollRight"><font-awesome-icon icon="arrow-right" /></i>
@@ -67,17 +31,19 @@
 import { mapState, mapMutations } from 'vuex';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import CircleProgress from "vue3-circle-progress";
-import { faArrowRight, faArrowLeft, faArrowRightLong, faHeart } from '@fortawesome/free-solid-svg-icons'
+
+import { faArrowRight, faArrowLeft, faTrophy, faHeart } from '@fortawesome/free-solid-svg-icons'
+import MovieCard from '../MovieCard.vue';
 library.add(faArrowRight)
 library.add(faArrowLeft)
 library.add(faHeart)
-library.add(faArrowRightLong)
+library.add(faTrophy)
 
 export default {
   components: {
     FontAwesomeIcon,
-    CircleProgress,
+ 
+    MovieCard
   },
 
   computed: {
@@ -185,6 +151,42 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+ .movie-poster {
+    position: relative;
+    display: inline-block;
+  }
+
+  .description-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .movie-poster:hover .description-overlay {
+    opacity: 1;
+  }
+
+  .shortDescription {
+    max-width: 100%;
+    padding: 20px;
+    word-wrap: break-word;
+    white-space: normal;
+  }
+
+  p {
+    word-wrap: break-word;
+  }
+
 .switchingTabs {
   position: relative;
   height: 34px;
@@ -218,7 +220,7 @@ export default {
     }
     
     .movingBg {
-      height: 38px;
+      height: 35px;
       width: 100px;
       border-radius: 20px;
       background-image: linear-gradient(98.37deg, #f89e00 0.99%, #da2f68 100%);
@@ -311,6 +313,7 @@ export default {
     width: 250px;
     font-weight: bold;
     word-break: break-all;
+    
   }
   
   .year {
