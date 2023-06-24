@@ -8,8 +8,8 @@
       </div>
       <div class="opacity-layer"></div>
       <div class="heroBannerContent">
-        <h1 class="title">WELCOME</h1>
-        <p class="subTitle">Миллион фильмов и сериалов только для тебя</p>
+        <h1 class="title" >WELCOME</h1>
+        <p class="subTitle" style="font-family: cursive;">Миллион фильмов и сериалов только для тебя</p>
         <div class="searchInput">
           <input
           type="text"
@@ -61,6 +61,7 @@ export default {
 
 
   <style>
+  
 .heroBanner {
    
     width: 100%;
@@ -123,6 +124,7 @@ export default {
   font-size: 50px;
   font-weight: 700;
   margin-bottom: 10px;
+
 }
 
 .heroBanner .heroBannerContent .subTitle {
