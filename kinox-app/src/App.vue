@@ -3,10 +3,9 @@
     <MyHeader @search="updateSearchQuery" />
     
     <router-view>
-
-      
-    </router-view>
-
+</router-view>
+<!-- <MoviePage/> -->
+      <Footer/>
    
   </div>
 </template>
@@ -14,19 +13,21 @@
 <script>
 // import MovieList from './components/MovieList.vue';
 import  MyHeader from './components/Header/MyHeader.vue';
-
-
+import  Footer from './components/Footer/MyFooter.vue';
+// import MoviePage from './components/MoviePage/MoviePage.vue';
 import { mapState, mapActions } from 'vuex';
-
+// 
 export default {
   name: 'App',
   components: {
     // MovieList,
     MyHeader,
+    Footer,
+    // MoviePage
    
   },
   computed: {
-    ...mapState(['filteredMovies']),
+    ...mapState(['movies','filteredMovies']),
   },
   data() {
     return {
@@ -35,7 +36,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['searchMovies']),
+    ...mapActions(['fetchMovies', 'selectMovie', 'searchMovies']),
     changePage(page) {
       // Обработка изменения страницы
       this.currentPage = page;

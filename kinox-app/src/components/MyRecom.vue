@@ -1,7 +1,7 @@
 <template>
     <div class="container">
     
-        <h1 class="title">Рекомендуем тебе<font-awesome-icon icon="arrow-right-long" class="longArrow" /></h1>
+        <h2 class="title">Рекомендуем к просмотру</h2>
         <div class="wrapper">
            
           <i id="left"  @click="scrollLeft"><font-awesome-icon icon="arrow-left" /></i>
@@ -9,56 +9,7 @@
             @mouseup="dragStop" @touchend="dragStop" :class="{'dragging': isDragging}">
             
             <div class="movie-poster" v-for="movie in randomMovies" :key="movie.id">
-                <router-link to="/" style="  cursor: pointer;text-decoration: none; list-style-type: none;">
-                    <div class="movie-poster">
-              <img :src="movie.poster.url" alt="Постер фильма" class="poster-image" />
-              <!-- <font-awesome-icon icon="heart" class="heart" /> -->
-            </div>
-          
-
-            <div class="movie-details">
-                <circle-progress class="circle_progress"
-                :viewport="true"
-            
-                :on-viewport= "movie.rating.kp.toFixed(1)"
-                    :size="60"
-                    :background="'white'"
-          :is-gradient="true"
-          :percent=movie.rating.kp*10
-          :gradient="{
-            angle: 90,
-            startColor: '#ff0000',
-            stopColor: '#ffff00'
-        }"
-        :is-bg-shadow="true"
-          :bg-shadow="{
-            inset: true,
-            vertical: 2,
-            horizontal: 2,
-            blur: 4,
-            opacity: .4,
-            color: '#000000'
-        }"
-        :border-width="5"
-          :border-bg-width="5"
-      >
-    
-            
-      </circle-progress>
-      <span  class="ratingtext">
-            {{ movie.rating.kp.toFixed(1) }}
-          </span>  
-    
-                <h2 class="movie-name">{{ movie.name }} </h2>
-                 <!-- ({{ movie.type}}) -->
-                <div class="movie-info">
-                  <div class="circleRating">
-                   
-         </div>
-                  <div class="year">{{ movie.year }}</div>
-                </div>
-              </div>
-            </router-link>
+              <MovieCard :movie="movie" />
             </div>
       
           </div>
@@ -69,20 +20,22 @@
     
       <script>
       import { mapState, mapMutations  } from 'vuex';
-      import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+   
+     
+         import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
       import { library } from '@fortawesome/fontawesome-svg-core'
-      import CircleProgress from "vue3-circle-progress";
-      import { faArrowRight,faArrowLeft, faArrowRightLong, faHeart } from '@fortawesome/free-solid-svg-icons'
+      import { faArrowRight,faArrowLeft, faHeart } from '@fortawesome/free-solid-svg-icons'
+      import MovieCard from './MovieCard.vue';
       library.add(faArrowRight)
       library.add(faArrowLeft)
       library.add(faHeart)
-      library.add(faArrowRightLong)
+  
    
       export default {
         components: {
             FontAwesomeIcon,
-        CircleProgress,
-        
+ 
+        MovieCard
       },
         computed: {
             ...mapState(['movies']),

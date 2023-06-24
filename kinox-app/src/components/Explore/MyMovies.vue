@@ -6,6 +6,7 @@
     <!-- <input type="text" v-model="searchQuery" @input="searchMovies" placeholder="Поиск фильмов..." /> -->
     <div class="sort-options">
       <Dropdown 
+      :class="['custom-dropdown', 'w-full', 'md:w-14rem', 'p-dropdown-indigo']"
       v-model="selectedSortOption" 
       :options="sortOptions" 
       optionLabel="label" 
@@ -28,14 +29,15 @@
 
   </div>
     <ul class="movie-list">
-      <li v-for="(movie, index) in displayedMovies" class="list" :key="movie.id" :class="{'movie-item': true, 'new-row': index % 5 === 0}">
+      <li v-for="(movie, index) in displayedMovies"  :key="movie.id" :class="{'movie-item': true, 'new-row': index % 5 === 0} " >
        <!-- <MovieCard :movie="movie" class="MovieCard"/> -->
        <router-link :movie="movie"  :to="{ name: 'movie-details', params: { id: movie.id }}" style="cursor: pointer; text-decoration: none; list-style-type: none;">
+       <div  style="cursor: pointer; text-decoration: none; list-style-type: none; display: flex;">
+
+      
       <div class="movie-poster">
         <img :src="movie.poster.url" alt="Постер фильма" class="poster-image">
-        
-      </div>
-      <div class="movie-details">
+        <div class="movie-details">
         <circle-progress
           class="circle_progress"
           :viewport="true"
@@ -61,10 +63,12 @@
           :border-width="5"
           :border-bg-width="5"
         ></circle-progress>
-       
+        <span class="ratingtext">{{ movie.rating.kp.toFixed(1) }}</span>
       </div>
-    </router-link>
-    <div>
+      </div>
+      
+ 
+    <div style="cursor: pointer; text-decoration: none; list-style-type: none; color: white">
       <p>{{ movie.description }}</p>
       <div class="row">
               <div class="info">
@@ -79,7 +83,15 @@
               </div>
             </div>
     </div>
-       
+
+
+
+
+
+
+       </div>
+      </router-link>
+
       </li>
     </ul>
   
@@ -115,7 +127,8 @@
 <script>
 //theme
 import "primevue/resources/themes/lara-light-indigo/theme.css";     
-    
+
+
 //core
 import "primevue/resources/primevue.min.css";
 
@@ -192,6 +205,7 @@ export default {
   },
   methods: {
     ...mapActions(['searchMovies', 'searchQuery']),
+    
     updateDisplayedMovies() {
       this.displayedMovies = this.movies.slice(this.startIndex, this.endIndex + 1);
     },

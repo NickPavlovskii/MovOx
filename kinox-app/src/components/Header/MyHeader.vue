@@ -7,7 +7,7 @@
           <p>KinOx</p>
         </div>
       </router-link>
-     
+      
 
       <div class="group">
         <ul class="menuItems">
@@ -27,9 +27,9 @@
               icon="bookmark"
              class="Bookmark"
               v-if="!isSearchActive"
-              click="navigateToLikePage"
+              @click="navigateToLikePage"
             />
-          </li>
+            </li>
         </ul>
         
         <div class="search">
@@ -53,9 +53,13 @@
     <input type="text" placeholder="Search here..." v-model="searchQuery"  @keyup.enter="performSearch" />
   </div>
 
-        <div class="mobileMenu">
-          <font-awesome-icon icon="bars" class="toggleMenu" @click="toggleMenu" />
-        </div>
+  <div class="mobileMenu" :class="{ active: show }" @click="toggleMenu">
+    <div class="toggleMenu">
+      <span class="line top" :class="{ active: show }"></span>
+      <span class="line middle" :class="{ active: show }"></span>
+      <span class="line bottom" :class="{ active: show }"></span>
+    </div>
+  </div>
       </div>
     </div>
   </header>
@@ -115,6 +119,57 @@ export default {
 
 
 <style lang="scss" scoped>
+.mobileMenu {
+  cursor: pointer;
+  display: inline-block;
+  color: white;
+}
+
+.toggleMenu {
+  position: relative;
+  width: 30px;
+  height: 20px;
+  transform: rotate(0deg);
+  transition: transform 0.3s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+.line {
+  display: block;
+  position: absolute;
+  height: 3px;
+  width: 100%;
+  background: #333;
+  border-radius: 2px;
+  opacity: 1;
+  left: 0;
+  transform-origin: center;
+  transition: transform 0.3s cubic-bezier(0.55, 0.055, 0.675, 0.19),
+    opacity 0.3s ease;
+}
+
+.top {
+  top: 0;
+}
+
+.middle {
+  top: 8px;
+}
+
+.bottom {
+  top: 16px;
+}
+
+.active .top {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.active .middle {
+  opacity: 0;
+}
+
+.active .bottom {
+  transform: translateY(-8px) rotate(-45deg);
+}
 .header {
   font-family: cursive;
   position: absolute;
@@ -261,12 +316,41 @@ export default {
   transform-origin: left;
 }
 
-.mobileMenuItems {
+.toggleMenu{
+display: none;
+  }
+@media (max-width: 768px) {
+
+  .mobileMenuItems {
   display: none;
   width: 100%;
 }
 
+.header .menuItems {
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  left: 100%;
+  transition: transform 0.5s ease-in-out;
+}
 
+.header.active .menuItems {
+  top: 60px;
+  opacity: 1;
+  visibility: visible;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  background: #020c1b;
+  width: 100%;
+  height: 170%;
+  margin: 0;
+  transform: translateY(-10px);
+}
+
+.menuItem {
+  margin: 10px 25px;
+}
 
 .mobileMenuItems .menuItem {
   margin-right: 10px;
@@ -279,11 +363,60 @@ export default {
     display: none;
   }
 }
-.toggleMenu{
-display: none;
-  }
-@media (max-width: 768px) {
+  .mobileMenu {
+  cursor: pointer;
+  display: inline-block;
+  color: white;
+}
 
+.toggleMenu {
+  position: relative;
+  width: 26px;
+  height: 12px;
+  transform: rotate(0deg);
+  transition: transform 0.3s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  top:2px;
+}
+
+.line {
+  display: block;
+  position: absolute;
+  height: 3px;
+  width: 80%;
+  background: #fff;
+  border-radius: 2px;
+    
+  left: 0;
+  transform-origin: center;
+  transition: transform 0.3s cubic-bezier(0.55, 0.055, 0.675, 0.19),
+    opacity 0.9s ease;
+    color: white;
+}
+
+.top {
+  top: 0;
+  color: white;
+}
+
+.middle {
+  top: 8px;
+}
+
+.bottom {
+  top: 16px;
+}
+
+.active .top {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.active .middle {
+  opacity: 0;
+}
+
+.active .bottom {
+  transform: translateY(-8px) rotate(-45deg);
+}
   .searchBox {
  bottom: 1px;
 &.active{
@@ -322,9 +455,9 @@ display: block;
     flex-direction: column;
     background: #020c1b;
     width: 100%;
-    height: 150%;
+    height: 170%;
     margin: 0;
-
+    transition: transform 0.5s ease-in-out;
     .menuItem{
       margin: 10px 25px;
     }
