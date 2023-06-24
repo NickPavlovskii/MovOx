@@ -1,266 +1,367 @@
 <template>
-    <div class="movie-card">
-      <img :src="fetchedMovie.poster.url" alt="Постер фильма" />
-      <h3>{{ fetchedMovie.name }}</h3>
-      <p>{{ fetchedMovie.description }}</p>
-      <p>Рейтинг (КиноПоиск): {{ fetchedMovie.rating.kp }}</p>
-      <p>Рейтинг (IMDb): {{ fetchedMovie.rating.imdb }}</p>
-      <p>Год: {{ fetchedMovie.year }}</p>
-      <p>Голоса (КиноПоиск): {{ fetchedMovie.votes.kp }}</p>
-      <p>Голоса (IMDb): {{ fetchedMovie.votes.imdb }}</p>
-      <p>Длительность фильма: {{ fetchedMovie.movieLength }} минут</p>
-      <div v-if="fetchedMovie.watchability && fetchedMovie.watchability.items.length > 0">
-        <p>Доступно на:</p>
-        <ul>
-          <li v-for="item in fetchedMovie.watchability.items" :key="item._id">
-            <a :href="item.url" target="_blank">{{ item.name }}</a>
-          </li>
-        </ul>
+   
+      <div class="movie-poster">
+        <img :src="movie.poster.url" alt="Постер фильма" class="poster-image">
+        <div class="description-overlay">
+          <div class="shortDescription">
+            <div class="icons">
+  <font-awesome-icon
+    icon="heart"
+    class="heart"
+    :class="{ active: hasRating }"
+    @click.stop="rateMovie"
+   
+  /> 
+  <!-- :class="{ active: localStorage.getItem(`bookmark_${movie.id}`) === 'true' }" --> 
+  <font-awesome-icon
+    icon="bookmark"
+    class="bookmark"
+    :class="{ active: isBookmarked }"
+    @click.stop="toggleBookmark"
+    
+  />
+  <!-- :class="{ active: localStorage.getItem(`rating_${movie.id}`) === '5' }" -->
+</div>
+           
+            <p>{{ movie.shortDescription }}</p>
+            <div class="row">
+              <div class="info">
+                <div class="infoItem">
+                  <span class="text bold"><font-awesome-icon icon="clock" /></span>
+                  <span class="text">{{ convertMinutesToHours(movie.movieLength) }}</span>
+                </div>
+                <div class="infoItem">
+                  <span class="text bold"><font-awesome-icon icon="calendar-days" /></span>
+                  <span class="text">{{ movie.year }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </template>
+      <div class="movie-details">
+        <circle-progress
+          class="circle_progress"
+          :viewport="true"
+          :on-viewport="movie.rating.kp.toFixed(1)"
+          :size="60"
+          :background="'white'"
+          :is-gradient="true"
+          :percent="movie.rating.kp * 10"
+          :gradient="{
+            angle: 90,
+            startColor: '#ff0000',
+            stopColor: '#ffff00'
+          }"
+          :is-bg-shadow="true"
+          :bg-shadow="{
+            inset: true,
+            vertical: 2,
+            horizontal: 2,
+            blur: 4,
+            opacity: .4,
+            color: '#000000'
+          }"
+          :border-width="5"
+          :border-bg-width="5"
+        ></circle-progress>
+        <span class="ratingtext">{{ movie.rating.kp.toFixed(1) }}</span>
+        <h3 class="movie-name">{{ movie.name }}</h3>
+        <div class="year">{{ movie.year }}</div>
+      </div>
   
-  <script>
-  export default {
-    props: ['movie'],
-    data() {
-  return {
-    fetchedMovie: []
-  };
-},
+  </template>
+<script>
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faBookmark, faHeart } from '@fortawesome/free-solid-svg-icons'
+import CircleProgress from "vue3-circle-progress";
+library.add(faBookmark)
+library.add(faHeart)
 
-    created() {
-      this.fetchMovieData();
+export default {
+  components: {
+    FontAwesomeIcon,
+    CircleProgress
+  },
+  props: {
+    movie: {
+      type: Object,
+      required: true,
     },
-    fetchMovieData() {
-      // Замените этот код на вызов API для получения данных фильма
-      // В этом примере я просто присваиваю статические данные фильма напрямую fetchedMovie
-      this.fetchedMovie = [
-            {
-          "externalId": {
-            "kpHD": "4127663ed234fa8584aeb969ceb02cd8",
-            "imdb": "tt1675434",
-            "tmdb": 77338,
-            "_id": "6376b9837ad98299ff922212"
-          },
-          "logo": {
-            "_id": "62f767e7252c8469effb6268",
-            "url": "https://avatars.mds.yandex.net/get-ott/1531675/2a0000017f0262661cde61dc260cb86f7830/orig"
-          },
-          "poster": {
-            "_id": "6339779fc22d011bb5646e03",
-            "url": "https://st.kp.yandex.net/images/film_big/535341.jpg",
-            "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_535341.jpg"
-          },
-          "rating": {
-            "_id": "6339779fc22d011bb5646e01",
-            "kp": 8.805,
-            "imdb": 8.5,
-            "filmCritics": 6.8,
-            "russianFilmCritics": 100,
-            "await": 0
-          },
-          "votes": {
-            "kp": 1529613,
-            "imdb": 866329,
-            "filmCritics": 130,
-            "russianFilmCritics": 12,
-            "await": 15,
-            "_id": "63e7c63f68d824d6caf18e3b"
-          },
-          "watchability": {
-            "items": [
-              {
-                "logo": {
-                  "url": "https://avatars.mds.yandex.net/get-ott/239697/7713e586-17d1-42d1-ac62-53e9ef1e70c3/orig",
-                  "_id": "63e7c63f68d824d6caf18e85"
-                },
-                "name": "Okko",
-                "url": "https://okko.tv/movie/intouchables?utm_medium=referral&utm_source=yandex_search&utm_campaign=new_search_feed",
-                "_id": "63e7c63f68d824d6caf18e84"
-              },
-              {
-                "logo": {
-                  "url": "https://avatars.mds.yandex.net/get-ott/239697/1a632675-0d99-4268-bd5e-d5f3dd800174/orig",
-                  "_id": "63e7c63f68d824d6caf18e87"
-                },
-                "name": "START",
-                "url": "https://start.ru/watch/1-1?utm_source=kinopoisk&utm_medium=feed_watch&utm_campaign=1-1",
-                "_id": "63e7c63f68d824d6caf18e86"
-              }
-            ],
-            "_id": "63e7c63f68d824d6caf18e83"
-          },
-          "movieLength": 112,
-          "id": 535341,
-          "type": "movie",
-          "name": "1+1",
-          "description": "Пострадав в результате несчастного случая, богатый аристократ Филипп нанимает в помощники человека, который менее всего подходит для этой работы, – молодого жителя предместья Дрисса, только что освободившегося из тюрьмы. Несмотря на то, что Филипп прикован к инвалидному креслу, Дриссу удается привнести в размеренную жизнь аристократа дух приключений.",
-          "year": 2011,
-          "alternativeName": "Intouchables",
-          "enName": null,
-          "names": [
-            {
-              "_id": "6339779fc22d011bb5646dff",
-              "name": "1+1"
-            },
-            {
-              "_id": "6339779fc22d011bb5646e00",
-              "name": "Intouchables"
-            }
-          ],
-          "shortDescription": "Аристократ на коляске нанимает в сиделки бывшего заключенного. Искрометная французская комедия с Омаром Си",
-          "releaseYears": []
-        },  
-        {
-      "externalId": {
-        "kpHD": "47649cf90de74aca8da7eb5b17fc8a8a",
-        "imdb": "tt8367814",
-        "tmdb": 522627,
-        "_id": "6376b9787ad98299ff91685f"
-      },
-      "logo": {
-        "_id": "62f5427d252c8469ef8b44f9",
-        "url": "https://avatars.mds.yandex.net/get-ott/1534341/2a00000176f18064fd95abb74cbcc02873b8/orig"
-      },
-      "poster": {
-        "_id": "6339eb5489ae969da213a33e",
-        "url": "https://st.kp.yandex.net/images/film_big/1143242.jpg",
-        "previewUrl": "https://st.kp.yandex.net/images/film_iphone/iphone360_1143242.jpg"
-      },
-      "rating": {
-        "kp": 8.536,
-        "imdb": 7.8,
-        "filmCritics": 6.5,
-        "russianFilmCritics": 86.3636,
-        "await": 97.92,
-        "_id": "63e647b968d824d6ca7a0fbf"
-      },
-      "votes": {
-        "kp": 1284199,
-        "imdb": 347206,
-        "filmCritics": 275,
-        "russianFilmCritics": 22,
-        "await": 13643,
-        "_id": "63e647b968d824d6ca7a0fc0"
-      },
-      "watchability": {
-        "items": [
-          {
-            "logo": {
-              "url": "https://avatars.mds.yandex.net/get-ott/239697/7713e586-17d1-42d1-ac62-53e9ef1e70c3/orig",
-              "_id": "63e647b968d824d6ca7a0fc4"
-            },
-            "name": "Okko",
-            "url": "https://okko.tv/movie/the-gentlemen?utm_medium=referral&utm_source=yandex_search&utm_campaign=new_search_feed",
-            "_id": "63e647b968d824d6ca7a0fc3"
-          },
-          {
-            "logo": {
-              "url": "https://avatars.mds.yandex.net/get-ott/239697/daeb142e-3ecc-4bb2-9bff-4827996643ab/orig",
-              "_id": "63e647b968d824d6ca7a0fc6"
-            },
-            "name": "KION",
-            "url": "https://kion.ru/video/movie/169735638?utm_source=yandex&utm_medium=organic&utm_campaign=wizard",
-            "_id": "63e647b968d824d6ca7a0fc5"
-          },
-          {
-            "logo": {
-              "url": "https://avatars.mds.yandex.net/get-ott/239697/947e777c-2f73-4cbc-b09d-6bfa3966ba13/orig",
-              "_id": "63e647b968d824d6ca7a0fc8"
-            },
-            "name": "Триколор Кино и ТВ",
-            "url": "https://kino.tricolor.tv/watch/dzhentlmeny-2019/?utm_source=yandex&utm_medium=feed",
-            "_id": "63e647b968d824d6ca7a0fc7"
-          },
-          {
-            "logo": {
-              "url": "https://avatars.mds.yandex.net/get-ott/1672343/54096cbe-cc3b-41c9-8e44-990ebbca8d61/orig",
-              "_id": "63e647b968d824d6ca7a0fca"
-            },
-            "name": "Wink",
-            "url": "https://wink.ru/media_items/95724717?utm_source=yandex&utm_medium=koldunschick&utm_content=name",
-            "_id": "63e647b968d824d6ca7a0fc9"
-          },
-          {
-            "logo": {
-              "url": "https://avatars.mds.yandex.net/get-ott/1672343/74a3af87-2bfa-4cdc-bc16-32a21114665b/orig",
-              "_id": "63e647b968d824d6ca7a0fcc"
-            },
-            "name": "МегаФон ТВ",
-            "url": "https://megafon.tv/movies/vods/Dzhentlmeny_2019?utm_source=yandex&utm_medium=wizard&utm_campaign=Dzhentlmeny_2019",
-            "_id": "63e647b968d824d6ca7a0fcb"
-          }
-        ],
-        "_id": "63e647b968d824d6ca7a0fc2"
-      },
-      "movieLength": 113,
-      "id": 1143242,
-      "type": "movie",
-      "name": "Джентльмены",
-      "description": "Один ушлый американец ещё со студенческих лет приторговывал наркотиками, а теперь придумал схему нелегального обогащения с использованием поместий обедневшей английской аристократии и очень неплохо на этом разбогател. Другой пронырливый журналист приходит к Рэю, правой руке американца, и предлагает тому купить киносценарий, в котором подробно описаны преступления его босса при участии других представителей лондонского криминального мира — партнёра-еврея, китайской диаспоры, чернокожих спортсменов и даже русского олигарха.",
-      "year": 2019,
-      "alternativeName": "The Gentlemen",
-      "enName": null,
-      "names": [
-        {
-          "_id": "6339eb5489ae969da213a33a",
-          "name": "Джентльмены"
-        },
-        {
-          "_id": "6339eb5489ae969da213a33b",
-          "name": "The Gentlemen"
-        }
-      ],
-      "color": "#DBCCC2",
-      "shortDescription": "Наркобарон хочет уйти на покой, но криминальный мир не отпускает. Успешное возвращение Гая Ричи к корням",
-      "releaseYears": []
+  },
+  data() {
+    return {
+      isBookmarked: false,
+      hasRating: false
+    };
+  },
+  created() {
+    const bookmarkKey = `bookmark_${this.movie.id}`;
+    const ratingKey = `rating_${this.movie.id}`;
+
+    // Проверяем сохраненные значения в локальном хранилище
+    if (localStorage.getItem(bookmarkKey) === 'true') {
+      this.isBookmarked = true;
     }
 
-]
+    if (localStorage.getItem(ratingKey) === 'true') {
+      this.hasRating = true;
     }
-  };
-  </script>
-
-
+  },
+  computed: {
+    bookmarkKey() {
+      return `bookmark_${this.movie.id}`;
+    },
+    ratingKey() {
+      return `rating_${this.movie.id}`;
+    },
+  },
+  watch: {
+    isBookmarked(value) {
+      localStorage.setItem(this.bookmarkKey, value.toString());
+    },
+    hasRating(value) {
+      localStorage.setItem(this.ratingKey, value.toString());
+    },
+  },
+  methods: {
+    toggleBookmark() {
+      this.isBookmarked = !this.isBookmarked;
+    },
+    rateMovie() {
+      this.hasRating = !this.hasRating;
+    },
+    convertMinutesToHours(minutes) {
+      const hours = Math.floor(minutes / 60);
+      const remainingMinutes = minutes % 60;
+      return `${hours}h ${remainingMinutes}min`;
+    },
+  },
+};
+</script>
 
 <style scoped>
-.movie-card {
-  max-width: 400px;
+.text {
+   
+    margin-right: 5px;
+    
+    opacity: 0.5;
+    line-height: 24px;
+
+}
+
+.detailsBanner .content .right .info .text.bold {
+    font-weight: 600;
+    opacity: 1;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  justify-content: center;
+  position: relative;
+ bottom: 10px;
+
+    
+}
+
+.info {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 15px 0;
+  display: flex;
+}
+
+.info .infoItem {
+  margin-right: 10px;
+  display: flex;
+  flex-flow: row wrap;
+  
+}
+
+.icons {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-bottom: 30px;
+  opacity: 0.7;
+}
+.heart{
+    margin-bottom: 15px;
+}
+.bookmark{
+    margin-right: 1px;
+}
+.heart.active,
+.bookmark.active {
+  color: #ff0000; /* Цвет активного состояния */
+}
+.heart:hover,
+.bookmark:hover {
+  color: #ff0000; /* Цвет активного состояния */
+}
+.movie-poster {
+  position: relative;
+  display: inline-block;
+}
+
+.description-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.movie-poster:hover .description-overlay {
+  opacity: 1;
+}
+
+.shortDescription {
+  max-width: 100%;
+  padding: 20px;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+p {
+  word-wrap: break-word;
+  opacity: 0.7;
+    line-height: 24px;
+
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 20px;
+  color: #333;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.page-button {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 5px 10px;
+  margin: 0 5px;
+  cursor: pointer;
+  background-color: #f7f7f7;
+}
+
+.page-button:hover {
+  background-color: #e1e1e1;
+}
+
+.page-button.active {
+  color: #fff;
+  background: linear-gradient(98.37deg, #f89e00 0.99%, #da2f68 100%);
+}
+
+.jump-button {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 5px 10px;
+  margin: 0 5px;
+  cursor: pointer;
+  color: #fff;
+  background: #020c1b;
+}
+
+.jump-button:hover {
+  background-color: #e1e1e1;
+}
+
+.circle_progress {
+  position: absolute;
+  bottom: 70px;
+  left: 10px;
+  color: #ffffff;
+}
+
+.circle_progress .percentage {
+  color: black;
+}
+
+.ratingtext {
+  position: relative;
+  bottom: 110px;
+  margin-left: 26px;
+  font-size: 21px;
+  color: #020c1b;
+  font-weight: bold;
+  text-align: center;
+}
+
+.container {
+  max-width: 960px;
   margin: 0 auto;
   padding: 20px;
-  text-align: center;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  color: #fff;
 }
 
-.movie-card img {
-  max-width: 100%;
-}
-
-.movie-card h3 {
-  margin-top: 10px;
-  margin-bottom: 5px;
-}
-
-.movie-card p {
-  margin-bottom: 10px;
-}
-
-.movie-card ul {
-  margin-top: 10px;
-  padding-left: 0;
+.movie-list {
   list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 20px;
 }
 
-.movie-card ul li {
+.movie-item {
+  padding: 10px;
+}
+
+.movie-poster {
+  text-align: center;
+  border-radius: 8px;
+  margin-right: 30px;
+}
+
+.poster-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 11px;
+}
+
+.movie-details {
+  padding-top: 10px;
+  width: 100%;
+  color: white;
+  height: 80px;
+}
+
+.movie-name {
+  font-size: 19px;
   margin-bottom: 5px;
+  position: relative;
+  bottom: 90px;
+  font-weight: bold;
+  width: 180px;
 }
 
-.movie-card ul li a {
-  text-decoration: none;
+.movie-info {
+  display: flex;
+  align-items: center;
+}
+
+.year {
+  font-size: 16px;
+  color: #888;
+  position: relative;
+  bottom: 90px;
 }
 </style>
-
-  
-  

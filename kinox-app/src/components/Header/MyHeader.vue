@@ -7,18 +7,28 @@
           <p>KinOx</p>
         </div>
       </router-link>
+     
 
       <div class="group">
         <ul class="menuItems">
-          <li >
-            <router-link to="/movies" class="menuItem">
-              <a>Movies</a>
-            </router-link>
-          </li>
-          <li class="menuItem">
-            <router-link to="/tv-shows" class="menuItem">
-              <a>Cartoon</a>
-            </router-link>
+          <li>
+  <router-link :to="{ path: '/movie' }" class="menuItem">
+    <a>Фильмы</a>
+  </router-link>
+</li>
+<li class="menuItem">
+  <router-link :to="{ path: '/cartoon' }" class="menuItem">
+    <a>Мультфильмы</a>
+  </router-link>
+</li>
+
+<li class="menuItem">
+<font-awesome-icon
+              icon="bookmark"
+             class="Bookmark"
+              v-if="!isSearchActive"
+              click="navigateToLikePage"
+            />
           </li>
         </ul>
         
@@ -81,6 +91,9 @@ export default {
 
   methods: {
     ...mapActions(['searchMovies']),
+    navigateToLikePage() {
+      this.$router.push({ name: 'bookmarks-ratings' });
+    },
     performSearch() {
       this.searchMovies(); // Вызвать действие searchMovies для обновления filteredMovies в хранилище
       this.$emit('search', this.searchQuery); // Эмитировать событие 'search' с переданным значением поискового запроса
@@ -103,6 +116,7 @@ export default {
 
 <style lang="scss" scoped>
 .header {
+  font-family: cursive;
   position: absolute;
   top: 0;
   left: 0;
@@ -131,6 +145,7 @@ export default {
 }
 
 .logo {
+  
   display: flex;
   align-items: center;
   letter-spacing: 0.1em;
@@ -141,6 +156,7 @@ export default {
   p {
     font-size: 18px;
     font-weight: bold;
+    font-family: cursive;
   }
 }
 
