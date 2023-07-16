@@ -59,14 +59,7 @@
       </div>
     </router-link>
     <div class="icons">
-  <!-- <font-awesome-icon
-    icon="heart"
-    class="heart"
-    :class="{ active: hasRating }"
-    @click.stop="rateMovie($event)"
-   
-  />  -->
-  <!-- :class="{ active: localStorage.getItem(`bookmark_${movie.id}`) === 'true' }" --> 
+  
   <font-awesome-icon
     icon="bookmark"
     class="bookmark"
@@ -74,7 +67,7 @@
     @click.stop="toggleBookmark($event)"
     
   />
-  <!-- :class="{ active: localStorage.getItem(`rating_${movie.id}`) === '5' }" -->
+
 </div>
 </div>
   </template>
@@ -335,6 +328,7 @@ library.add(faBookmark)
 library.add(faHeart)
 
 export default {
+  
   components: {
     FontAwesomeIcon,
     CircleProgress

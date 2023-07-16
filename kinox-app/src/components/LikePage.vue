@@ -1,95 +1,118 @@
 <template>
-    <div class="container">
-      <div class="movie-list">
-        <div class="section">
-          <h2 class="section-title">Посмотреть позже</h2>
-          <ul class="movie-card-list">
-            <li v-for="(movie) in paginatedBookmarkedMovies" :key="movie.id" class="movie-card-item">
-              <MovieCard :movie="movie" />
-            </li>
-          </ul>
-          <div class="pagination" v-if="bookmarkedMovies.length >6">
-            <button v-for="page in bookmarkedPages" :key="page" @click="currentPageBookmarked = page" :class="{ active: page === currentPageBookmarked }">{{ page }}</button>
-          </div>
-        </div>
-  
-        <div class="section">
-          <h2 class="section-title">История оценок</h2>
-          <table class="movie-table">
-            <tbody>
-              <tr v-for="(movie) in paginatedLikedMovies" :key="movie.id">
-                <td>
-                  <img :src="movie.poster.url" alt="Movie Poster" class="poster" />
-                </td>
-                <td>{{ movie.name }}</td>
-                <td class="movie-rating">
-                  <span v-for="star in 10" :key="star" class="star" :class="{ active: movie.rating >= star }" @click="rateMovie(movie.id, star)"></span>
-                </td>
-                <td>
-                  <button class="delete-button" @click="removeRating(movie.id)">&#10060;</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="pagination">
-            <button v-for="page in likedPages" :key="page" @click="currentPageLiked = page" :class="{ active: page === currentPageLiked }">{{ page }}</button>
-          </div>
+  <div class="container">
+    <div class="movie-list">
+      <div class="section">
+        <h2 class="section-title">Посмотреть позже</h2>
+        <ul class="movie-card-list">
+          <li v-for="(movie) in paginatedBookmarkedMovies" :key="movie.id" class="movie-card-item">
+            <MovieCard :movie="movie" />
+          </li>
+        </ul>
+        <div class="pagination" v-if="bookmarkedMovies.length > 6">
+          <button v-for="page in bookmarkedPages" :key="page" @click="currentPageBookmarked = page" :class="{ active: page === currentPageBookmarked }">{{ page }}</button>
         </div>
       </div>
+
+      <div class="section">
+        <h2>Оцененные фильмы</h2>
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Оценка</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="movie in ratedMovies" :key="movie.id">
+              <td>
+                <img :src="movie.poster.url" :alt="movie.name" height="100">
+                {{ movie.name }}
+              </td>
+              <td>
+                <Rating v-model="movie.rating" :stars="10" cancel="false" :readonly="true" class="custom-rating" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </template>
-  
-  <script>
-  import { mapState } from 'vuex';
-  import MovieCard from './MovieCard.vue';
-  
-  export default {
-    components: {
-      MovieCard
+  </div>
+</template>
+
+<script>
+import { mapState } from 'vuex';
+import MovieCard from './MovieCard.vue';
+import Rating from 'primevue/rating';
+
+export default {
+  components: {
+    MovieCard,
+    Rating,
+  },
+  data() {
+    return {
+      currentPageBookmarked: 1,
+      moviesPerPage: 6,
+    };
+  },
+  computed: {
+    ...mapState(['movies']),
+    bookmarkedMovies() {
+      return this.movies.filter((movie) => {
+        const bookmarkKey = `bookmark_${movie.id}`;
+        return localStorage.getItem(bookmarkKey) === 'true';
+      });
     },
-    data() {
-      return {
-        currentPageBookmarked: 1,
-        currentPageLiked: 1,
-        perPage: 6
-      };
+    ratedMovies() {
+      return this.movies.filter((movie) => {
+        const ratingKey = `rating_${movie.id}`;
+        const rating = localStorage.getItem(ratingKey);
+        return rating !== null;
+      }).map((movie) => {
+        return {
+          ...movie,
+          rating: parseInt(localStorage.getItem(`rating_${movie.id}`)),
+        };
+      });
     },
-    computed: {
-      ...mapState(['movies']),
-      bookmarkedMovies() {
-        return this.movies.filter((movie) => {
-          const bookmarkKey = `bookmark_${movie.id}`;
-          return localStorage.getItem(bookmarkKey) === 'true';
-        });
-      },
-      likedMovies() {
-        return this.movies.filter((movie) => {
-          const likeKey = `rating_${movie.id}`;
-          return localStorage.getItem(likeKey) === 'true';
-        });
-      },
-      bookmarkedPages() {
-        return Math.ceil(this.bookmarkedMovies.length / this.perPage);
-      },
-      likedPages() {
-        return Math.ceil(this.likedMovies.length / this.perPage);
-      },
-      paginatedBookmarkedMovies() {
-        const startIndex = (this.currentPageBookmarked - 1) * this.perPage;
-        const endIndex = this.currentPageBookmarked * this.perPage;
-        return this.bookmarkedMovies.slice(startIndex, endIndex);
-      },
-      paginatedLikedMovies() {
-        const startIndex = (this.currentPageLiked - 1) * this.perPage;
-        const endIndex = this.currentPageLiked * this.perPage;
-        return this.likedMovies.slice(startIndex, endIndex);
+    bookmarkedPages() {
+      return Math.ceil(this.bookmarkedMovies.length / this.moviesPerPage);
+    },
+    paginatedBookmarkedMovies() {
+      const startIndex = (this.currentPageBookmarked - 1) * this.moviesPerPage;
+      const endIndex = this.currentPageBookmarked * this.moviesPerPage;
+      return this.bookmarkedMovies.slice(startIndex, endIndex);
+    },
+  },
+  methods: {
+    rateMovie(movieId, rating) {
+      const movie = this.movies.find((movie) => movie.id === movieId);
+      if (movie) {
+        movie.rating = rating;
+        localStorage.setItem(`rating_${movie.id}`, rating.toString());
+        localStorage.setItem(`rating_date_${movie.id}`, new Date().toISOString());
+        localStorage.setItem('movies', JSON.stringify(this.movies));
       }
     },
-    methods: {
-      
-    }
-  };
-  </script>
+    removeRating(movieId) {
+      const index = this.ratedMovies.findIndex((movie) => movie.id === movieId);
+      if (index !== -1) {
+        this.ratedMovies.splice(index, 1);
+        localStorage.removeItem(`rating_${movieId}`);
+        localStorage.setItem('movies', JSON.stringify(this.movies));
+      }
+    },
+    getRatingDate(movieId) {
+      const ratingDate = localStorage.getItem(`rating_date_${movieId}`);
+      if (ratingDate) {
+        return new Date(ratingDate).toLocaleDateString();
+      }
+      return '';
+    },
+  },
+};
+</script>
+
 
 
 <style scoped>

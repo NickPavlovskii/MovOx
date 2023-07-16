@@ -63,6 +63,47 @@
         "year": 2011,
         "alternativeName": "Intouchables",
         "enName": null,
+        "country": [
+          "Франция"
+        ],
+        "director": [
+          {
+            "name": "Оливье Накаш",
+            "posterUrl": "https://avatars.mds.yandex.net/get-kinopoisk-image/1946459/55cd82c0-fae2-4b30-8e95-34b8fe73f3f9/300x450",
+            "job": "режиссер"
+          },
+          {
+            "name": "Эрик Толедано",
+            "posterUrl": "https://avatars.mds.yandex.net/get-kinopoisk-image/1946459/81dbac9f-424a-4052-a258-7c6070c3b3b6/300x450",
+            "job": "режиссер"
+          }
+        ],
+        "cast": [
+          {
+            "_id": "63e647b968d824d6ca7a0fcd",
+            "name": "Франсуа Клюзе",
+            "role": "Филипп",
+            "photo": {
+              "_id": "63e647b968d824d6ca7a0fce",
+              "url": "https://avatars.mds.yandex.net/get-kinopoisk-image/1777765/f1615d27-440d-490e-85dd-ecbf5490b554/112x168"
+            }
+          },
+          {
+            "_id": "63e647b968d824d6ca7a0fcf",
+            "name": "Омар Си",
+            "role": "Дрис",
+            "photo": {
+              "_id": "63e647b968d824d6ca7a0fd0",
+              "url": "https://example.com/omar_sy.jpg"
+            }
+          }
+        ],
+        
+        "genre": [
+          "драма",
+          "комедия",
+          "биография"
+        ],
         "names": [
           {
             "_id": "6339779fc22d011bb5646dff",
@@ -166,6 +207,50 @@
         "year": 2019,
         "alternativeName": "The Gentlemen",
         "enName": null,
+        "cast": [
+          {
+            "_id": "63e647b968d824d6ca7a0fcd",
+            "name": "Мэттью МакКонахи",
+            "role": "Майкл Пирс",
+            "photo": {
+              "_id": "63e647b968d824d6ca7a0fce",
+              "url": "https://example.com/matthew_mcconaughey.jpg"
+            }
+          },
+          
+          {
+            "_id": "63e647b968d824d6ca7a0fcf",
+            "name": "Чарли Ханнэм",
+            "role": "Рэй",
+            "photo": {
+              "_id": "63e647b968d824d6ca7a0fd0",
+              "url": "https://example.com/charlie_hunnam.jpg"
+            }
+          },
+          {
+            "_id": "63e647b968d824d6ca7a0fd1",
+            "name": "Мишель Докери",
+            "role": "Розалинд Пирс",
+            "photo": {
+              "_id": "63e647b968d824d6ca7a0fd2",
+              "url": "https://example.com/michelle_dockery.jpg"
+            }
+          },
+          {
+            "_id": "63e647b968d824d6ca7a0fd3",
+            "name": "Джереми Стронг",
+            "role": "Мэтью",
+            "photo": {
+              "_id": "63e647b968d824d6ca7a0fd4",
+              "url": "https://example.com/jeremy_strong.jpg"
+            }
+          }
+        ],
+        "genre": [
+          "драма",
+          "комедия",
+          "биография"
+        ],
         "names": [
           {
             "_id": "6339eb5489ae969da213a33a",

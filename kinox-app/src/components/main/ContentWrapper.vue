@@ -8,17 +8,32 @@
       </div>
       <div class="opacity-layer"></div>
       <div class="heroBannerContent">
-        <h1 class="title" >WELCOME</h1>
+        <div v-if = "this.$route.path === '/'"> 
+           <h1 class="title" >WELCOME</h1>
         <p class="subTitle" style="font-family: cursive;">Миллион фильмов и сериалов только для тебя</p>
+      </div>
+      
+
+        <div v-if = "this.$route.path === '/search'">
+          <div> 
+           <h2 class="title" >Результаты поиска</h2>
+       
+      </div>
+        </div>
         <div class="searchInput">
           <input
           type="text"
-          v-model="searchQuery"
-          @keyup.enter="performSearch"
+         
           placeholder="Поиск фильма"
+      v-model="searchQuery"
+      @input="handleInput"
+      @keydown.enter="handleEnter"
+      @blur="handleBlur"
+     
+         
           class="search-input"
         />
-        <button @click="performSearch" class="search-button">Поиск</button>
+        <button @click="this.$router.push({ path: `/search` })" class="search-button">Поиск</button>
         </div>
       </div>
     </div>
@@ -34,6 +49,7 @@ export default {
       isSearchActive: false,
       searchQuery: '',
       isMenuOpen: false,
+      showResults: false,
     };
   },
   computed: {
@@ -42,12 +58,20 @@ export default {
 
   methods: {
     ...mapActions(['searchMovies']),
-    performSearch() {
-      this.searchMovies(); // Вызвать действие searchMovies для обновления filteredMovies в хранилище
-      this.$emit('search', this.searchQuery); // Эмитировать событие 'search' с переданным значением поискового запроса
-    },
+    handleEnter() {
+  if (event.key === 'Enter') {
+    this.$router.push({ path: `/search` });
+  }
+},
 
- 
+handleInput() {
+    this.showResults = true;
+    this.$store.commit('setSearchQuery', this.searchQuery); // Обновление значения searchQuery в хранилище
+    this.searchMovies();
+  },
+  handleBlur() {
+      this.showResults = false;
+    },
   },
   mounted() {
     this.searchMovies();
@@ -136,7 +160,7 @@ export default {
 .heroBanner .heroBannerContent .searchInput {
   display: flex;
   align-items: center;
-  width: 120%;
+  width: 100%;
 }
 
 .heroBanner .heroBannerContent .searchInput input {

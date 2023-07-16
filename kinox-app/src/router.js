@@ -1,6 +1,7 @@
 // router.js
 import { createRouter, createWebHistory } from 'vue-router';
 import MyHeader from './components/Header/MyHeader.vue';
+import MovieMain from './components/MovieMain.vue';
 import MovieList from './components/MovieList.vue';
 import LikePage from './components/LikePage.vue';
 import MyMovies from './components/Explore/MyMovies.vue';
@@ -9,6 +10,15 @@ import MoviePage from './components/MoviePage/MoviePage.vue';
 const routes = [
   {
     path: '/',
+    name: 'movies-main',
+    components: {
+      default: MovieMain,
+      header: MyHeader,
+    },
+  },
+
+  {
+    path: '/search',
     name: 'movies-list',
     components: {
       default: MovieList,
@@ -16,13 +26,20 @@ const routes = [
     },
   },
 
-
  
 
 
   {
    
     path: '/:type',
+    components: {
+      default: MyMovies,
+      header: MyHeader,
+    },
+  },
+  {
+   
+    path: '/:genres',
     components: {
       default: MyMovies,
       header: MyHeader,
@@ -59,5 +76,8 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
-
+router.afterEach(() => {
+  // Прокрутка страницы в начало при каждом переходе через роутер
+  window.scrollTo(0, 0);
+});
 export default router;

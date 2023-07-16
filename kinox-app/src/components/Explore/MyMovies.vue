@@ -1,9 +1,12 @@
 <template>
   <div class="container">
     <div class="title_container">
-      <h2 v-if="this.$route.path === '/movie'" >Фильмы</h2>
-      <h2 v-if="this.$route.path === '/cartoon'" >Мультфильмы</h2>
-    <!-- <input type="text" v-model="searchQuery" @input="searchMovies" placeholder="Поиск фильмов..." /> -->
+      <h2 class="title" v-if="this.$route.path === '/movie'" >Фильмы</h2>
+      <h2 class="title" v-if="this.$route.path === '/cartoon'" >Мультфильмы</h2>
+      <h2 class="title" v-if="this.$route.path === '/tv-series'" >Сериалы</h2>
+      <h2 class="title" v-if="this.$route.path === '/Комедия'" >Комедии</h2>
+      
+ 
     <div class="sort-options">
       <Dropdown 
       :class="['custom-dropdown', 'w-full', 'md:w-14rem', 'p-dropdown-indigo']"
@@ -21,19 +24,15 @@
     </div>
    
 
-<!-- <select v-model="sortOrder" id="sort-order-select" @change="sortMovies">
 
-  <option value="asc">Ascending</option> 
-  <option value="desc">Descending</option>
-</select> -->
 
   </div>
     <ul class="movie-list">
       <li v-for="(movie, index) in displayedMovies"  :key="movie.id" :class="{'movie-item': true, 'new-row': index % 5 === 0} " >
-       <!-- <MovieCard :movie="movie" class="MovieCard"/> -->
+
        <router-link :movie="movie"  :to="{ name: 'movie-details', params: { id: movie.id }}" style="cursor: pointer; text-decoration: none; list-style-type: none;">
        <div  style="cursor: pointer; text-decoration: none; list-style-type: none; display: flex;">
-
+      
       
       <div class="movie-poster">
         <img :src="movie.poster.url" alt="Постер фильма" class="poster-image">
@@ -69,6 +68,7 @@
       
  
     <div style="cursor: pointer; text-decoration: none; list-style-type: none; color: white">
+      <h2 class="movie-name">{{ movie.name }}</h2>
       <p>{{ movie.description }}</p>
       <div class="row">
               <div class="info">
@@ -125,8 +125,7 @@
 </template>
 
 <script>
-//theme
-import "primevue/resources/themes/lara-light-indigo/theme.css";     
+
 
 
 //core
@@ -170,13 +169,20 @@ export default {
   },
   computed: {
     ...mapState(['movies', 'searchQuery']),
-    
-    filteredMovies() {
+  
+    filteredM() {
       return this.movies.filter(movie => {
     if (this.$route.path === '/movie') {
-      return movie.type === 'movie' && movie.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+      return movie.type === 'movie' ;
     } else if (this.$route.path === '/cartoon') {
-      return movie.type === 'cartoon' && movie.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+      return movie.type === 'cartoon' && 'animated-series'
+    }
+    else if (this.$route.path === '/tv-series') {
+      return movie.type === 'tv-series';
+    }
+    else if (this.$route.path === '/Комедия') {
+      return movie.genres.includes('Комедия');  
+
     }
     return false; // Если путь не соответствует ни '/movies/movie', ни '/movies/cartoon'
   });
@@ -190,17 +196,17 @@ export default {
   //     return this.$store.state.movies.movieList;
   //   },
     totalPages() {
-      return Math.ceil(this.filteredMovies.length / this.itemsPerPage);
+      return Math.ceil(this.filteredM.length / this.itemsPerPage);
     },
     totalJumpPages() {
       return Math.ceil(this.totalPages / 5);
     },
     displayedMovies() {
       const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-      return this.filteredMovies.slice(startIndex, startIndex + this.itemsPerPage);
+      return this.filteredM.slice(startIndex, startIndex + this.itemsPerPage);
     },
     shouldShowLoadMoreButton() {
-      return this.currentPage * this.itemsPerPage < this.filteredMovies.length;
+      return this.currentPage * this.itemsPerPage < this.filteredM.length;
     },
   },
   methods: {
@@ -360,6 +366,50 @@ color: #fff;
   background: #1c4b91;
 }
 
+.pagination {
+    
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    z-index: 9999;
+  }
+  .jump-pagination{
+    z-index: 1111;
+  }
+  
+  .page-button {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 5px 10px;
+    margin: 0 5px;
+    cursor: pointer;
+    background-color: #f7f7f7;
+  }
+  
+  .page-button:hover {
+    background-color: #e1e1e1;
+  }
+  
+
+  .jump-button {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 5px 10px;
+    margin: 0 5px;
+    cursor: pointer;
+    color: #fff;
+    background: #020c1b;
+  }
+  
+  .jump-button:hover {
+    background: #1c4b91;
+  }
+  .jump-button:active {
+    background: #1c4b91;
+  }
+
+  
+
 .icon_select{
 position: relative;
 top: 2px;
@@ -381,7 +431,7 @@ top: 2px;
 .ratingtext {
   position: relative;
   bottom: 110px;
-  margin-left: 26px;
+  right: 37px;
   font-size: 21px;
   color: #020c1b;
   font-weight: bold;
@@ -401,6 +451,18 @@ top: 2px;
   display: flex;
  justify-content: space-between;
  flex-direction: column;
+ 
+}
+.title{
+  position: relative;
+}
+.title::before {
+  content: '';
+  position: absolute;
+  width: 75%;
+  height: 2px;
+  background: white;
+  bottom: -3px;
  
 }
 
@@ -479,12 +541,12 @@ color: #1c4b91;
 }
 
 .movie-name {
-  font-size: 19px;
+  font-size: 25px;
   margin-bottom: 5px;
-  position: relative;
-  bottom: 90px;
+  
+
   font-weight: bold;
-  width: 180px;
+
 }
 
 .movie-info {
@@ -550,9 +612,6 @@ color: #1c4b91;
   margin-left: 5px;
 }
 
-.movie-name {
-  margin-bottom: 10px;
-}
 
 </style>
 

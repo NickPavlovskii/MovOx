@@ -16,19 +16,29 @@
     <a>Фильмы</a>
   </router-link>
 </li>
-<li class="menuItem">
+<li>
+  <router-link :to="{ path: '/tv-series' }" class="menuItem">
+    <a>Сериалы</a>
+  </router-link>
+</li>
+<li >
   <router-link :to="{ path: '/cartoon' }" class="menuItem">
     <a>Мультфильмы</a>
   </router-link>
 </li>
 
-<li class="menuItem">
+<li class="menuItem bookmarksItem" >
 <font-awesome-icon
               icon="bookmark"
              class="Bookmark"
               v-if="!isSearchActive"
               @click="navigateToLikePage"
             />
+            </li>
+            <li class="bookmarksLink">
+              <router-link :to="{ path: '/bookmarks-ratings' }" class="menuItem">
+    <a>Смотреть позже</a>
+  </router-link>
             </li>
         </ul>
         
@@ -50,8 +60,42 @@
         </div>
 
         <div class="searchBox" :class="{ active: isSearchActive }">
-    <input type="text" placeholder="Search here..." v-model="searchQuery"  @keyup.enter="performSearch" />
+    <input
+      type="text"
+      placeholder="Search here..."
+      v-model="searchQuery"
+      @input="handleInput"
+      @keydown.enter="handleEnter"
+      @blur="handleBlur"
+    />
+    <ul v-if="showResults && filteredMoviesList.length > 0" class="dropdown">
+      <li v-for="movie in filteredMoviesList" :key="movie.id" class="dropdown-item">
+        <router-link :to="{ path: `/movie/${movie.id}` }" class="dropdown-link">
+          <img :src="movie.poster.url" alt="Постер фильма" class="dropdown-image">
+          <div class="dropdown-info">
+            <h3 class="dropdown-name" >{{ movie.name }}</h3> 
+            
+            <p class="dropdown-shortDesc">{{ movie.shortDescription }}</p>
+      <div class="row">
+              <div class="info">
+                <div class="infoItem dropdown-movieLength">
+                  <span class="text bold"><font-awesome-icon icon="clock" /></span>
+                  <span class="text">{{ convertMinutesToHours(movie.movieLength) }}</span>
+                </div>
+                <div class="infoItem">
+                  <span class="text bold"><font-awesome-icon icon="calendar-days" /></span>
+                  <span class="text">{{ movie.year }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+   
+
+        </router-link>
+      </li>
+    </ul>
   </div>
+   
 
   <div class="mobileMenu" :class="{ active: show }" @click="toggleMenu">
     <div class="toggleMenu">
@@ -66,16 +110,16 @@
 </template>
 
 <script>
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faSearch, faBars, faClose, faBookmark, faHeart } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faSearch, faBars, faClose, faBookmark, faHeart } from '@fortawesome/free-solid-svg-icons';
 import { mapState, mapActions } from 'vuex';
 
-library.add(faSearch)
-library.add(faBars)
-library.add(faClose)
-library.add(faBookmark)
-library.add(faHeart)
+library.add(faSearch);
+library.add(faBars);
+library.add(faClose);
+library.add(faBookmark);
+library.add(faHeart);
 
 export default {
   components: {
@@ -85,22 +129,54 @@ export default {
   data() {
     return {
       isSearchActive: false,
+      showResults: false,
       searchQuery: '',
       isMenuOpen: false,
     };
   },
+ 
   computed: {
-    ...mapState(['movies', 'searchQuery', 'filteredMovies']), // Добавить filteredMovies в computed
+    ...mapState(['movies', 'searchQuery', 'filteredMovies']),
+
+    filteredMoviesList() {
+      return this.filteredMovies.slice(0, 3);
+    },
   },
 
   methods: {
     ...mapActions(['searchMovies']),
+    
+    convertMinutesToHours(minutes) {
+      const hours = Math.floor(minutes / 60);
+      const remainingMinutes = minutes % 60;
+      return `${hours}h ${remainingMinutes}min`;
+    },
+    handleInput() {
+    this.showResults = true;
+    this.$store.commit('setSearchQuery', this.searchQuery); // Обновление значения searchQuery в хранилище
+    this.searchMovies();
+  },
+  
+  handleEnter() {
+  if (event.key === 'Enter') {
+    this.$router.push({ path: `/search` });
+  }
+},
+    handleBlur() {
+      this.showResults = false;
+    },
+    selectMovie(movie) {
+      this.searchQuery = movie.name;
+      this.showResults = false;
+      this.$router.push({ path: `/movie/${movie.id}` });
+    },
+
     navigateToLikePage() {
       this.$router.push({ name: 'bookmarks-ratings' });
     },
     performSearch() {
-      this.searchMovies(); // Вызвать действие searchMovies для обновления filteredMovies в хранилище
-      this.$emit('search', this.searchQuery); // Эмитировать событие 'search' с переданным значением поискового запроса
+      this.searchMovies();
+      this.$emit('search', this.searchQuery);
     },
 
     toggleSearch() {
@@ -113,12 +189,101 @@ export default {
   mounted() {
     this.searchMovies();
   },
-}
+};
 </script>
 
 
 
+
 <style lang="scss" scoped>
+.movie-name {
+  font-size: 24px;
+  margin-bottom: 5px;
+  
+
+  font-weight: bold;
+  width: 180px;
+}
+
+.text {
+   
+   margin-right: 5px;
+   
+   opacity: 0.5;
+   line-height: 24px;
+
+}
+
+.detailsBanner .content .right .info .text.bold {
+   font-weight: 600;
+   opacity: 1;
+}
+.row {
+ display: flex;
+
+ gap: 25px;
+
+ position: relative;
+bottom: 10px;
+
+   
+}
+
+.info {
+ border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+ padding: 15px 0;
+ display: flex;
+}
+
+.info .infoItem {
+ margin-right: 10px;
+ display: flex;
+ flex-flow: row wrap;
+ 
+}
+
+.icons {
+ display: flex;
+ flex-direction: column;
+ align-items: flex-end;
+ margin-bottom: 30px;
+ opacity: 0.7;
+}
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 70%;
+  width: 28%;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0;
+  margin-top: 4px;
+  list-style: none;
+}
+
+.dropdown-item {
+  padding: 8px;
+}
+
+.dropdown-link {
+  text-decoration: none;
+  color: #000;
+  display: flex;
+ 
+}
+.dropdown-image{
+  width: 35%;
+  margin-right: 6px;
+}
+
+.dropdown-name{
+  
+}
+.dropdown-shortDesc{
+
+}
+
 .mobileMenu {
   cursor: pointer;
   display: inline-block;
@@ -227,7 +392,9 @@ export default {
     }
   }
 }
-
+.bookmarksLink{
+  display: none;
+}
 .search {
   position: relative;
   z-index: 10;
@@ -320,7 +487,18 @@ export default {
 display: none;
   }
 @media (max-width: 768px) {
-
+  .dropdown-movieLength .text{
+    display:none;
+  }
+  .dropdown-shortDesc{
+    display:none;
+  }
+.bookmarksLink{
+  display: block;
+}
+.bookmarksItem{
+display: none;
+}
   .mobileMenuItems {
   display: none;
   width: 100%;
@@ -455,7 +633,7 @@ display: block;
     flex-direction: column;
     background: #020c1b;
     width: 100%;
-    height: 170%;
+    height: 180%;
     margin: 0;
     transition: transform 0.5s ease-in-out;
     .menuItem{

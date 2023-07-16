@@ -12,15 +12,38 @@
       </div>
     </div>
     <div class="opacity-layer"></div>
-    <!-- <h4 class="link"> <router-link to="/" style="text-decoration: none;cursor: pointer; color: white;">
-      
-      <span style="text-decoration: underline; cursor: pointer;">KinOx</span>
-    </router-link>/{{ movie.name }}</h4> -->
+    
     <div class="content">
       
       <div class="left">
         <img :src="movie.poster.url" alt="Movie Poster" class="posterImg">
+       
+      
+   <div style="display: flex;   flex-direction: column; ">
+   
+    <div style="display: flex; flex-direction: column;">
+  <h3 style="margin: 25px -2px -2px -2px">Поставьте оценку</h3>
+  <span class="text">Это улучшит ваши рекомендации</span>
+</div>
+
+<Rating v-model="rating" :stars="10" cancel="false" @input="saveRating" class="custom-rating" />
+
+      <div style="display: flex; justify-content: flex-end;">
         
+   <button :class="{ active: isBookmarked }" @click.stop="toggleBookmark($event)" class="myButton  btn-3">
+    <span >
+      <Icon v-if="!isBookmarked" icon="ic:outline-bookmark-add" class="icn" />
+      <Icon v-else icon="material-symbols:bookmark-add" class="icn"/>
+      
+     Смотреть позже 
+    </span>
+     
+    </button>
+ 
+   
+ 
+    </div>
+  </div>
       </div>
       <div class="right">
         <h1 class="title">{{ movie.name }} </h1>
@@ -29,22 +52,39 @@
     
         
         <h4 class="subtitle">{{movie.alternativeName}}</h4>
-       <!--  <div class="genres">
-          <span class="genre">Comedy</span>
-          <span class="genre">Drama</span> 
-        </div>-->
+        <div class="genres">
+        <div  v-for="genre in movie.genres" :key="genre" >
+          <span class="genre">{{ genre }}</span>
+          
+        </div>
+      </div>
         <div class="overview">
-          <h2 class="heading">Описание</h2>
+          <h2 class="heading">О фильме</h2>
           <p class="description">{{ movie.description }}</p>
         </div>
      
-        <!-- <div class="playbtn">
-          <svg> Иконка проигрывания 
-          </svg>
-          <span class="text">Play Trailer</span>
-        </div> -->
-        <div class="row">
+     
+      <div class="right-rows">
+        <div class="row" >
           <div class="info">
+            <div class="infoItem">
+              <span class="text bold" style="    letter-spacing: 0.2em;">Режиссер</span>
+              
+              <span class="text">{{ movie.director.producer.join(', ') }}</span>
+            </div>
+            <div class="infoItem">
+              <span class="text bold">Cценарист:</span>
+              <span class="text">{{ movie.director.screenwriter.join(', ') }}</span>
+            </div>
+          </div>
+         
+        </div>
+        <div class="row" style="position: relative; bottom: 30px;">
+          <div class="info">
+            <div class="infoItem">
+              <span class="text bold"><font-awesome-icon icon="globe" /></span>
+              <span class="text">{{ movie.country }}</span>
+            </div>
             <div class="infoItem">
               <span class="text bold"><font-awesome-icon icon="clock" /></span>
               <span class="text">{{ convertMinutesToHours(movie.movieLength) }}</span>
@@ -56,7 +96,8 @@
           </div>
          
         </div>
-        <div class="row">
+        
+        <div class="row raiting">
           <div class="info">
             <div class="infoItem">
               <span class="text bold">kp:</span>
@@ -66,16 +107,38 @@
               <span class="text bold">imdb:</span>
               <span class="text">{{ movie.rating.imdb }}</span>
             </div>
-            <div class="infoItem">
-              <span class="text bold">Критики:</span>
-              <span class="text">{{ movie.rating.filmCritics }}</span>
-            </div>
-          </div>
+           
+          </div> 
           
         
-        </div>
-    
-        <div class="watchability" v-if="movie.watchability.items>0">
+        </div> 
+        
+        
+        <div style=" position: relative; bottom: 70px;">
+         <h3 style=" margin-bottom: -0px;   letter-spacing: 0.2em;">Рейтинг Кинокритиков</h3> 
+          <div class="progress-bars">
+            <div style="display: flex;     flex-direction: column; width: 315px;" >
+          <h4 style="    letter-spacing: 0.2em;"> В Мире</h4>
+          <div class="progress-bar">
+
+            <ProgressBar :value="movie.rating.filmCritics * 10" >{{ movie.rating.filmCritics }}</ProgressBar>
+          </div>
+          <span class="text votes">{{ movie.votes.filmCritics }} голосов</span>
+          
+    </div>
+    <div style="display: flex;     flex-direction: column; width: 270px; " >
+      <h4>В России</h4>
+  <div class="progress-bar rf">
+
+    <ProgressBar :value="movie.rating.russianFilmCritics"> <span style="margin-bottom: 2px;">{{ movie.rating.russianFilmCritics }}</span> </ProgressBar>
+
+  </div>
+    <span class="text votes">{{ movie.votes.russianFilmCritics }} голосов</span>      
+  </div>
+          </div>
+       
+</div>
+        <div class="watchability" v-if="movie.watchability.items != null">
           <p class="watchability-heading">Доступно на:</p>
           <ul class="watchability-list">
             <li v-for="item in movie.watchability.items" :key="item._id">
@@ -85,75 +148,497 @@
             </li>
           </ul>
         </div>
+
       </div>
+      
     </div>
+   
+    </div>
+   
     <h4 class="link"> <router-link to="/" style="text-decoration: none;cursor: pointer; color: white;">
       
       <span style="text-decoration: underline; cursor: pointer;">KinOx</span>
     </router-link>/{{ movie.name }}</h4>
-    <MyRecom/>
-  </div>
 
+
+    
+   
+
+  
+  </div>
+  <div style="position: relative; bottom: 100px;">
+  <div class="Cast" v-if=" movie.type !== 'cartoon'"
+>
+  <h3 class="watchability-heading">Каст:</h3>
+  <ul class=" cast-list">
+    <li v-for="item in movie.cast" :key="item._id">
+      <div class="cast-log" :style="'background-image: url(' + item.photo.url + ');'"></div>
+      <div style="display: flex; flex-direction: column;">
+        <span >{{ item.name }}</span>
+      <span class="text">{{ item.role }}</span>
+    </div>
+      
+   
+    </li>
+  </ul>
+</div> 
+  <MyRecom class="MyRecom"/> 
+</div>
 </div>
 </template>
 
 
 <script>
+import '../../../style/style.css'; // Подключение файла стилей
+import { Icon } from '@iconify/vue';
 import { mapState } from 'vuex';
 import { mapActions } from 'vuex';
 import MyRecom from '../MyRecom.vue';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faClock, faCalendarDays } from '@fortawesome/free-solid-svg-icons'
-library.add(faClock, faCalendarDays)
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faClock, faCalendarDays, faGlobe, faBookmark } from '@fortawesome/free-solid-svg-icons';
+import Rating from 'primevue/rating';
+import ProgressBar from 'primevue/progressbar';
+
+library.add(faClock, faCalendarDays, faGlobe, faBookmark);
+
 export default {
   components: {
     FontAwesomeIcon,
-   MyRecom
+    MyRecom,
+    Rating,
+    ProgressBar,
+    Icon,
+  },
+  data() {
+    return {
+      rating: 0,
+      isBookmarked: false,
+      hasRating: false,
+      ratedMovies: [], // Массив для хранения оцененных фильмов
+    };
+  },
+  watch: {
+    isBookmarked(value) {
+      localStorage.setItem(this.bookmarkKey, value.toString());
+    },
+    rating(value) {
+      localStorage.setItem(this.ratingKey, value.toString());
+    },
+  },
+  created() {
+    // Загружаем оцененные фильмы из LocalStorage при создании компонента
+    const ratedMovies = localStorage.getItem('ratedMovies');
+    if (ratedMovies) {
+      this.ratedMovies = JSON.parse(ratedMovies);
+    }
+    const bookmarkKey = `bookmark_${this.movie.id}`;
+    const ratingKey = `rating_${this.movie.id}`;
+
+    // Проверяем сохраненные значения в локальном хранилище
+    if (localStorage.getItem(bookmarkKey) === 'true') {
+      this.isBookmarked = true;
+    }
+
+    if (localStorage.getItem(ratingKey)) {
+      this.rating = parseInt(localStorage.getItem(ratingKey));
+    }
   },
   computed: {
     ...mapState(['movies']),
+    getRatingDate() {
+      const movieId = this.movie.id;
+      const ratingDateKey = `rating_date_${movieId}`;
+      const ratingDate = localStorage.getItem(ratingDateKey);
+
+      if (ratingDate) {
+        return new Date(ratingDate).toLocaleDateString();
+      }
+
+      return '';
+    },
     movie() {
       // Получаем информацию о фильме на основе переданного id из маршрута
       const movieId = parseInt(this.$route.params.id);
       return this.movies.find((movie) => movie.id === movieId);
     },
+    bookmarkKey() {
+      return `bookmark_${this.movie.id}`;
+    },
+    ratingKey() {
+      return `rating_${this.movie.id}`;
+    },
   },
   mounted() {
-   
     if (!this.movies.length) {
       this.fetchMovies();
+    }
+    if (localStorage.getItem('rating')) {
+      this.savedRating = parseInt(localStorage.getItem('rating'));
     }
   },
   methods: {
     ...mapActions(['fetchMovies']),
+    saveRating(rating) {
+      this.rating = rating;
+      const movieId = this.movie.id;
+      const localStorageKey = `rating_${movieId}`;
+      const ratingDateKey = `rating_date_${movieId}`;
+      const ratingDate = new Date().toISOString();
+
+      localStorage.setItem(localStorageKey, rating.toString());
+      localStorage.setItem(ratingDateKey, ratingDate);
+    },
+
     convertMinutesToHours(minutes) {
       const hours = Math.floor(minutes / 60);
       const remainingMinutes = minutes % 60;
-      return `${hours}h ${remainingMinutes}min`;
+      return `${hours}ч ${remainingMinutes}м`;
+    },
+    toggleBookmark(event) {
+      this.isBookmarked = !this.isBookmarked;
+      event.preventDefault();
     },
   },
 };
 </script>
 
-
 <style scoped>
+
+.Cast{
+  position: relative;
+  bottom: 20px;
+}
+.box {
+  --border-size: 3px;
+  --border-angle: 0turn;
+  width: 60vmin;
+  height: 50vmin;
+  background-image: conic-gradient(
+      from var(--border-angle),
+      #213,
+      #112 50%,
+      #213
+    ),
+    conic-gradient(from var(--border-angle), transparent 20%, #08f, #f03);
+  background-size: calc(100% - (var(--border-size) * 2))
+    calc(100% - (var(--border-size) * 2)), cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  animation: bg-spin 3s linear infinite;
+}
+
+@keyframes bg-spin {
+  to {
+    --border-angle: 1turn;
+  }
+}
+
+.box:hover {
+  animation-play-state: paused;
+}
+.genres {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 6px;
+}
+.genre {
+      background-color: #da2f68;
+      padding: 3px 5px;
+      font-size: 12px;
+      border-radius: 4px;
+      color: white;
+      white-space: nowrap;
+  }
+.container{
+      max-width: 960px;
+  margin: 0 auto;
+  padding: 20px;
+
+  height:80%;
+
+}
+ .left {
+      flex-shrink: 0;
+width: 40%;
+
+}
+
+
+.castSection {
+  position: relative;
+  margin-bottom: 50px;
+}
+
+.castSection .sectionHeading {
+  font-size: 24px;
+  color: white;
+  margin-bottom: 25px;
+}
+
+.castSection .listItems {
+  display: flex;
+  gap: 20px;
+  overflow-y: hidden;
+  margin-right: -20px;
+  margin-left: -20px;
+  padding: 0 20px;
+}
+
+@media (max-width: 767px) {
+  .castSection .listItems {
+    margin: 100%;
+    padding: 0;
+  }
+}
+
+.castSection .listItem {
+  text-align: center;
+  color: white;
+}
+
+.castSection .listItem .profileImg {
+  width: 125px;
+  height: 125px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+  .castSection .listItem .profileImg {
+    width: 175px;
+    height: 175px;
+    margin-bottom: 25px;
+  }
+}
+
+.castSection .listItem .profileImg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.castSection .listItem .name {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .castSection .listItem .name {
+    font-size: 18px;
+    line-height: 24px;
+  }
+}
+
+.castSection .listItem .character {
+  font-size: 14px;
+  line-height: 20px;
+  opacity: 0.5;
+}
+
+@media (max-width: 768px) {
+  .castSection .listItem .character {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+}
+
+.Rating .p-rating-item {
+  font-size: 24px;
+  width: 25px;
+}
+.MyRecom{
+position: relative;
+
+}
+.custom-rating {
+  height: 24px;
+  margin-top: 7px;
+  margin-bottom: 5px;
+}.myButton {
+  color: white;
+  width: 190px;
+  background: linear-gradient(0deg, #1c4b91 0%, #027efb 100%);
+  padding: 0.6rem 0.6rem;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  font-weight: 1000;
+  font-style: normal;
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+}
+
+.custom-btn {
+  background: rgb(28, 75, 145);
+  padding: 0.6rem 0.6rem;
+  font-family: 'Lato', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5),
+    7px 7px 20px 0px rgba(0, 0, 0, 0.1),
+    4px 4px 5px 0px rgba(0, 0, 0, 0.1);
+}
+
+.btn-3 {
+  background: linear-gradient(0deg, rgba(28, 75, 145, 1) 0%, rgba(2, 126, 251, 1) 100%);
+  line-height: 42px;
+  padding: 0;
+  border: none;
+}
+
+.btn-3 span {
+  position: relative;
+  display: block;
+  border: none;
+  border-radius: 5.2rem;
+  width: 100%;
+  height: 100%;
+}
+
+.btn-3:before,
+.btn-3:after {
+  position: absolute;
+  content: "";
+  right: 0;
+  top: 0;
+  background: rgba(2, 126, 251, 1);
+  transition: all 0.3s ease;
+}
+
+.btn-3:before {
+  height: 0%;
+  width: 2px;
+}
+
+.btn-3:after {
+  width: 0%;
+  height: 2px;
+}
+
+.btn-3:hover {
+  background: transparent;
+  box-shadow: none;
+}
+
+.btn-3:hover:before {
+  height: 100%;
+}
+
+.btn-3:hover:after {
+  width: 100%;
+}
+
+.btn-3 span:hover {
+  color: rgba(2, 126, 251, 1);
+}
+
+.btn-3 span:before,
+.btn-3 span:after {
+  position: absolute;
+  content: "";
+  left: 0;
+  bottom: 0;
+  background: rgba(2, 126, 251, 1);
+  transition: all 0.3s ease;
+}
+
+.btn-3 span:before {
+  width: 2px;
+  height: 0%;
+}
+
+.btn-3 span:after {
+  width: 0%;
+  height: 2px;
+}
+
+.btn-3 span:hover:before {
+  height: 100%;
+}
+
+.btn-3 span:hover:after {
+  width: 100%;
+}
+
+.icn{
+  font-size: 24px;
+   margin-right: 5px;
+  position: relative;
+  top: 7px;
+  
+}
+
+.progress-bars {
+  display: flex;
+  gap: 70px;
+
+
+}
+
+.progress-bar {
+  margin-right: 20px;
+  width: 100%;
+  margin-bottom: 10px;
+  background-color: #f2f2f2;
+  border-radius: 4px;
+  height: 20px;
+  overflow: hidden;
+}
+
+.rf{}
+.progress {
+  width: 0;
+  height: 100%;
+  background-color: #2196f3;
+  transition: width 0.3s ease-in-out;
+}
+
+.progress-label {
+  font-weight: bold;
+  margin-top: 5px;
+  color: #333333;
+  text-align: right;
+}
+.right-rows{
+  position: relative;
+  bottom: 40px;
+}
+ .raiting{
+  position: relative;
+  bottom: 60px;
+}
 .link{
  position: absolute;
  top: 60px;
  left: 50px;
 }
 .watchability {
+ 
   position: relative;
-  margin-bottom: 50px;
-  position: relative;
-    bottom: 20px;
+  
+
+    bottom: 70px;
 }
 
 .watchability-heading {
   font-size: 20px;
   color: white;
   margin-bottom: 25px;
+  font-family: cursive;
+    letter-spacing: 0.1em;
 }
 
 .watchability-list {
@@ -164,6 +649,36 @@ export default {
   margin-left: -20px;
   padding: 0 20px;
   list-style-type: none;
+   overflow-x:scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.watchability-list::-webkit-scrollbar {
+  width: 0; /* Установите ширину полосы прокрутки на 0 */
+}
+.cast-list{
+   display: flex;
+  gap: 20px;
+  overflow-y: hidden;
+  margin-right: -20px;
+  margin-left: -20px;
+  padding: 0 20px;
+  list-style-type: none;
+   overflow-x:scroll;
+   scrollbar-width: none; /* Удаление полосы прокрутки */
+  -ms-overflow-style: none; /* Удаление полосы прокрутки в IE/Edge */
+}
+
+.cast-list::-webkit-scrollbar {
+  width: 2px; /* Ширина полосы прокрутки */
+  height: 8px;
+}
+
+
+
+.cast-list::-webkit-scrollbar-thumb {
+  background-color: #1c4b91; /* Цвет полосы прокрутки */
+  border-radius: 3px; /* Скругление углов полосы прокрутки */
 }
 
 .watchability-list li {
@@ -172,9 +687,33 @@ export default {
   list-style-type: none;
 }
 
+.cast-logo{
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+.cast-log{
+   width: 100px; /* Adjust the width and height according to your preference */
+  height: 100px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+}
+
+
+.cast-logo img {
+  width: 80%;
+  height: 80%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
 .watchability-logo {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   overflow: hidden;
   margin-bottom: 15px;
@@ -195,7 +734,7 @@ export default {
     margin-bottom: 50px;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
     .detailsBanner {
         margin-bottom: 0;
         padding-top: 120px;
@@ -238,23 +777,26 @@ export default {
     left: 0;
 }
 
-.detailsBanner .content {
+ .content {
     display: flex;
     position: relative;
     flex-direction: column;
-    gap: 25px;
-    margin-top: 50px;
+    gap: 20px;
+    
+
+
 }
 
 @media (min-width: 768px) {
-    .detailsBanner .content {
-        gap: 50px;
+     .content {
+       gap: 50px;
         flex-direction: row;
     }
+  
 }
 
-.detailsBanner .content .left {
-    flex-shrink: 0;
+.left .row {
+margin-top: 20px;
 }
 
 .detailsBanner .content .left .posterImg {
@@ -270,8 +812,18 @@ export default {
     }
 }
 
-.detailsBanner .content .right {
+ .right {
     color: white;
+    width: 50%;
+}
+@media (max-width: 768px) {
+ 
+  .left,
+  .right {
+    width: 100%;
+    max-width: none;
+  }
+  
 }
 
 .detailsBanner .content .right .title {
@@ -293,7 +845,8 @@ position: relative;
 bottom: 20px;
     font-style: italic;
     opacity: 0.5;
-}
+    margin-bottom: -5px;
+  }
 
 @media (min-width: 768px) {
     .detailsBanner .content .right .subtitle {
@@ -302,16 +855,12 @@ bottom: 20px;
     }
 }
 
-.detailsBanner .content .right .genres {
-    margin-bottom: 25px;
-    flex-flow: row wrap;
-}
 
 .detailsBanner .content .right .overview {
     margin-bottom: 25px;
-    width: 122%;
+    width: 100%;
     position: relative;
-    bottom: 20px;
+    bottom: 10px;
 }
 
 .detailsBanner .content .right .overview .heading {
@@ -323,108 +872,64 @@ bottom: 20px;
     line-height: 24px;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
     .detailsBanner .content .right .overview .description {
         padding-right: 100px;
     }
 }
 
-.detailsBanner .content .right .circleRating {
-    max-width: 70px;
-    background-color: var(--black2);
-}
 
-@media (min-width: 768px) {
-    .detailsBanner .content .right .circleRating {
-        max-width: 90px;
-    }
-}
 
-.detailsBanner .content .right .circleRating .CircularProgressbar-text {
-    fill: white;
-}
 
-.detailsBanner .content .right .playbtn {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    cursor: pointer;
-}
 
-.detailsBanner .content .right .playbtn svg {
-    width: 60px;
-}
 
-@media (min-width: 768px) {
-    .detailsBanner .content .right .playbtn svg {
-        width: 80px;
-    }
-}
 
+
+
+.votes{
+  margin-top: -7px;
+}
 .detailsBanner .content .right .playbtn .text {
+  
     font-size: 20px;
     transition: all 0.7s ease-in-out;
 }
 
-.detailsBanner .content .right .playbtn .triangle {
-    stroke-dasharray: 240;
-    stroke-dashoffset: 480;
-    stroke: white;
-    transform: translateY(0);
-    transition: all 0.7s ease-in-out;
-}
 
-.detailsBanner .content .right .playbtn .circle {
-    stroke: white;
-    stroke-dasharray: 650;
-    stroke-dashoffset: 1300;
-    transition: all 0.5s ease-in-out;
-}
 
-.detailsBanner .content .right .playbtn:hover .text {
-    color: var(--pink);
-}
 
-.detailsBanner .content .right .playbtn:hover .triangle {
-    stroke-dashoffset: 0;
-    opacity: 1;
-    stroke: var(--pink);
-    animation: trailorPlay 0.7s ease-in-out;
-}
 
-.detailsBanner .content .right .playbtn:hover .circle {
-    stroke-dashoffset: 0;
-    stroke: var(--pink);
-}
 
-.detailsBanner .content .right .row {
+
+
+.detailsBanner .content  .row {
     display: flex;
     align-items: center;
     gap: 25px;
     margin-bottom: 20px;
     position: relative;
-    bottom: 25px;
+    
 }
 
-.detailsBanner .content .right .info {
+.detailsBanner .content .info {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding: 15px 0;
     display: flex;
 }
 
-.detailsBanner .content .right .info .infoItem {
+.detailsBanner .content .info .infoItem {
     margin-right: 10px;
     display: flex;
     flex-flow: row wrap;
 }
 
-.detailsBanner .content .right .info .text {
+ .text {
     margin-right: 10px;
     opacity: 0.5;
     line-height: 24px;
 }
 
-.detailsBanner .content .right .info .text.bold {
+ .text.bold {
     font-weight: 600;
     opacity: 1;
 }
@@ -456,15 +961,6 @@ p {
 
 <style scoped>
 
-.container{
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 20px;
-
- 
-
-  color: white;
-}
 .movie-card {
   max-width: 400px;
   margin: 0 auto;

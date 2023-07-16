@@ -1,5 +1,6 @@
 <template>
     <footer class="footer">
+      
       <div class="footer-content">
         <div class="footer-column">
           <h4>О нас</h4>
@@ -9,7 +10,10 @@
           <h4>Категории</h4>
           <ul>
             <li><a href="#">Боевик</a></li>
-            <li><a href="#">Комедия</a></li>
+
+             <router-link :to="{ path: '/Комедия' }">
+            <a >Комедия</a>  
+            </router-link>
             <li><a href="#">Драма</a></li>
             <li><a href="#">Фэнтези</a></li>
           </ul>
@@ -48,12 +52,24 @@
   
   
   <style lang="scss" scoped>
+  
   .footer {
     background-color: #020c1b;
     color: #ffffff;
     padding: 20px;
   }
-  
+  .witcher{
+    position:absolute;
+    top: 4782px;
+    left: 0;
+    z-index: 0;
+    width: 640px;
+  }
+  @media (max-width: 768px) {
+    .witcher{
+   display: none;
+  }
+  }
   .footer-content {
     display: flex;
     justify-content: space-between;

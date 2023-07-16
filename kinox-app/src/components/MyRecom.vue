@@ -127,7 +127,8 @@
 
 <style scoped>
 .title{
-  
+  font-family: cursive;
+    letter-spacing: 0.1em;
 }
 .longArrow{
   width: 20px;
@@ -164,20 +165,20 @@ left: 1px;
 }
 #right{
 
-  bottom: 290px;
+ 
   right: 1px;
   background-color: #020c1b99;
   color: #ffffff;
 }
 .movie-details {
-  padding-top: 10px;
+  
   width: 100%;
   color: white;
   height: 80px;
 }
 .container {
   max-width: 960px;
-  margin: 0 auto;
+
   padding: 20px;
 
   color: #fff;

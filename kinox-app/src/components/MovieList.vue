@@ -1,60 +1,58 @@
 <template>
-  <div>
-    
-   
-    
-      <ContentWrapper @search="performSearch" class="ContentWrapper" />
-      <div v-if="isLoading" class="loader"><MyLoader/></div> <!-- Add loader element -->
-      <div v-else >
 
-<div v-if="!searchQuery">
-  <WatchNow />
-  <TopMovie />
-  <!-- <MyRecom/> -->
-</div>
-
-<div class="container">
-  <h2 class="container_title" v-if="!searchQuery" >Наша коллекция</h2>
-  <h2 class="container_title" v-else>Результаты поиска</h2>
-
-  <div class="sort-options">
-          
-    <Dropdown 
-      :class="['custom-dropdown', 'w-full', 'md:w-14rem', 'p-dropdown-indigo']"
-      v-model="selectedSortOption" 
-      :options="sortOptions" 
-      optionLabel="label" 
-      optionValue="value" 
-      @change="sortMovies" 
-      placeholder="Сортировать по" 
-      class=" custom-dropdown w-full md:w-14rem">
-    </Dropdown>
-    <font-awesome-icon icon="arrow-up-9-1" v-if="sortOrder === 'asc'" @click="updateSortOrder('desc')" class="icon_select" />
-<font-awesome-icon icon="arrow-up-1-9" v-else @click="updateSortOrder('asc')" class="icon_select"/>
-  </div>
-
-
-  <ul  class="movie-list"> <!-- Use v-else to show the movie list when not loading -->
-    <li v-for="(movie, index) in displayedMovies" :key="movie.id" :class="{'movie-item': true, 'new-row': index % 5 === 0}">
-     
-        <MovieCard :movie="movie"/>
-     
-    </li>
-  </ul>
-
-  <div class="pagination">
-    <button
-      v-for="pageNumber in totalPages"
-      :key="pageNumber"
-      @click="setCurrentPage(pageNumber)"
-      :class="{'active': pageNumber === currentPage}"
-      class="page-button"
-    >
-      {{ pageNumber }}
-    </button>
-  </div>
+     <ContentWrapper v-if = "this.$route.path === '/search'" class="ContentWrapper" /> 
+    <div class="container movieList">
+      
+      
+      <h2 class="container_title" v-if="!searchQuery">Наша коллекция</h2>
   
-  <div class="jump-pagination">
+       
+       
+   
+  
+      <div class="sort-options">
+        <Dropdown
+          :class="['custom-dropdown', 'w-full', 'md:w-14rem', 'p-dropdown-indigo']"
+          v-model="selectedSortOption"
+          :options="sortOptions"
+          optionLabel="label"
+          optionValue="value"
+          @change="sortMovies"
+          placeholder="Сортировать по"
+          class="custom-dropdown w-full md:w-14rem"
+        ></Dropdown>
+        <font-awesome-icon
+          icon="arrow-up-9-1"
+          v-if="sortOrder === 'asc'"
+          @click="updateSortOrder('desc')"
+          class="icon_select"
+        />
+        <font-awesome-icon
+          icon="arrow-up-1-9"
+          v-else
+          @click="updateSortOrder('asc')"
+          class="icon_select"
+        />
+      </div>
+  
+      <ul class="movie-list">
+        <li v-for="(movie, index) in displayedMovies" :key="movie.id" :class="{'movie-item': true, 'new-row': index % 5 === 0}">
+          <MovieCard :movie="movie" />
+        </li>
+      </ul>
+  
+      <div class="pagination">
+        <button
+          v-for="pageNumber in totalPages"
+          :key="pageNumber"
+          @click="setCurrentPage(pageNumber)"
+          :class="{'active': pageNumber === currentPage}"
+          class="page-button"
+        >
+          {{ pageNumber }}
+        </button>
+      </div>
+      <div class="jump-pagination">
     <button
       v-for="pageNumber in totalJumpPages"
       :key="pageNumber"
@@ -64,170 +62,154 @@
       {{ (pageNumber - 1) * 5 + 1 }}-{{ Math.min(pageNumber * 5, totalPages) }}
     </button>
   </div>
-</div>
-
-
-
-
-</div>
-    
-  </div>
-</template>
-
-<script>
-
-// import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-// import { library } from '@fortawesome/fontawesome-svg-core'
-import ContentWrapper from './main/ContentWrapper.vue';
-import TopMovie from './main/TopMovie.vue';
-import WatchNow from './main/WatchNow.vue';
-import MyLoader from './MyLoader.vue';
-import MovieCard from './MovieCard.vue';
-import Dropdown from 'primevue/dropdown';
-
-
-// import MyRecom from './main/MyRecom.vue';
-import { mapState, mapActions, mapGetters } from 'vuex';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faArrowUp91,faArrowUp19 } from '@fortawesome/free-solid-svg-icons';
-// import CircleProgress from "vue3-circle-progress";
-// import { faBookmark, faHeart } from '@fortawesome/free-solid-svg-icons'
-library.add(faArrowUp91);
-library.add(faArrowUp19);
-
-export default {
-  components: {
-    FontAwesomeIcon,
-    ContentWrapper,
-    Dropdown,
- 
-    // CircleProgress,
-    // FontAwesomeIcon,
-    TopMovie,
-    WatchNow,
-    MyLoader,
-    MovieCard
-    // MyRecom
-  },
-  data() {
-    return {
-      itemsPerPage: 21,
-      currentPage: 1,
-      sortOptions: [
-      { value: 'Сортировать по', label: 'Сортировать по' },
-        { value: 'year', label: 'Год' },
-        { value: 'rating.kp', label: 'Рейтинг' },
-        { value: 'movieLength', label: 'Длительность' }
-      ],
-      selectedSortOption: 'Сортировать по',
-      sortOrder: 'asc',
-      isLoading: false, // Add isLoading state property
-      
-    };
-  },
-  computed: {
-    ...mapState(['filteredMovies', 'searchQuery', 'movies']),
-  ...mapGetters(['getMovieById']),
-  movies() {
-      return this.$store.state.movies;
-    },
-  totalMovies() {
-      return this.movies.length;
-    },
-  // movies() {
-  //     // Access the movie list from the Vuex store
-  //     return this.$store.state.movies.movieList;
-  //   },
-    totalPages() {
-      return Math.ceil(this.filteredMovies.length / this.itemsPerPage);
-    },
-    totalJumpPages() {
-      return Math.ceil(this.totalPages / 5);
-    },
-    displayedMovies() {
-      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-      return this.filteredMovies.slice(startIndex, startIndex + this.itemsPerPage);
-    },
-    shouldShowLoadMoreButton() {
-      return this.currentPage * this.itemsPerPage < this.filteredMovies.length;
-    },
-  },
-  mounted() {
-    this.searchMovies();
-    this.$store.dispatch('movies/fetchMovieList');
-  },
-  methods: {
-    // Обработчик нажатия на фильм
-    navigateToLikePage() {
-      this.$router.push({ name: 'bookmarks-ratings' });
-    },
+    </div>
+  </template>
   
-    ...mapActions(['fetchMovies', 'searchMovies']),
-    updateSortOrder(order) {
-  this.sortOrder = order;
-  this.sortMovies();
-},
+  <script>
 
-    sortMovies() {
-      // Sort the movies array based on the selectedSortOption and sortOrder
-      this.filteredMovies.sort((a, b) => {
-        const aValue = a[this.selectedSortOption];
-        const bValue = b[this.selectedSortOption];
-        if (this.sortOrder === 'asc') {
-          return aValue - bValue;
-        } else {
-          return bValue - aValue;
+  import { mapState, mapActions, mapGetters } from 'vuex';
+  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+  import { library } from '@fortawesome/fontawesome-svg-core';
+  import { faArrowUp91, faArrowUp19 } from '@fortawesome/free-solid-svg-icons';
+  import MovieCard from './MovieCard.vue';
+  import Dropdown from 'primevue/dropdown';
+  import ContentWrapper from './main/ContentWrapper.vue';
+  library.add(faArrowUp91);
+  library.add(faArrowUp19);
+  
+  export default {
+    components: {
+      FontAwesomeIcon,
+      ContentWrapper,
+      MovieCard,
+      Dropdown,
+    },
+    data() {
+      return {
+        itemsPerPage: 21,
+        currentPage: 1,
+        sortOptions: [
+          { value: 'Сортировать по', label: 'Сортировать по' },
+          { value: 'year', label: 'Год' },
+          { value: 'rating.kp', label: 'Рейтинг' },
+          { value: 'movieLength', label: 'Длительность' },
+        ],
+        selectedSortOption: 'Сортировать по',
+        sortOrder: 'asc',
+        isLoading: false,
+      };
+    },
+    computed: {
+      ...mapState(['filteredMovies', 'searchQuery', 'movies']),
+      ...mapGetters(['getMovieById']),
+      totalMovies() {
+        return this.$route.path === '/' ? this.movies.length : this.filteredMovies.length;
+      },
+      totalPages() {
+        return Math.ceil(this.totalMovies / this.itemsPerPage);
+      },
+      totalJumpPages() {
+        return Math.ceil(this.totalPages / 5);
+      },
+      displayedMovies() {
+        const moviesList = this.$route.path === '/' ? this.movies : this.filteredMovies;
+        const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+        return moviesList.slice(startIndex, startIndex + this.itemsPerPage);
+      },
+      shouldShowLoadMoreButton() {
+        return this.currentPage * this.itemsPerPage < this.totalMovies;
+      },
+    },
+    mounted() {
+      this.searchMovies();
+      this.$store.dispatch('movies/fetchMovieList');
+    },
+    methods: {
+     
+      ...mapActions(['fetchMovies', 'searchMovies']),
+      handleEnter() {
+        if (event.key === 'Enter') {
+          this.updateMovieList();
         }
-      });
-      this.setCurrentPage(1);
+      },
+      navigateToLikePage() {
+        this.$router.push({ name: 'bookmarks-ratings' });
+      },
+      updateSortOrder(order) {
+        this.sortOrder = order;
+        this.sortMovies();
+      },
+      sortMovies() {
+        const moviesList = this.$route.path === '/' ? this.movies : this.filteredMovies;
+        moviesList.sort((a, b) => {
+          const aValue = a[this.selectedSortOption];
+          const bValue = b[this.selectedSortOption];
+          if (this.sortOrder === 'asc') {
+            return aValue - bValue;
+          } else {
+            return bValue - aValue;
+          }
+        });
+        this.setCurrentPage(1);
+      },
+      setCurrentPage(pageNumber) {
+        this.currentPage = pageNumber;
+      },
+      loadMore() {
+        this.currentPage++;
+      },
+      performSearch(query) {
+        this.$store.commit('setSearchQuery', query);
+        this.currentPage = 1;
+        this.setCurrentPage(1);
+      },
+      setSortOrder(order) {
+        this.sortOrder = order;
+      },
+      async searchMovies() {
+        this.isLoading = true;
+        await this.$store.dispatch('searchMovies');
+        this.isLoading = false;
+      },
+      async fetchMovieData() {
+        const movieId = this.$route.params.id;
+        this.movie = this.getMovieById(movieId);
+        if (!this.movie) {
+          await this.$store.dispatch('fetchMovie', movieId);
+          this.movie = this.getMovieById(movieId);
+        }
+      },
     },
-
-    setCurrentPage(pageNumber) {
-      this.currentPage = pageNumber;
+    created() {
+      this.fetchMovieData();
     },
-    loadMore() {
-      this.currentPage++;
-    },
-    performSearch(query) {
-      this.$store.commit('setSearchQuery', query);
-      this.currentPage = 1;
-      this.setCurrentPage(1);
-    },
-
-    setSortOrder(order) {
-      this.sortOrder = order;
-    },
-    async searchMovies() {
-      this.isLoading = true; // Set isLoading to true before starting the request
-      await this.$store.dispatch('searchMovies');
-      this.isLoading = false; // Set isLoading to false after the request is completed
-    },
-    async fetchMovieData() {
-  const movieId = this.$route.params.id;
-  // Используйте ваш метод getMovieById для получения данных о фильме
-  this.movie = this.getMovieById(movieId);
-  // Если фильма нет в хранилище, выполните загрузку данных
-  if (!this.movie) {
-    await this.$store.dispatch('fetchMovie', movieId);
-    this.movie = this.getMovieById(movieId);
-  }
-},
-  },
-  created() {
-    this.fetchMovieData();
-  },
-};
-</script>
-
-
-
-
-<style scoped>
+  };
+  </script>
+  
+  
+  <style scoped>
 .custom-dropdown{
  width: 200px;
 
  color: #fff;
+}
+.shapes{
+  box-sizing: border-box;
+flex-shrink: 0;
+width: 1px;
+height: 400px;
+display: flex;
+flex-direction: row;
+justify-content: space-evenly;
+align-items: center;
+padding: 100px 100px 100px 100px;
+
+overflow: visible;
+flex: 1 0 0px;
+position: relative;
+align-content: center;
+flex-wrap: nowrap;
+border-radius: 0px 0px 0px 0px;
 }
 .container {
   max-width: 960px;
@@ -321,9 +303,14 @@ option {
   color: #333;
 }
 .pagination {
+    
   display: flex;
   justify-content: center;
   margin-top: 20px;
+  z-index: 9999;
+}
+.jump-pagination{
+  z-index: 3;
 }
 
 .page-button {
@@ -379,7 +366,7 @@ color: #fff;
 }
 
 .movie-item {
-
+z-index: 2;
   padding: 10px;
 
 }
@@ -430,12 +417,3 @@ color: #fff;
 
 
 </style>
-
-
-
-
-
-
-
-
-
