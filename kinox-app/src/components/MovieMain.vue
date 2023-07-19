@@ -1,71 +1,70 @@
 <template>
   <div>
-    
-  
-    
-      <ContentWrapper @search="performSearch" class="ContentWrapper" />
-      <div v-if="isLoading" class="loader"><MyLoader/></div> <!-- Add loader element -->
-      <div v-else >
-
-<div>
-  <WatchNow />
-  <TopMovie />
-  <!-- <MyRecom/> -->
-</div>
-
-<MovieList/>
 
 
 
+    <ContentWrapper @search="performSearch" class="ContentWrapper" />
+    <MySocial />
+    <div v-if="isLoading" class="loader">
+      <MyLoader />
+    </div> <!-- Add loader element -->
+    <div v-else>
+
+      <div>
+        <WatchNow />
+        <TopMovie />
+        <div style="" class="clapperboard_icons">
+          <img src="../assets/clapperboard.png" alt="" style="height: 40px; opacity: 0.3; margin-right: 70px;">
+          <img src="../assets/clapperboard.png" alt="" style="height: 80px; opacity: 0.75; margin-right: 70px;">
+          <img src="../assets/clapperboard.png" alt="" style="height: 140px; opacity: 1; margin-right: 70px;">
+          <img src="../assets/clapperboard.png" alt="" style="height: 80px; opacity: 0.75; margin-right: 70px;">
+          <img src="../assets/clapperboard.png" alt="" style="height: 40px; opacity: 0.3; margin-right: 50px;">
+        </div> 
+
+      </div>
+
+      <MovieList />
 
 
-</div>
-    
+
+
+
+    </div>
+
   </div>
 </template>
 
 <script>
+import MySocial from './MySocial.vue';
 import MovieList from './MovieList.vue';
-// import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-// import { library } from '@fortawesome/fontawesome-svg-core'
 import ContentWrapper from './main/ContentWrapper.vue';
 import TopMovie from './main/TopMovie.vue';
 import WatchNow from './main/WatchNow.vue';
 import MyLoader from './MyLoader.vue';
-// import MovieCard from './MovieCard.vue';
-// import Dropdown from 'primevue/dropdown';
-
-
-// import MyRecom from './main/MyRecom.vue';
 import { mapState, mapActions, mapGetters } from 'vuex';
-// import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faArrowUp91,faArrowUp19 } from '@fortawesome/free-solid-svg-icons';
-// import CircleProgress from "vue3-circle-progress";
+import { faArrowUp91, faArrowUp19 } from '@fortawesome/free-solid-svg-icons';
+
 // import { faBookmark, faHeart } from '@fortawesome/free-solid-svg-icons'
 library.add(faArrowUp91);
 library.add(faArrowUp19);
 
 export default {
   components: {
-    // FontAwesomeIcon,
     ContentWrapper,
-    // Dropdown,
     MovieList,
-    // CircleProgress,
-    // FontAwesomeIcon,
     TopMovie,
     WatchNow,
     MyLoader,
-    // MovieCard
-    // MyRecom
+    MySocial
   },
   data() {
     return {
+   
       itemsPerPage: 21,
       currentPage: 1,
       sortOptions: [
-      { value: 'Сортировать по', label: 'Сортировать по' },
+        { value: 'Сортировать по', label: 'Сортировать по' },
         { value: 'year', label: 'Год' },
         { value: 'rating.kp', label: 'Рейтинг' },
         { value: 'movieLength', label: 'Длительность' }
@@ -73,23 +72,20 @@ export default {
       selectedSortOption: 'Сортировать по',
       sortOrder: 'asc',
       isLoading: false, // Add isLoading state property
-      
+
     };
   },
   computed: {
     ...mapState(['filteredMovies', 'searchQuery', 'movies']),
-  ...mapGetters(['getMovieById']),
-  movies() {
+    ...mapGetters(['getMovieById']),
+    movies() {
       return this.$store.state.movies;
     },
-  totalMovies() {
+    totalMovies() {
       return this.movies.length;
     },
-  // movies() {
-  //     // Access the movie list from the Vuex store
-  //     return this.$store.state.movies.movieList;
-  //   },
-    
+ 
+
     shouldShowLoadMoreButton() {
       return this.currentPage * this.itemsPerPage < this.filteredMovies.length;
     },
@@ -100,23 +96,22 @@ export default {
   },
   methods: {
     handleEnter() {
-  // Здесь вы можете выполнить действие при нажатии на клавишу Enter
-  if (event.key === 'Enter') {
-    // Ваш код
-    // Например, вызов функции, которая обновляет список фильмов
-    this.updateMovieList();
-  }
-},
+      // Здесь вы можете выполнить действие при нажатии на клавишу Enter
+      if (event.key === 'Enter') {
+     
+        this.updateMovieList();
+      }
+    },
     // Обработчик нажатия на фильм
     navigateToLikePage() {
       this.$router.push({ name: 'bookmarks-ratings' });
     },
-  
+
     ...mapActions(['fetchMovies', 'searchMovies']),
     updateSortOrder(order) {
-  this.sortOrder = order;
-  this.sortMovies();
-},
+      this.sortOrder = order;
+      this.sortMovies();
+    },
 
     sortMovies() {
       // Sort the movies array based on the selectedSortOption and sortOrder
@@ -153,15 +148,15 @@ export default {
       this.isLoading = false; // Set isLoading to false after the request is completed
     },
     async fetchMovieData() {
-  const movieId = this.$route.params.id;
-  // Используйте ваш метод getMovieById для получения данных о фильме
-  this.movie = this.getMovieById(movieId);
-  // Если фильма нет в хранилище, выполните загрузку данных
-  if (!this.movie) {
-    await this.$store.dispatch('fetchMovie', movieId);
-    this.movie = this.getMovieById(movieId);
-  }
-},
+      const movieId = this.$route.params.id;
+      // Используйте ваш метод getMovieById для получения данных о фильме
+      this.movie = this.getMovieById(movieId);
+      // Если фильма нет в хранилище, выполните загрузку данных
+      if (!this.movie) {
+        await this.$store.dispatch('fetchMovie', movieId);
+        this.movie = this.getMovieById(movieId);
+      }
+    },
   },
   created() {
     this.fetchMovieData();
@@ -173,94 +168,32 @@ export default {
 
 
 <style scoped>
-.custom-dropdown{
- width: 200px;
-
- color: #fff;
-}
-.container {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 20px;
-
-  color: #fff;
-}
-.container_title{
-  display: flex; 
-  justify-content: center;
-  letter-spacing: 0.1em;
-  font-family: cursive;
-}
-.sort-options {
+.clapperboard_icons {
   display: flex;
+  justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
-}
-.icon_select{
-position: relative;
-top: 2px;
-  width: 40px;
-  font-size: 21px;
-  justify-items: center;
-}
-label {
-  font-size: 16px;
-  margin-right: 10px;
+ 
+  margin-left: 50px;
 }
 
-select {
-  padding: 8px 12px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  transition: border-color 0.3s ease;
-}
-
-select:focus {
-  outline: none;
-  border-color: #8cacc4;
-  box-shadow: 0 0 0 2px rgba(140, 172, 196, 0.2);
-}
-
-option {
-  font-size: 16px;
-}
-.row {
-    display: flex;
-    align-items: center;
-    gap: 25px;
-    margin-bottom: 20px;
-    position: relative;
-    bottom: 25px;
-}
-.info {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 15px 0;
-    display: flex;
-}
-.info .infoItem {
-    margin-right: 10px;
-    display: flex;
-    flex-flow: row wrap;
-}
-.icons {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    margin-bottom: 10px;
+@media screen and (max-width: 900px) {
+  .clapperboard_icons img:nth-child(1),
+  .clapperboard_icons img:nth-child(5) {
+    display: none;
+  }
+      }
+      @media screen and (max-width: 480px) {
+        .clapperboard_icons img:nth-child(1),
+  .clapperboard_icons img:nth-child(5) {
+    display: block;
   }
 
-
-
-
-
- 
-
- 
-
- 
-
+        .clapperboard_icons img:nth-child(3),
+      
+  .clapperboard_icons img:nth-child(2){
+    display: none;
+  }
+      }
 .loader {
   display: flex;
   justify-content: center;
@@ -269,121 +202,13 @@ option {
   font-size: 20px;
   color: #333;
 }
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-.jump-pagination{
-  z-index: 1111;
-}
 
-.page-button {
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  padding: 5px 10px;
-  margin: 0 5px;
-  cursor: pointer;
-  background-color: #f7f7f7;
-}
-
-.page-button:hover {
-  background-color: #e1e1e1;
-}
-
-.page-button.active {
-color: #fff;
-  background: linear-gradient(98.37deg, #f89e00 0.99%, #da2f68 100%);
-}
-.jump-button {
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  padding: 5px 10px;
-  margin: 0 5px;
-  cursor: pointer;
-  color: #fff;
-  background: #020c1b;
-}
-
-.jump-button:hover {
-  background-color: #e1e1e1;
-}
-
-
-
-.witcher{
-  width: 740px;
-    position: absolute;
-    top: 4944px;
- 
-}
 
 .ContentWrapper {
   text-align: center;
   margin: 0 auto;
 }
 
-.title {
-  font-size: 32px;
-  margin-bottom: 10px;
-}
-
-.movie-list {
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  grid-gap: -30px;
-}
-
-.movie-item {
-
-  padding: 10px;
-
-}
-
-.movie-poster {
-  text-align: center;
-  border-radius: 8px;
-  margin-left: -30px;
-}
-
-
-
-.poster-image {
-  max-width: 100%;
-  height: auto;
-  border-radius: 11px;
-}
-
-.movie-details {
-  padding-top: 10px;
-  width: 100%;
-  color: white;
-  height: 80px;
-}
-
-.movie-name {
-  font-size: 19px;
-  margin-bottom: 5px;
-  position: relative;
-  bottom: 90px;
-
-  font-weight: bold;
-}
-
-.movie-info {
-  display: flex;
-  align-items: center;
-}
-
-
-
-.year {
-  font-size: 16px;
-  color: #888;
-  position: relative;
-  bottom: 85px;
-}
 
 
 </style>

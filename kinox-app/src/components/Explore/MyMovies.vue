@@ -171,30 +171,28 @@ export default {
     ...mapState(['movies', 'searchQuery']),
   
     filteredM() {
-      return this.movies.filter(movie => {
-    if (this.$route.path === '/movie') {
-      return movie.type === 'movie' ;
-    } else if (this.$route.path === '/cartoon') {
-      return movie.type === 'cartoon' && 'animated-series'
-    }
-    else if (this.$route.path === '/tv-series') {
-      return movie.type === 'tv-series';
-    }
-    else if (this.$route.path === '/Комедия') {
-      return movie.genres.includes('Комедия');  
+  const routePath = this.$route.path;
+  const validGenres = ['Комедия', 'Драма', 'Фэнтези', 'Фантастика', 'Боевик'];
 
+  return this.movies.filter(movie => {
+    if (routePath === '/movie') {
+      return movie.type === 'movie';
+    } else if (routePath === '/cartoon') {
+      return movie.type === 'cartoon' || movie.type === 'animated-series';
+    } else if (routePath === '/tv-series') {
+      return movie.type === 'tv-series';
+    } else if (validGenres.includes(routePath.substring(1))) {
+      return movie.genres.includes(routePath.substring(1));
     }
-    return false; // Если путь не соответствует ни '/movies/movie', ни '/movies/cartoon'
+
+    return false;
   });
-    },
+},
     
     totalMovies() {
       return this.movies.length;
     },
-  // movies() {
-  //     // Access the movie list from the Vuex store
-  //     return this.$store.state.movies.movieList;
-  //   },
+
     totalPages() {
       return Math.ceil(this.filteredM.length / this.itemsPerPage);
     },
@@ -298,9 +296,7 @@ setCurrentPage(pageNumber) {
 
  height: 50px;
 }
-.p-component{
-height: 50px;
-}
+
 
 .text {
    
@@ -311,7 +307,7 @@ height: 50px;
 
 }
 
-.detailsBanner .content .right .info .text.bold {
+.info .text.bold {
    font-weight: 600;
    opacity: 1;
 }
@@ -346,12 +342,7 @@ bottom: 10px;
  margin-bottom: 30px;
  opacity: 0.7;
 }
-.heart{
-   margin-bottom: 15px;
-}
-.bookmark{
-   margin-right: 1px;
-}
+
 
 .pagination {
   display: flex;

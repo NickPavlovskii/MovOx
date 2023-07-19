@@ -289,7 +289,7 @@ export default {
   max-width: 960px;
   margin: 0 auto;
   padding: 20px;
-  height: 480px;
+
   color: #fff;
   
   .title_container {
@@ -297,31 +297,11 @@ export default {
     justify-content: space-between;
   }
   
-  .circle_progress {
-    position: absolute;
-    bottom: 70px;
-    left: 10px;
-    color: #ffffff;
-  }
+
   
-  .movie-name {
-    font-size: 19px;
-    margin-bottom: 5px;
-    position: relative;
-    bottom: 98px;
-    display: block;
-    width: 250px;
-    font-weight: bold;
-    word-break: break-all;
-    
-  }
+ 
   
-  .year {
-    font-size: 16px;
-    color: #888;
-    position: relative;
-    bottom: 95px;
-  }
+ 
 }
 
 .wrapper {

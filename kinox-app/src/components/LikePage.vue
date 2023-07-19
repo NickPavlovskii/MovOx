@@ -9,7 +9,7 @@
           </li>
         </ul>
         <div class="pagination" v-if="bookmarkedMovies.length > 6">
-          <button v-for="page in bookmarkedPages" :key="page" @click="currentPageBookmarked = page" :class="{ active: page === currentPageBookmarked }">{{ page }}</button>
+          <button v-for="page in bookmarkedPages" :key="page" @click="currentPageBookmarked = page" class="page-button" :class="{ active: page === currentPageBookmarked }">{{ page }}</button>
         </div>
       </div>
 
@@ -20,21 +20,35 @@
             <tr>
               <th></th>
               <th>Оценка</th>
+              <th>Удалить</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="movie in ratedMovies" :key="movie.id">
-              <td>
-                <img :src="movie.poster.url" :alt="movie.name" height="100">
-                {{ movie.name }}
+            <tr v-for="movie in paginatedRatedMovies" :key="movie.id">
+              <td style="display: flex; flex-direction: column;">
+                <img :src="movie.poster.url" :alt="movie.name" style="height: 200px; width: 150px;" >
+               <p> {{ movie.name }}</p>
               </td>
               <td>
-                <Rating v-model="movie.rating" :stars="10" cancel="false" :readonly="true" class="custom-rating" />
+                <Rating v-model="movie.rating" :stars="10" :cancel="false" :readonly="true" class="custom-rating" />
+              </td>
+              <td>
+                <img src="https://primefaces.org/cdn/primevue/images/rating/cancel.png" height="24" width="24"
+                @click="removeRating(movie.id)"  />
+           
               </td>
             </tr>
           </tbody>
         </table>
-      </div>
+        <div class="pagination" v-if="ratedMovies.length > moviesPerPage">
+          <Paginator
+  :totalRecords="ratedMovies.length"
+  :rows="5"
+  @pageChange="handlePageChange"
+  :currentPage="currentPageRated"
+></Paginator>
+    </div>
+    </div>
     </div>
   </div>
 </template>
@@ -43,16 +57,18 @@
 import { mapState } from 'vuex';
 import MovieCard from './MovieCard.vue';
 import Rating from 'primevue/rating';
-
+import Paginator from 'primevue/paginator';
 export default {
   components: {
     MovieCard,
     Rating,
+    Paginator
   },
   data() {
     return {
       currentPageBookmarked: 1,
-      moviesPerPage: 6,
+      currentPageRated: 1, // Текущая страница для оцененных фильмов
+      moviesPerPage:6,
     };
   },
   computed: {
@@ -63,28 +79,58 @@ export default {
         return localStorage.getItem(bookmarkKey) === 'true';
       });
     },
-    ratedMovies() {
-      return this.movies.filter((movie) => {
-        const ratingKey = `rating_${movie.id}`;
-        const rating = localStorage.getItem(ratingKey);
-        return rating !== null;
-      }).map((movie) => {
-        return {
-          ...movie,
-          rating: parseInt(localStorage.getItem(`rating_${movie.id}`)),
-        };
-      });
+   ratedMovies() {
+  return this.movies.filter((movie) => {
+    const ratingKey = `rating_${movie.id}`;
+    const rating = localStorage.getItem(ratingKey);
+    return rating !== null;
+  }).map((movie) => {
+    return {
+      ...movie,
+      rating: parseInt(localStorage.getItem(`rating_${movie.id}`)),
+    };
+  });
+},
+    displayedMovies() {
+    const startIndex = (this.currentPageRated - 1) * this.moviesPerPage;
+    const endIndex = startIndex + this.moviesPerPage;
+    return this.ratedMovies.slice(startIndex, endIndex);
+  },
+  totalPages() {
+    return Math.ceil(this.ratedMovies.length / this.moviesPerPage);
+  },
+ginatedRatedMovies() {
+      const startIndex = (this.currentPageRated - 1) * this.moviesPerPage;
+      const endIndex = this.currentPageRated * this.moviesPerPage;
+      return this.ratedMovies.slice(startIndex, endIndex);
     },
     bookmarkedPages() {
       return Math.ceil(this.bookmarkedMovies.length / this.moviesPerPage);
+    },
+    ratedPages() {
+      return Math.ceil(this.ratedMovies.length / this.moviesPerPage);
     },
     paginatedBookmarkedMovies() {
       const startIndex = (this.currentPageBookmarked - 1) * this.moviesPerPage;
       const endIndex = this.currentPageBookmarked * this.moviesPerPage;
       return this.bookmarkedMovies.slice(startIndex, endIndex);
     },
+ 
+  startIndex() {
+    return (this.currentPageRated - 1) * 5;
+  },
+  endIndex() {
+    return this.startIndex + 5;
+  },
+  paginatedRatedMovies() {
+    return this.ratedMovies.slice(this.startIndex, this.endIndex);
+  }
+
   },
   methods: {
+    handlePageChange(newPage) {
+    this.currentPageRated = newPage;
+  },
     rateMovie(movieId, rating) {
       const movie = this.movies.find((movie) => movie.id === movieId);
       if (movie) {
@@ -123,12 +169,35 @@ export default {
 
   color: #fff;
 }
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
 
+.pagination {
+    
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    z-index: 9999;
+  }
+  .jump-pagination{
+    z-index: 3;
+  }
+  
+  .page-button {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 5px 10px;
+    margin: 0 5px;
+    cursor: pointer;
+    background-color: #f7f7f7;
+  }
+  
+  .page-button:hover {
+    background-color: #e1e1e1;
+  }
+  
+ .page-button.active {
+color: #fff;
+  background: #1c4b91;
+}
 .pagination-button {
   background-color: #333;
   color: #fff;

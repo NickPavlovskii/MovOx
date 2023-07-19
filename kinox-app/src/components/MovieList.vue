@@ -41,8 +41,8 @@
         </li>
       </ul>
   
-      <div class="pagination">
-        <button
+<!-- 
+      <div class="pagination">     <button
           v-for="pageNumber in totalPages"
           :key="pageNumber"
           @click="setCurrentPage(pageNumber)"
@@ -50,23 +50,26 @@
           class="page-button"
         >
           {{ pageNumber }}
-        </button>
-      </div>
-      <div class="jump-pagination">
-    <button
-      v-for="pageNumber in totalJumpPages"
-      :key="pageNumber"
-      @click="setCurrentPage((pageNumber - 1) * 5 + 1)"
-      class="jump-button"
-    >
-      {{ (pageNumber - 1) * 5 + 1 }}-{{ Math.min(pageNumber * 5, totalPages) }}
-    </button>
-  </div>
+        </button></div> -->
+ 
+    <div class="pagination">
+      <Paginator
+      v-model:first="currentPage "
+      :rows="1"
+      :totalRecords="totalPages"
+      @pageChange="onPageChange"
+    />
+</div>
+    
+
     </div>
   </template>
+
+
   
   <script>
 
+import Paginator from 'primevue/paginator';
   import { mapState, mapActions, mapGetters } from 'vuex';
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   import { library } from '@fortawesome/fontawesome-svg-core';
@@ -83,11 +86,12 @@
       ContentWrapper,
       MovieCard,
       Dropdown,
+      Paginator
     },
     data() {
       return {
         itemsPerPage: 21,
-        currentPage: 1,
+        currentPage: 0,
         sortOptions: [
           { value: 'Сортировать по', label: 'Сортировать по' },
           { value: 'year', label: 'Год' },
@@ -102,9 +106,7 @@
     computed: {
       ...mapState(['filteredMovies', 'searchQuery', 'movies']),
       ...mapGetters(['getMovieById']),
-      totalMovies() {
-        return this.$route.path === '/' ? this.movies.length : this.filteredMovies.length;
-      },
+ 
       totalPages() {
         return Math.ceil(this.totalMovies / this.itemsPerPage);
       },
@@ -112,10 +114,14 @@
         return Math.ceil(this.totalPages / 5);
       },
       displayedMovies() {
-        const moviesList = this.$route.path === '/' ? this.movies : this.filteredMovies;
-        const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-        return moviesList.slice(startIndex, startIndex + this.itemsPerPage);
-      },
+      const moviesList = this.$route.path === '/' ? this.movies : this.filteredMovies;
+      const startIndex = (this.currentPage ) * this.itemsPerPage;
+      return moviesList.slice(startIndex, startIndex + this.itemsPerPage);
+    },
+    totalMovies() {
+      const moviesList = this.$route.path === '/' ? this.movies : this.filteredMovies;
+      return moviesList.length;
+    },
       shouldShowLoadMoreButton() {
         return this.currentPage * this.itemsPerPage < this.totalMovies;
       },
@@ -127,6 +133,9 @@
     methods: {
      
       ...mapActions(['fetchMovies', 'searchMovies']),
+      onPageChange(pageNumber) {
+      this.currentPage = pageNumber;
+    },
       handleEnter() {
         if (event.key === 'Enter') {
           this.updateMovieList();
@@ -152,9 +161,9 @@
         });
         this.setCurrentPage(1);
       },
-      setCurrentPage(pageNumber) {
-        this.currentPage = pageNumber;
-      },
+      setCurrentPage(event) {
+      this.currentPage = event.page + 1;
+    },
       loadMore() {
         this.currentPage++;
       },
@@ -193,24 +202,7 @@
 
  color: #fff;
 }
-.shapes{
-  box-sizing: border-box;
-flex-shrink: 0;
-width: 1px;
-height: 400px;
-display: flex;
-flex-direction: row;
-justify-content: space-evenly;
-align-items: center;
-padding: 100px 100px 100px 100px;
 
-overflow: visible;
-flex: 1 0 0px;
-position: relative;
-align-content: center;
-flex-wrap: nowrap;
-border-radius: 0px 0px 0px 0px;
-}
 .container {
   max-width: 960px;
   margin: 0 auto;
@@ -267,41 +259,8 @@ option {
     position: relative;
     bottom: 25px;
 }
-.info {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 15px 0;
-    display: flex;
-}
-.info .infoItem {
-    margin-right: 10px;
-    display: flex;
-    flex-flow: row wrap;
-}
-.icons {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    margin-bottom: 10px;
-  }
 
 
-
-
-
- 
-
- 
-
- 
-
-.loader {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 200px;
-  font-size: 20px;
-  color: #333;
-}
 .pagination {
     
   display: flex;
@@ -371,49 +330,7 @@ z-index: 2;
 
 }
 
-.movie-poster {
-  text-align: center;
-  border-radius: 8px;
-  margin-left: -30px;
-}
 
-
-
-.poster-image {
-  max-width: 100%;
-  height: auto;
-  border-radius: 11px;
-}
-
-.movie-details {
-  padding-top: 10px;
-  width: 100%;
-  color: white;
-  height: 80px;
-}
-
-.movie-name {
-  font-size: 19px;
-  margin-bottom: 5px;
-  position: relative;
-  bottom: 90px;
-
-  font-weight: bold;
-}
-
-.movie-info {
-  display: flex;
-  align-items: center;
-}
-
-
-
-.year {
-  font-size: 16px;
-  color: #888;
-  position: relative;
-  bottom: 85px;
-}
 
 
 </style>

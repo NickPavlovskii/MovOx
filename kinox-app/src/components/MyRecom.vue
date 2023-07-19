@@ -1,129 +1,180 @@
 <template>
-    <div class="container">
-    
-        <h2 class="title">Рекомендуем к просмотру</h2>
-        <div class="wrapper">
-           
-          <i id="left"  @click="scrollLeft"><font-awesome-icon icon="arrow-left" /></i>
-          <div class="carousel" @mousedown="dragStart" @touchstart="dragStart" @mousemove="dragging" @touchmove="dragging"
-            @mouseup="dragStop" @touchend="dragStop" :class="{'dragging': isDragging}">
-            
-            <div class="movie-poster" v-for="movie in randomMovies" :key="movie.id">
-              <MovieCard :movie="movie" />
-            </div>
-      
-          </div>
-          <i id="right"  @click="scrollRight"><font-awesome-icon icon="arrow-right" /></i>
+  <div class="container">
+    <h2 class="title">Рекомендуем к просмотру</h2>
+    <div class="wrapper">
+      <i id="left" @click="scrollLeft"><font-awesome-icon icon="arrow-left" /></i>
+      <div class="carousel" @mousedown="dragStart" @touchstart="dragStart" @mousemove="dragging" @touchmove="dragging"
+        @mouseup="dragStop" @touchend="dragStop" :class="{'dragging': isDragging}">
+        <div class="movie-poster" v-for="movie in recommendedMovies" :key="movie.id">
+          <MovieCard :movie="movie" />
         </div>
+      </div>
+      <i id="right" @click="scrollRight"><font-awesome-icon icon="arrow-right" /></i>
     </div>
-      </template>
-    
-      <script>
-      import { mapState, mapMutations  } from 'vuex';
-   
-     
-         import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-      import { library } from '@fortawesome/fontawesome-svg-core'
-      import { faArrowRight,faArrowLeft, faHeart } from '@fortawesome/free-solid-svg-icons'
-      import MovieCard from './MovieCard.vue';
-      library.add(faArrowRight)
-      library.add(faArrowLeft)
-      library.add(faHeart)
-  
-   
-      export default {
-        components: {
-            FontAwesomeIcon,
- 
-        MovieCard
-      },
-        computed: {
-            ...mapState(['movies']),
-            randomMovies() {
-      // Получение 10 случайных фильмов из общего списка
-      const randomIndexes = [];
-      const randomMovies = [];
+  </div>
+</template>
 
-      while (randomIndexes.length < 10) {
-        const randomIndex = Math.floor(Math.random() * this.movies.length);
+<script>
+import { mapState, mapMutations } from 'vuex';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faArrowRight, faArrowLeft, faHeart } from '@fortawesome/free-solid-svg-icons';
+import MovieCard from './MovieCard.vue';
 
-        if (!randomIndexes.includes(randomIndex)) {
-          randomIndexes.push(randomIndex);
-          randomMovies.push(this.movies[randomIndex]);
-        }
+library.add(faArrowRight);
+library.add(faArrowLeft);
+library.add(faHeart);
+
+export default {
+  components: {
+    FontAwesomeIcon,
+    MovieCard
+  },
+  computed: {
+    ...mapState(['movies']),
+    recommendedMovies() {
+  // Получаем список фильмов с закладками или лайками
+  const bookmarkedMovies = this.movies.filter((movie) => {
+    const bookmarkKey = `bookmark_${movie.id}`;
+    const hasBookmark = localStorage.getItem(bookmarkKey) === 'true';
+
+    const likeKey = `like_${movie.id}`;
+    const hasLike = localStorage.getItem(likeKey) === 'true';
+
+    return hasBookmark || hasLike;
+  });
+
+  // Получаем все жанры и страны из фильмов с закладками или лайками
+  const genres = [...new Set(bookmarkedMovies.flatMap((movie) => movie.genres))];
+  const countries = [...new Set(bookmarkedMovies.flatMap((movie) => movie.country))];
+  const actors = [...new Set(bookmarkedMovies.flatMap((movie) => (movie.cast && Array.isArray(movie.cast)) ? movie.cast.map((actor) => actor.name) : []))];
+
+  // Группируем все фильмы по жанрам
+  const groupedMoviesByGenres = {};
+  this.movies.forEach((movie) => {
+    movie.genres.forEach((genre) => {
+      if (!groupedMoviesByGenres[genre]) {
+        groupedMoviesByGenres[genre] = [];
       }
+      groupedMoviesByGenres[genre].push(movie);
+    });
+  });
 
-      return randomMovies;
+  // Группируем все фильмы по странам
+  const groupedMoviesByCountries = {};
+  this.movies.forEach((movie) => {
+    const country = movie.country;
+    if (!groupedMoviesByCountries[country]) {
+      groupedMoviesByCountries[country] = [];
+    }
+    groupedMoviesByCountries[country].push(movie);
+  });
+
+  // Группируем все фильмы по актерам
+  const groupedMoviesByActors = {};
+  this.movies.forEach((movie) => {
+    if (movie.cast && Array.isArray(movie.cast)) {
+      movie.cast.forEach((actor) => {
+        if (!groupedMoviesByActors[actor.name]) {
+          groupedMoviesByActors[actor.name] = [];
+        }
+        groupedMoviesByActors[actor.name].push(movie);
+      });
+    }
+  });
+
+  // Выбираем наиболее популярные жанры, страны и актеров
+  const popularGenres = genres.sort((a, b) => groupedMoviesByGenres[b].length - groupedMoviesByGenres[a].length);
+  const popularCountries = countries.sort((a, b) => groupedMoviesByCountries[b].length - groupedMoviesByCountries[a].length);
+  const popularActors = actors.sort((a, b) => groupedMoviesByActors[b].length - groupedMoviesByActors[a].length);
+
+  // Получаем 10 похожих фильмов из списка всех фильмов
+  const recommendedMovies = [];
+  [popularGenres, popularCountries, popularActors].forEach((category) => {
+    category.forEach((item) => {
+      const movies = groupedMoviesByGenres[item] || groupedMoviesByCountries[item] || groupedMoviesByActors[item];
+      if (movies) {
+        recommendedMovies.push(...movies);
+      }
+    });
+  });
+
+  // Получаем 10 случайных фильмов из списка рекомендаций
+  const randomMovies = recommendedMovies.sort(() => 0.5 - Math.random()).slice(0, 10);
+
+  return randomMovies;
+}
+
+  },
+  data() {
+    return {
+      isDragStart: false,
+      isDragging: false,
+      prevPageX: 0,
+      prevScrollLeft: 0,
+      positionDiff: 0,
+    };
+  },
+  methods: {
+    ...mapMutations(['setMovies']), // Добавлено использование мутации setMovies
+    scrollLeft() {
+      const carousel = this.$el.querySelector('.carousel');
+      const firstImg = carousel.querySelectorAll('img')[0];
+      const firstImgWidth = firstImg.clientWidth + 14;
+      carousel.scrollLeft -= firstImgWidth;
+      this.showHideIcons();
     },
-        },
-        data() {
-          return {
-            isDragStart: false,
-            isDragging: false,
-            prevPageX: 0,
-            prevScrollLeft: 0,
-            positionDiff: 0,
-          };
-        },
-        methods: {
-            ...mapMutations(['setMovies']), // Добавлено использование мутации setMovies
-          scrollLeft() {
-            const carousel = this.$el.querySelector(".carousel");
-            const firstImg = carousel.querySelectorAll("img")[0];
-            const firstImgWidth = firstImg.clientWidth + 14;
-            carousel.scrollLeft -= firstImgWidth;
-            this.showHideIcons();
-          },
-          scrollRight() {
-            const carousel = this.$el.querySelector(".carousel");
-            const firstImg = carousel.querySelectorAll("img")[0];
-            const firstImgWidth = firstImg.clientWidth + 14;
-            carousel.scrollLeft += firstImgWidth;
-            this.showHideIcons();
-          },
-          showHideIcons() {
-            const carousel = this.$el.querySelector(".carousel");
-            const scrollWidth = carousel.scrollWidth - carousel.clientWidth;
-            const arrowIcons = this.$el.querySelectorAll(".wrapper i");
-            arrowIcons[0].style.display = carousel.scrollLeft === 0 ? "none" : "block";
-            arrowIcons[1].style.display = carousel.scrollLeft === scrollWidth ? "none" : "block";
-          },
-          autoSlide() {
-            const carousel = this.$el.querySelector(".carousel");
-            const firstImg = carousel.querySelectorAll("img")[0];
-            const firstImgWidth = firstImg.clientWidth + 14;
-            const valDifference = firstImgWidth - Math.abs(this.positionDiff);
-      
-            if (carousel.scrollLeft > this.prevScrollLeft) {
-              carousel.scrollLeft += this.positionDiff > firstImgWidth / 3 ? valDifference : -this.positionDiff;
-            } else {
-              carousel.scrollLeft -= this.positionDiff > firstImgWidth / 3 ? valDifference : -this.positionDiff;
-            }
-          },
-          dragStart(e) {
-            this.isDragStart = true;
-            this.prevPageX = e.pageX || e.touches[0].pageX;
-            this.prevScrollLeft = this.$el.querySelector(".carousel").scrollLeft;
-          },
-          dragging(e) {
-            if (!this.isDragStart) return;
-            e.preventDefault();
-            this.isDragging = true;
-            this.$el.querySelector(".carousel").classList.add("dragging");
-            this.positionDiff = (e.pageX || e.touches[0].pageX) - this.prevPageX;
-            this.$el.querySelector(".carousel").scrollLeft = this.prevScrollLeft - this.positionDiff;
-            this.showHideIcons();
-          },
-          dragStop() {
-            this.isDragStart = false;
-            this.$el.querySelector(".carousel").classList.remove("dragging");
-            if (!this.isDragging) return;
-            this.isDragging = false;
-            this.autoSlide();
-          },
-        },
-      };
-      </script>
+    scrollRight() {
+      const carousel = this.$el.querySelector('.carousel');
+      const firstImg = carousel.querySelectorAll('img')[0];
+      const firstImgWidth = firstImg.clientWidth + 14;
+      carousel.scrollLeft += firstImgWidth;
+      this.showHideIcons();
+    },
+    showHideIcons() {
+      const carousel = this.$el.querySelector('.carousel');
+      const scrollWidth = carousel.scrollWidth - carousel.clientWidth;
+      const arrowIcons = this.$el.querySelectorAll('.wrapper i');
+      arrowIcons[0].style.display = carousel.scrollLeft === 0 ? 'none' : 'block';
+      arrowIcons[1].style.display = carousel.scrollLeft === scrollWidth ? 'none' : 'block';
+    },
+    autoSlide() {
+      const carousel = this.$el.querySelector('.carousel');
+      const firstImg = carousel.querySelectorAll('img')[0];
+      const firstImgWidth = firstImg.clientWidth + 14;
+      const valDifference = firstImgWidth - Math.abs(this.positionDiff);
+
+      if (carousel.scrollLeft > this.prevScrollLeft) {
+        carousel.scrollLeft += this.positionDiff > firstImgWidth / 3 ? valDifference : -this.positionDiff;
+      } else {
+        carousel.scrollLeft -= this.positionDiff > firstImgWidth / 3 ? valDifference : -this.positionDiff;
+      }
+    },
+    dragStart(e) {
+      this.isDragStart = true;
+      this.prevPageX = e.pageX || e.touches[0].pageX;
+      this.prevScrollLeft = this.$el.querySelector('.carousel').scrollLeft;
+    },
+    dragging(e) {
+      if (!this.isDragStart) return;
+      e.preventDefault();
+      this.isDragging = true;
+      this.$el.querySelector('.carousel').classList.add('dragging');
+      this.positionDiff = (e.pageX || e.touches[0].pageX) - this.prevPageX;
+      this.$el.querySelector('.carousel').scrollLeft = this.prevScrollLeft - this.positionDiff;
+      this.showHideIcons();
+    },
+    dragStop() {
+      this.isDragStart = false;
+      this.$el.querySelector('.carousel').classList.remove('dragging');
+      if (!this.isDragging) return;
+      this.isDragging = false;
+      this.autoSlide();
+    },
+  },
+};
+</script>
+
 
 <style scoped>
 .title{

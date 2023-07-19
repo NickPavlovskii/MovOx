@@ -54,3 +54,21 @@
   
   color: white;
 }
+
+.p-paginator{
+  border-radius: 15px!important;
+  height: 60px;
+  background:  #1c4b91!important;
+  border: solid #e9ecef!important;
+}
+.p-paginator-element{
+  color: #fff!important;
+}
+
+
+
+.p-paginator .p-highlight {
+
+  color: #1c4b91!important;
+  border-radius: 25px!important;
+}

@@ -3,188 +3,194 @@
 
 <template>
   <div class="container">
-   
- <div class="detailsBanner">
-  
-    <div class="backdrop-img">
-      <div class="lazy-load-image-background">
-        <img :src="movie.poster.url" alt="Movie Poster" class="posterImg">
-      </div>
-    </div>
-    <div class="opacity-layer"></div>
-    
-    <div class="content">
-      
-      <div class="left">
-        <img :src="movie.poster.url" alt="Movie Poster" class="posterImg">
-       
-      
-   <div style="display: flex;   flex-direction: column; ">
-   
-    <div style="display: flex; flex-direction: column;">
-  <h3 style="margin: 25px -2px -2px -2px">Поставьте оценку</h3>
-  <span class="text">Это улучшит ваши рекомендации</span>
-</div>
 
-<Rating v-model="rating" :stars="10" cancel="false" @input="saveRating" class="custom-rating" />
+    <div class="detailsBanner">
 
-      <div style="display: flex; justify-content: flex-end;">
-        
-   <button :class="{ active: isBookmarked }" @click.stop="toggleBookmark($event)" class="myButton  btn-3">
-    <span >
-      <Icon v-if="!isBookmarked" icon="ic:outline-bookmark-add" class="icn" />
-      <Icon v-else icon="material-symbols:bookmark-add" class="icn"/>
-      
-     Смотреть позже 
-    </span>
-     
-    </button>
- 
-   
- 
-    </div>
-  </div>
-      </div>
-      <div class="right">
-        <h1 class="title">{{ movie.name }} </h1>
-   
-
-    
-        
-        <h4 class="subtitle">{{movie.alternativeName}}</h4>
-        <div class="genres">
-        <div  v-for="genre in movie.genres" :key="genre" >
-          <span class="genre">{{ genre }}</span>
-          
+      <div class="backdrop-img">
+        <div class="lazy-load-image-background">
+          <img :src="movie.poster.url" alt="Movie Poster" class="posterImg">
         </div>
       </div>
-        <div class="overview">
-          <h2 class="heading">О фильме</h2>
-          <p class="description">{{ movie.description }}</p>
-        </div>
-     
-     
-      <div class="right-rows">
-        <div class="row" >
-          <div class="info">
-            <div class="infoItem">
-              <span class="text bold" style="    letter-spacing: 0.2em;">Режиссер</span>
-              
-              <span class="text">{{ movie.director.producer.join(', ') }}</span>
-            </div>
-            <div class="infoItem">
-              <span class="text bold">Cценарист:</span>
-              <span class="text">{{ movie.director.screenwriter.join(', ') }}</span>
-            </div>
-          </div>
-         
-        </div>
-        <div class="row" style="position: relative; bottom: 30px;">
-          <div class="info">
-            <div class="infoItem">
-              <span class="text bold"><font-awesome-icon icon="globe" /></span>
-              <span class="text">{{ movie.country }}</span>
-            </div>
-            <div class="infoItem">
-              <span class="text bold"><font-awesome-icon icon="clock" /></span>
-              <span class="text">{{ convertMinutesToHours(movie.movieLength) }}</span>
-            </div>
-            <div class="infoItem">
-              <span class="text bold"><font-awesome-icon icon="calendar-days" /></span>
-              <span class="text">{{ movie.year }}</span>
-            </div>
-          </div>
-         
-        </div>
-        
-        <div class="row raiting">
-          <div class="info">
-            <div class="infoItem">
-              <span class="text bold">kp:</span>
-              <span class="text">{{movie.rating.kp}}</span>
-            </div>
-            <div class="infoItem">
-              <span class="text bold">imdb:</span>
-              <span class="text">{{ movie.rating.imdb }}</span>
-            </div>
-           
-          </div> 
-          
-        
-        </div> 
-        
-        
-        <div style=" position: relative; bottom: 70px;">
-         <h3 style=" margin-bottom: -0px;   letter-spacing: 0.2em;">Рейтинг Кинокритиков</h3> 
-          <div class="progress-bars">
-            <div style="display: flex;     flex-direction: column; width: 315px;" >
-          <h4 style="    letter-spacing: 0.2em;"> В Мире</h4>
-          <div class="progress-bar">
+      <div class="opacity-layer"></div>
 
-            <ProgressBar :value="movie.rating.filmCritics * 10" >{{ movie.rating.filmCritics }}</ProgressBar>
-          </div>
-          <span class="text votes">{{ movie.votes.filmCritics }} голосов</span>
-          
-    </div>
-    <div style="display: flex;     flex-direction: column; width: 270px; " >
-      <h4>В России</h4>
-  <div class="progress-bar rf">
+      <div class="content">
 
-    <ProgressBar :value="movie.rating.russianFilmCritics"> <span style="margin-bottom: 2px;">{{ movie.rating.russianFilmCritics }}</span> </ProgressBar>
+        <div class="left">
+          <img :src="movie.poster.url" alt="Movie Poster" class="posterImg">
 
-  </div>
-    <span class="text votes">{{ movie.votes.russianFilmCritics }} голосов</span>      
-  </div>
+
+          <div style="display: flex;   flex-direction: column; ">
+
+            <div style="display: flex; flex-direction: column;">
+              <h3 style="margin: 25px -2px -2px -2px">Поставьте оценку</h3>
+              <span class="text">Это улучшит ваши рекомендации</span>
+            </div>
+            <div style="display: flex;">
+              <img src="https://primefaces.org/cdn/primevue/images/rating/cancel.png" height="24" width="24"
+                @click="resetRating"  style="position: relative; top: 8px;" />
+              <Rating v-model="rating" :stars="10" @input="saveRating" class="custom-rating" :cancel=false />
+
+            </div>
+
+
+
+            <div style="display: flex; justify-content: flex-end;">
+
+              <button :class="{ active: isBookmarked }" @click.stop="toggleBookmark($event)" class="myButton  btn-3">
+                <span>
+                  <Icon v-if="!isBookmarked" icon="ic:outline-bookmark-add" class="icn" />
+                  <Icon v-else icon="material-symbols:bookmark-add" class="icn" />
+
+                  Смотреть позже
+                </span>
+
+              </button>
+
+
+
+            </div>
           </div>
-       
-</div>
-        <div class="watchability" v-if="movie.watchability.items != null">
-          <p class="watchability-heading">Доступно на:</p>
-          <ul class="watchability-list">
-            <li v-for="item in movie.watchability.items" :key="item._id">
-              <a :href="item.url" target="_blank">
-                <img :src="item.logo.url" :alt="item.name" class="watchability-logo">
-              </a>
-            </li>
-          </ul>
+        </div>
+        <div class="right">
+          <h1 class="title">{{ movie.name }} </h1>
+
+
+
+
+          <h4 class="subtitle">{{ movie.alternativeName }}</h4>
+          <div class="genres">
+            <div v-for="genre in movie.genres" :key="genre">
+              <span class="genre">{{ genre }}</span>
+
+            </div>
+          </div>
+          <div class="overview">
+            <h2 class="heading">О фильме</h2>
+            <p class="description">{{ movie.description }}</p>
+          </div>
+
+
+          <div class="right-rows">
+            <div class="row">
+              <div class="info">
+                <div class="infoItem">
+                  <span class="text bold" style="letter-spacing: 0.2em;">Режиссер</span>
+
+                  <span class="text">{{ movie.director.producer.join(', ') }}</span>
+                </div>
+                <div class="infoItem">
+                  <span class="text bold">Cценарист:</span>
+                  <span class="text">{{ movie.director.screenwriter.join(', ') }}</span>
+                </div>
+              </div>
+
+            </div>
+            <div class="row" style="position: relative; bottom: 30px;">
+              <div class="info">
+                <div class="infoItem">
+                  <span class="text bold"><font-awesome-icon icon="globe" /></span>
+                  <span class="text">{{ movie.country }}</span>
+                </div>
+                <div class="infoItem">
+                  <span class="text bold"><font-awesome-icon icon="clock" /></span>
+                  <span class="text">{{ convertMinutesToHours(movie.movieLength) }}</span>
+                </div>
+                <div class="infoItem">
+                  <span class="text bold"><font-awesome-icon icon="calendar-days" /></span>
+                  <span class="text">{{ movie.year }}</span>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row raiting">
+              <div class="info">
+                
+                <div class="infoItem">
+                  <span class="text bold"><font-awesome-icon icon="fa-brands fa-imdb" size="2xl" style="background: #1c4b91;" /></span>
+                  <span class="text" style="display: flex; align-items: center;">{{ movie.rating.imdb }}</span>
+                </div>
+                <div class="infoItem" style="display: flex; align-items: center;">
+                  <span class="text bold">kp:</span>
+                  <span class="text">{{ movie.rating.kp }}</span>
+                </div>
+              </div>
+
+
+            </div>
+
+
+            <div style=" position: relative; bottom: 70px;">
+              <h3 style=" margin-bottom: -0px;   letter-spacing: 0.2em;">Рейтинг Кинокритиков</h3>
+              <div class="progress-bars">
+                <div style="display: flex;     flex-direction: column; width: 315px;">
+                  <h4 style="    letter-spacing: 0.2em;"> В Мире</h4>
+                  <div class="progress-bar">
+
+                    <ProgressBar :value="movie.rating.filmCritics * 10">{{ movie.rating.filmCritics }}</ProgressBar>
+                  </div>
+                  <span class="text votes">{{ movie.votes.filmCritics }} голосов</span>
+
+                </div>
+                <div style="display: flex;     flex-direction: column; width: 270px; ">
+                  <h4>В России</h4>
+                  <div class="progress-bar rf">
+
+                    <ProgressBar :value="movie.rating.russianFilmCritics"> <span
+                        style="margin-bottom: 2px;">{{ movie.rating.russianFilmCritics }}</span> </ProgressBar>
+
+                  </div>
+                  <span class="text votes">{{ movie.votes.russianFilmCritics }} голосов</span>
+                </div>
+              </div>
+
+            </div>
+            <div class="watchability" v-if="movie.watchability.items != null">
+              <p class="watchability-heading">Доступно на:</p>
+              <ul class="watchability-list">
+                <li v-for="item in movie.watchability.items" :key="item._id">
+                  <a :href="item.url" target="_blank">
+                    <img :src="item.logo.url" :alt="item.name" class="watchability-logo">
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+
         </div>
 
       </div>
-      
+
+      <h4 class="link"> <router-link to="/" style="text-decoration: none;cursor: pointer; color: white;">
+
+          <span style="text-decoration: underline; cursor: pointer;">KinOx</span>
+        </router-link>/{{ movie.name }}</h4>
+
+
+
+
+
+
     </div>
-   
+    <div style="position: relative; bottom: 100px;">
+      <div class="Cast" v-if="movie.type !== 'cartoon'">
+        <h3 class="watchability-heading">Каст:</h3>
+        <ul class=" cast-list">
+          <li v-for="item in movie.cast" :key="item._id">
+            <div class="cast-log" :style="'background-image: url(' + item.photo.url + ');'"></div>
+            <div style="display: flex; flex-direction: column;">
+              <span>{{ item.name }}</span>
+              <span class="text">{{ item.role }}</span>
+            </div>
+
+
+          </li>
+        </ul>
+      </div>
+      <MyRecom class="MyRecom" />
     </div>
-   
-    <h4 class="link"> <router-link to="/" style="text-decoration: none;cursor: pointer; color: white;">
-      
-      <span style="text-decoration: underline; cursor: pointer;">KinOx</span>
-    </router-link>/{{ movie.name }}</h4>
-
-
-    
-   
-
-  
   </div>
-  <div style="position: relative; bottom: 100px;">
-  <div class="Cast" v-if=" movie.type !== 'cartoon'"
->
-  <h3 class="watchability-heading">Каст:</h3>
-  <ul class=" cast-list">
-    <li v-for="item in movie.cast" :key="item._id">
-      <div class="cast-log" :style="'background-image: url(' + item.photo.url + ');'"></div>
-      <div style="display: flex; flex-direction: column;">
-        <span >{{ item.name }}</span>
-      <span class="text">{{ item.role }}</span>
-    </div>
-      
-   
-    </li>
-  </ul>
-</div> 
-  <MyRecom class="MyRecom"/> 
-</div>
-</div>
 </template>
 
 
@@ -196,11 +202,12 @@ import { mapActions } from 'vuex';
 import MyRecom from '../MyRecom.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faClock, faCalendarDays, faGlobe, faBookmark } from '@fortawesome/free-solid-svg-icons';
+import { faClock, faCalendarDays, faGlobe, faBookmark} from '@fortawesome/free-solid-svg-icons';
+import { faImdb} from '@fortawesome/free-brands-svg-icons';
 import Rating from 'primevue/rating';
 import ProgressBar from 'primevue/progressbar';
 
-library.add(faClock, faCalendarDays, faGlobe, faBookmark);
+library.add(faClock, faCalendarDays, faGlobe, faBookmark,faImdb);
 
 export default {
   components: {
@@ -212,7 +219,7 @@ export default {
   },
   data() {
     return {
-      rating: 0,
+      rating: null,
       isBookmarked: false,
       hasRating: false,
       ratedMovies: [], // Массив для хранения оцененных фильмов
@@ -289,7 +296,9 @@ export default {
       localStorage.setItem(localStorageKey, rating.toString());
       localStorage.setItem(ratingDateKey, ratingDate);
     },
-
+    resetRating() {
+      this.rating = null;
+    },
     convertMinutesToHours(minutes) {
       const hours = Math.floor(minutes / 60);
       const remainingMinutes = minutes % 60;
@@ -304,25 +313,22 @@ export default {
 </script>
 
 <style scoped>
-
-.Cast{
+.Cast {
   position: relative;
   bottom: 20px;
 }
+
 .box {
   --border-size: 3px;
   --border-angle: 0turn;
   width: 60vmin;
   height: 50vmin;
-  background-image: conic-gradient(
-      from var(--border-angle),
+  background-image: conic-gradient(from var(--border-angle),
       #213,
       #112 50%,
-      #213
-    ),
+      #213),
     conic-gradient(from var(--border-angle), transparent 20%, #08f, #f03);
-  background-size: calc(100% - (var(--border-size) * 2))
-    calc(100% - (var(--border-size) * 2)), cover;
+  background-size: calc(100% - (var(--border-size) * 2)) calc(100% - (var(--border-size) * 2)), cover;
   background-position: center center;
   background-repeat: no-repeat;
   animation: bg-spin 3s linear infinite;
@@ -337,30 +343,34 @@ export default {
 .box:hover {
   animation-play-state: paused;
 }
+
 .genres {
   display: flex;
   gap: 5px;
   margin-bottom: 6px;
 }
+
 .genre {
-      background-color: #da2f68;
-      padding: 3px 5px;
-      font-size: 12px;
-      border-radius: 4px;
-      color: white;
-      white-space: nowrap;
-  }
-.container{
-      max-width: 960px;
+  background-color: #da2f68;
+  padding: 3px 5px;
+  font-size: 12px;
+  border-radius: 4px;
+  color: white;
+  white-space: nowrap;
+}
+
+.container {
+  max-width: 960px;
   margin: 0 auto;
   padding: 20px;
 
-  height:80%;
+  height: 80%;
 
 }
- .left {
-      flex-shrink: 0;
-width: 40%;
+
+.left {
+  flex-shrink: 0;
+  width: 40%;
 
 }
 
@@ -452,15 +462,19 @@ width: 40%;
   font-size: 24px;
   width: 25px;
 }
-.MyRecom{
-position: relative;
+
+.MyRecom {
+  position: relative;
 
 }
+
 .custom-rating {
   height: 24px;
   margin-top: 7px;
   margin-bottom: 5px;
-}.myButton {
+}
+
+.myButton {
   color: white;
   width: 190px;
   background: linear-gradient(0deg, #1c4b91 0%, #027efb 100%);
@@ -573,12 +587,12 @@ position: relative;
   width: 100%;
 }
 
-.icn{
+.icn {
   font-size: 24px;
-   margin-right: 5px;
+  margin-right: 5px;
   position: relative;
   top: 7px;
-  
+
 }
 
 .progress-bars {
@@ -598,7 +612,8 @@ position: relative;
   overflow: hidden;
 }
 
-.rf{}
+.rf {}
+
 .progress {
   width: 0;
   height: 100%;
@@ -612,25 +627,29 @@ position: relative;
   color: #333333;
   text-align: right;
 }
-.right-rows{
+
+.right-rows {
   position: relative;
   bottom: 40px;
 }
- .raiting{
+
+.raiting {
   position: relative;
   bottom: 60px;
 }
-.link{
- position: absolute;
- top: 60px;
- left: 50px;
-}
-.watchability {
- 
-  position: relative;
-  
 
-    bottom: 70px;
+.link {
+  position: absolute;
+  top: 60px;
+  left: 50px;
+}
+
+.watchability {
+
+  position: relative;
+
+
+  bottom: 70px;
 }
 
 .watchability-heading {
@@ -638,7 +657,7 @@ position: relative;
   color: white;
   margin-bottom: 25px;
   font-family: cursive;
-    letter-spacing: 0.1em;
+  letter-spacing: 0.1em;
 }
 
 .watchability-list {
@@ -649,36 +668,44 @@ position: relative;
   margin-left: -20px;
   padding: 0 20px;
   list-style-type: none;
-   overflow-x:scroll;
+  overflow-x: scroll;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
+
 .watchability-list::-webkit-scrollbar {
-  width: 0; /* Установите ширину полосы прокрутки на 0 */
+  width: 0;
+  /* Установите ширину полосы прокрутки на 0 */
 }
-.cast-list{
-   display: flex;
+
+.cast-list {
+  display: flex;
   gap: 20px;
   overflow-y: hidden;
   margin-right: -20px;
   margin-left: -20px;
   padding: 0 20px;
   list-style-type: none;
-   overflow-x:scroll;
-   scrollbar-width: none; /* Удаление полосы прокрутки */
-  -ms-overflow-style: none; /* Удаление полосы прокрутки в IE/Edge */
+  overflow-x: scroll;
+  scrollbar-width: none;
+  /* Удаление полосы прокрутки */
+  -ms-overflow-style: none;
+  /* Удаление полосы прокрутки в IE/Edge */
 }
 
 .cast-list::-webkit-scrollbar {
-  width: 2px; /* Ширина полосы прокрутки */
+  width: 2px;
+  /* Ширина полосы прокрутки */
   height: 8px;
 }
 
 
 
 .cast-list::-webkit-scrollbar-thumb {
-  background-color: #1c4b91; /* Цвет полосы прокрутки */
-  border-radius: 3px; /* Скругление углов полосы прокрутки */
+  background-color: #1c4b91;
+  /* Цвет полосы прокрутки */
+  border-radius: 3px;
+  /* Скругление углов полосы прокрутки */
 }
 
 .watchability-list li {
@@ -687,7 +714,7 @@ position: relative;
   list-style-type: none;
 }
 
-.cast-logo{
+.cast-logo {
   width: 100px;
   height: 100px;
   border-radius: 50%;
@@ -695,8 +722,9 @@ position: relative;
   margin-bottom: 15px;
 }
 
-.cast-log{
-   width: 100px; /* Adjust the width and height according to your preference */
+.cast-log {
+  width: 100px;
+  /* Adjust the width and height according to your preference */
   height: 100px;
   background-size: cover;
   background-position: center;
@@ -711,6 +739,7 @@ position: relative;
   object-position: center top;
   display: block;
 }
+
 .watchability-logo {
   width: 40px;
   height: 40px;
@@ -728,154 +757,153 @@ position: relative;
 }
 
 .detailsBanner {
-    width: 100%;
+  width: 100%;
 
-    padding-top: 100px;
-    margin-bottom: 50px;
+  padding-top: 100px;
+  margin-bottom: 50px;
 }
 
 @media (max-width: 768px) {
-    .detailsBanner {
-        margin-bottom: 0;
-        padding-top: 120px;
-        min-height: 700px;
-    }
+  .detailsBanner {
+    margin-bottom: 0;
+    padding-top: 120px;
+    min-height: 700px;
+  }
 }
 
 .detailsBanner .backdrop-img {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0.1;
-    overflow: hidden;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.1;
+  overflow: hidden;
 }
 
 .detailsBanner .backdrop-img .lazy-load-image-background {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 .detailsBanner .backdrop-img .lazy-load-image-background img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .detailsBanner .opacity-layer {
-    width: 100%;
-    height: 250px;
-    background: linear-gradient(
-        180deg,
-        rgba(4, 21, 45, 0) 0%,
-        #04152d 79.17%
-    );
-    position: absolute;
-    bottom: 0;
-    left: 0;
+  width: 100%;
+  height: 250px;
+  background: linear-gradient(180deg,
+      rgba(4, 21, 45, 0) 0%,
+      #04152d 79.17%);
+  position: absolute;
+  bottom: 0;
+  left: 0;
 }
 
- .content {
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    gap: 20px;
-    
+.content {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  gap: 20px;
+
 
 
 }
 
 @media (min-width: 768px) {
-     .content {
-       gap: 50px;
-        flex-direction: row;
-    }
-  
+  .content {
+    gap: 50px;
+    flex-direction: row;
+  }
+
 }
 
 .left .row {
-margin-top: 20px;
+  margin-top: 20px;
 }
 
 .detailsBanner .content .left .posterImg {
-    width: 100%;
-    display: block;
-    border-radius: 12px;
+  width: 100%;
+  display: block;
+  border-radius: 12px;
 }
 
 @media (min-width: 768px) {
-    .detailsBanner .content .left .posterImg {
-        max-width: 350px;
-     
-    }
+  .detailsBanner .content .left .posterImg {
+    max-width: 350px;
+
+  }
 }
 
- .right {
-    color: white;
-    width: 50%;
+.right {
+  color: white;
+  width: 50%;
 }
+
 @media (max-width: 768px) {
- 
+
   .left,
   .right {
     width: 100%;
     max-width: none;
   }
-  
+
 }
 
 .detailsBanner .content .right .title {
-    font-size: 28px;
+  font-size: 28px;
 
 
 }
 
 @media (min-width: 768px) {
-    .detailsBanner .content .right .title {
-        font-size: 34px;
-        line-height: 44px;
-    }
+  .detailsBanner .content .right .title {
+    font-size: 34px;
+    line-height: 44px;
+  }
 }
 
 .detailsBanner .content .right .subtitle {
-    font-size: 16px;
-position: relative;
-bottom: 20px;
-    font-style: italic;
-    opacity: 0.5;
-    margin-bottom: -5px;
-  }
+  font-size: 16px;
+  position: relative;
+  bottom: 20px;
+  font-style: italic;
+  opacity: 0.5;
+  margin-bottom: -5px;
+}
 
 @media (min-width: 768px) {
-    .detailsBanner .content .right .subtitle {
-        font-size: 20px;
-        line-height: 28px;
-    }
+  .detailsBanner .content .right .subtitle {
+    font-size: 20px;
+    line-height: 28px;
+  }
 }
 
 
 .detailsBanner .content .right .overview {
-    margin-bottom: 25px;
-    width: 100%;
-    position: relative;
-    bottom: 10px;
+  margin-bottom: 25px;
+  width: 100%;
+  position: relative;
+  bottom: 10px;
 }
 
 .detailsBanner .content .right .overview .heading {
-    font-size: 24px;
-    margin-bottom: 10px;
+  font-size: 24px;
+  margin-bottom: 10px;
 }
 
 .detailsBanner .content .right .overview .description {
-    line-height: 24px;
+  line-height: 24px;
 }
 
 @media (max-width: 768px) {
-    .detailsBanner .content .right .overview .description {
-        padding-right: 100px;
-    }
+  .detailsBanner .content .right .overview .description {
+    padding-right: 100px;
+  }
 }
 
 
@@ -886,13 +914,16 @@ bottom: 20px;
 
 
 
-.votes{
+.votes {
   margin-top: -7px;
 }
+
 .detailsBanner .content .right .playbtn .text {
+
+  font-size: 20px;
+  transition: all 0.7s ease-in-out;
   
-    font-size: 20px;
-    transition: all 0.7s ease-in-out;
+
 }
 
 
@@ -900,38 +931,36 @@ bottom: 20px;
 
 
 
+.detailsBanner .content .row {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  margin-bottom: 20px;
+  position: relative;
 
-
-.detailsBanner .content  .row {
-    display: flex;
-    align-items: center;
-    gap: 25px;
-    margin-bottom: 20px;
-    position: relative;
-    
 }
 
 .detailsBanner .content .info {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 15px 0;
-    display: flex;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 15px 0;
+  display: flex;
 }
 
 .detailsBanner .content .info .infoItem {
-    margin-right: 10px;
-    display: flex;
-    flex-flow: row wrap;
+  margin-right: 10px;
+  display: flex;
+  flex-flow: row wrap;
 }
 
- .text {
-    margin-right: 10px;
-    opacity: 0.5;
-    line-height: 24px;
+.text {
+  margin-right: 10px;
+  opacity: 0.5;
+  line-height: 24px;
 }
 
- .text.bold {
-    font-weight: 600;
-    opacity: 1;
+.text.bold {
+  font-weight: 600;
+  opacity: 1;
 }
 
 h1 {
@@ -960,13 +989,12 @@ p {
 
 
 <style scoped>
-
 .movie-card {
   max-width: 400px;
   margin: 0 auto;
   padding: 20px;
   text-align: center;
-    display: flex;
+  display: flex;
 
 }
 
