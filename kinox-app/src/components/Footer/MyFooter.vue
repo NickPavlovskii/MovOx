@@ -113,7 +113,12 @@ export default {
   margin-bottom: 5px;
   width: 500px;
 }
-
+@media (max-width: 768px) {
+  .footer p {
+  margin-bottom: 5px;
+  width: 100%;
+}
+  }
 .footer ul {
   list-style: none;
   padding: 0;
