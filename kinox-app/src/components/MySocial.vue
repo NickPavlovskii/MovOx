@@ -60,7 +60,7 @@ a {
 .social {
   z-index: 999;
   position: fixed;
-  top: 460px;
+  top: 400px;
 }
 @media (max-width: 1000px){
 .social {

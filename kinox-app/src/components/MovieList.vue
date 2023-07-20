@@ -57,7 +57,7 @@
       v-model:first="currentPage "
       :rows="1"
       :totalRecords="totalPages"
-      @pageChange="onPageChange"
+    
     />
 </div>
     
@@ -110,9 +110,7 @@ import Paginator from 'primevue/paginator';
       totalPages() {
         return Math.ceil(this.totalMovies / this.itemsPerPage);
       },
-      totalJumpPages() {
-        return Math.ceil(this.totalPages / 5);
-      },
+      
       displayedMovies() {
       const moviesList = this.$route.path === '/' ? this.movies : this.filteredMovies;
       const startIndex = (this.currentPage ) * this.itemsPerPage;
