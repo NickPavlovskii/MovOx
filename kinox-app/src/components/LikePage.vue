@@ -2,38 +2,49 @@
   <div class="container">
     <div class="movie-list">
       <div class="section">
-        <h2 class="section-title">Посмотреть позже</h2>
+      
+        <div class="title_container">
+          <h2 class="title">Посмотреть позже</h2>
+        </div>
         <ul class="movie-card-list">
-          <li v-for="(movie) in paginatedBookmarkedMovies" :key="movie.id" class="movie-card-item">
+          <li v-for="movie in paginatedBookmarkedMovies" :key="movie.id" class="movie-card-item">
             <MovieCard :movie="movie" />
           </li>
         </ul>
         <div class="pagination">
-          <Paginator v-model:first="currentPageBookmarked" 
-          :rows="1" 
-          :totalRecords="bookmarkedPages" />
+          <Paginator v-model:first="currentPageBookmarked" :rows="1" :totalRecords="bookmarkedPages" />
         </div>
 
       </div>
+      <div style="" class="clapperboard_icons">
+          <img src="../assets/clapperboard.png" alt="" style="height: 40px; opacity: 0.3; margin-right: 70px;">
+          <img src="../assets/clapperboard.png" alt="" style="height: 80px; opacity: 0.75; margin-right: 70px;">
+          <img src="../assets/clapperboard.png" alt="" style="height: 140px; opacity: 1; margin-right: 70px;">
+          <img src="../assets/clapperboard.png" alt="" style="height: 80px; opacity: 0.75; margin-right: 70px;">
+          <img src="../assets/clapperboard.png" alt="" style="height: 40px; opacity: 0.3; margin-right: 50px;">
+        </div> 
 
       <div class="section">
-        <h2>Оцененные фильмы</h2>
+        <div class="title_container">
+          <h2 class="title">Оцененные фильмы</h2>
+        </div>
+
         <table>
           <thead>
             <tr>
               <th></th>
-              <th>Оценка</th>
-              <th>Удалить</th>
+              <th></th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="movie in paginatedRatedMovies" :key="movie.id">
               <td style="display: flex; flex-direction: column;">
-                <img :src="movie.poster.url" :alt="movie.name" style="height: 200px; width: 150px;">
-                <p> {{ movie.name }}</p>
+                <MovieCard :movie="movie" style="width: 250px;" />
+
               </td>
               <td>
-                <Rating v-model="movie.rating" :stars="10" :cancel="false" :readonly="true" class="custom-rating" />
+                <Rating v-model="movie.like" :stars="10" :cancel="false" :readonly="true" class="custom-rating" />
               </td>
               <td>
                 <img src="https://primefaces.org/cdn/primevue/images/rating/cancel.png" height="24" width="24"
@@ -44,10 +55,7 @@
           </tbody>
         </table>
         <div class="pagination">
-          <Paginator 
-          v-model:first="currentPageRated" 
-          :rows="1"
-           :totalRecords="ratedPages" />
+          <Paginator v-model:first="currentPageRated" :rows="1" :totalRecords="ratedPages" />
         </div>
 
       </div>
@@ -85,12 +93,12 @@ export default {
     ratedMovies() {
       return this.movies.filter((movie) => {
         const ratingKey = `rating_${movie.id}`;
-        const rating = localStorage.getItem(ratingKey);
-        return rating !== null;
+        const like = localStorage.getItem(ratingKey);
+        return like !== null;
       }).map((movie) => {
         return {
           ...movie,
-          rating: parseInt(localStorage.getItem(`rating_${movie.id}`)),
+          like: parseInt(localStorage.getItem(`rating_${movie.id}`)),
         };
       });
     },
@@ -102,7 +110,7 @@ export default {
     totalPages() {
       return Math.ceil(this.ratedMovies.length / this.moviesPerPage);
     },
-   
+
     bookmarkedPages() {
       return Math.ceil(this.bookmarkedMovies.length / this.moviesPerPage);
     },
@@ -115,7 +123,7 @@ export default {
       return this.bookmarkedMovies.slice(startIndex, startIndex + this.moviesPerPage);
     },
 
-   
+
     paginatedRatedMovies() {
       const startIndex = (this.currentPageRated) * this.moviesPerPage;
 
@@ -155,6 +163,71 @@ export default {
   },
 };
 </script>
+<style scoped >
+/* Общие стили для таблицы и ячеек */
+
+
+th,
+td {
+  padding: 10px;
+
+
+}
+
+.movie-poster {
+  text-align: center;
+  border-radius: 8px;
+  margin-right: 30px;
+
+}
+
+.poster-image {
+  max-width: 150px;
+  border-radius: 11px;
+
+
+}
+
+.movie-details {
+  padding-top: 10px;
+  width: 100%;
+  color: white;
+  height: 80px;
+}
+
+.movie-name {
+  font-size: 25px;
+  margin-bottom: 5px;
+
+
+  font-weight: bold;
+
+}
+
+
+.circle_progress {
+  position: absolute;
+  bottom: 70px;
+  left: 10px;
+  color: #ffffff;
+}
+
+
+
+
+
+/* Стили для кнопки удаления */
+img[src="https://primefaces.org/cdn/primevue/images/rating/cancel.png"] {
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+
+img[src="https://primefaces.org/cdn/primevue/images/rating/cancel.png"]:hover {
+  transform: scale(1.2);
+}
+
+/* Стили для пагинации */
+</style>
 
 
 
@@ -256,9 +329,43 @@ export default {
   height: auto;
 }
 
+.clapperboard_icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+ 
+  margin-left: 50px;
+}
+
+@media screen and (max-width: 900px) {
+  .clapperboard_icons img:nth-child(1),
+  .clapperboard_icons img:nth-child(5) {
+    display: none;
+  }
+      }
+      @media screen and (max-width: 480px) {
+        .clapperboard_icons img:nth-child(1),
+  .clapperboard_icons img:nth-child(5) {
+    display: block;
+  }
+
+        .clapperboard_icons img:nth-child(3),
+      
+  .clapperboard_icons img:nth-child(2){
+    display: none;
+  }
+      }
 .section {
 
   margin-top: 140px;
+}
+
+.title_container {
+  margin-top: 60px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+
 }
 
 .section-title {

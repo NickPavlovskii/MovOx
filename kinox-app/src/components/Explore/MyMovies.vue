@@ -479,17 +479,7 @@ color: #1c4b91;
 
  color: #fff;
 }
-.p-dropdown .p-dropdown-label .p-placeholder {
-    color: white;
-}
-.p-dropdown-label{
-  color: white; 
-}
-.sort_select{
-  position: relative;
-  background:  #1c4b91;
-  color: white;
-}
+
 .sort_select  {
   position: relative;
   color: white;
@@ -540,20 +530,7 @@ color: #1c4b91;
 
 }
 
-.movie-info {
-  display: flex;
-  align-items: center;
-}
 
-.year {
-  font-size: 16px;
-  color: #888;
-  position: relative;
-  bottom: 90px
-}
-.list{
-  display: flex;
-}
 
 .container {
   max-width: 960px;
@@ -579,9 +556,6 @@ color: #1c4b91;
 
 
 
-.description {
-  margin-bottom: 10px;
-}
 
 .row {
   display: flex;
@@ -593,11 +567,6 @@ color: #1c4b91;
   margin-right: 10px;
 }
 
-.rating-container {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
 
 .ratingtext {
   margin-left: 5px;

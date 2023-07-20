@@ -65,17 +65,7 @@ const store = createStore({
       });
       commit('setFilteredMovies', filteredMovies);
     },
-    toggleLike({ commit, state }, movieId) {
-      commit('toggleLike', movieId);
-
-      // Optionally, you can update the liked status in the movies array as well
-      const index = state.movies.findIndex((movie) => movie.id === movieId);
-      if (index !== -1) {
-        const movie = state.movies[index];
-        movie.isLiked = !movie.isLiked;
-        state.movies.splice(index, 1, movie);
-      }
-    },
+   
   },
 });
 
