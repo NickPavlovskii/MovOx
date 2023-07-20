@@ -9,12 +9,9 @@
           </li>
         </ul>
         <div class="pagination">
-          <Paginator 
-          v-model:first="currentPageBookmarked" 
+          <Paginator v-model:first="currentPageBookmarked" 
           :rows="1" 
-          :totalRecords="bookmarkedPages" 
-          
-          />
+          :totalRecords="bookmarkedPages" />
         </div>
 
       </div>
@@ -49,8 +46,8 @@
         <div class="pagination">
           <Paginator 
           v-model:first="currentPageRated" 
-          :rows="1" 
-          :totalRecords="ratedPages" />
+          :rows="1"
+           :totalRecords="ratedPages" />
         </div>
 
       </div>
@@ -105,11 +102,7 @@ export default {
     totalPages() {
       return Math.ceil(this.ratedMovies.length / this.moviesPerPage);
     },
-    ginatedRatedMovies() {
-      const startIndex = (this.currentPageRated - 1) * this.moviesPerPage;
-      const endIndex = this.currentPageRated * this.moviesPerPage;
-      return this.ratedMovies.slice(startIndex, endIndex);
-    },
+   
     bookmarkedPages() {
       return Math.ceil(this.bookmarkedMovies.length / this.moviesPerPage);
     },
@@ -122,14 +115,9 @@ export default {
       return this.bookmarkedMovies.slice(startIndex, startIndex + this.moviesPerPage);
     },
 
-    startIndex() {
-      return (this.currentPageRated - 1) * 5;
-    },
-    endIndex() {
-      return this.startIndex + 5;
-    },
+   
     paginatedRatedMovies() {
-      const startIndex = (this.ratedMovies) * this.moviesPerPage;
+      const startIndex = (this.currentPageRated) * this.moviesPerPage;
 
       return this.ratedMovies.slice(startIndex, startIndex + this.moviesPerPage);
 
