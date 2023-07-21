@@ -2,9 +2,9 @@
   <div class="container">
     <div class="movie-list">
       <div class="section">
-      
+
         <div class="title_container">
-          <h2 class="title">Посмотреть позже</h2>
+          <h2 class="title"><font-awesome-icon icon="fa-solid fa-film" /> Посмотреть позже</h2>
         </div>
         <ul class="movie-card-list">
           <li v-for="movie in paginatedBookmarkedMovies" :key="movie.id" class="movie-card-item">
@@ -16,40 +16,35 @@
         </div>
 
       </div>
-      <div style="" class="clapperboard_icons">
-          <img src="../assets/clapperboard.png" alt="" style="height: 40px; opacity: 0.3; margin-right: 70px;">
-          <img src="../assets/clapperboard.png" alt="" style="height: 80px; opacity: 0.75; margin-right: 70px;">
-          <img src="../assets/clapperboard.png" alt="" style="height: 140px; opacity: 1; margin-right: 70px;">
-          <img src="../assets/clapperboard.png" alt="" style="height: 80px; opacity: 0.75; margin-right: 70px;">
-          <img src="../assets/clapperboard.png" alt="" style="height: 40px; opacity: 0.3; margin-right: 50px;">
-        </div> 
+     
+      <ClapperboardIcon style="margin-top: 40px;margin-bottom: -80px;"/>
 
       <div class="section">
         <div class="title_container">
-          <h2 class="title">Оцененные фильмы</h2>
+          <h2 class="title"><font-awesome-icon icon="fa-solid fa-star" /> Оцененные фильмы</h2>
         </div>
 
-        <table>
+        <table style="margin: auto;">
           <thead>
             <tr>
               <th></th>
               <th></th>
-              <th></th>
+   
             </tr>
           </thead>
           <tbody>
             <tr v-for="movie in paginatedRatedMovies" :key="movie.id">
-              <td style="display: flex; flex-direction: column;">
-                <MovieCard :movie="movie" style="width: 250px;" />
+              <td >
+                <MovieCard :movie="movie" style="width: 250px; " />
 
               </td>
-              <td>
+              <td class="Rating">
+                <div  style="display: flex; margin-top: -30px;">
                 <Rating v-model="movie.like" :stars="10" :cancel="false" :readonly="true" class="custom-rating" />
-              </td>
-              <td>
+             
                 <img src="https://primefaces.org/cdn/primevue/images/rating/cancel.png" height="24" width="24"
                   @click="removeRating(movie.id)" />
-
+                </div>
               </td>
             </tr>
           </tbody>
@@ -68,17 +63,24 @@ import { mapState } from 'vuex';
 import MovieCard from './MovieCard.vue';
 import Rating from 'primevue/rating';
 import Paginator from 'primevue/paginator';
+import ClapperboardIcon from './ClapperboardIcon.vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faFilm, faStar } from '@fortawesome/free-solid-svg-icons';
+library.add(faFilm, faStar);
 export default {
   components: {
     MovieCard,
     Rating,
-    Paginator
+    Paginator,
+    FontAwesomeIcon,
+    ClapperboardIcon
   },
   data() {
     return {
 
       currentPageBookmarked: 0,
-      currentPageRated: 0, // Текущая страница для оцененных фильмов
+      currentPageRated: 0, 
       moviesPerPage: 6,
     };
   },
@@ -164,74 +166,45 @@ export default {
 };
 </script>
 <style scoped >
-/* Общие стили для таблицы и ячеек */
 
+.title {
+  position: relative;
+  right: 23px
+}
 
 th,
 td {
   padding: 10px;
 
-
-}
-
-.movie-poster {
-  text-align: center;
-  border-radius: 8px;
-  margin-right: 30px;
-
-}
-
-.poster-image {
-  max-width: 150px;
-  border-radius: 11px;
+  
 
 
 }
 
-.movie-details {
-  padding-top: 10px;
-  width: 100%;
-  color: white;
-  height: 80px;
+@media (max-width: 768px) {
+  td {
+    display: flex; 
+    flex-direction: column;
+  
+  }
+
+ 
 }
-
-.movie-name {
-  font-size: 25px;
-  margin-bottom: 5px;
-
-
-  font-weight: bold;
-
-}
-
-
-.circle_progress {
-  position: absolute;
-  bottom: 70px;
-  left: 10px;
-  color: #ffffff;
-}
-
-
-
 
 
 /* Стили для кнопки удаления */
 img[src="https://primefaces.org/cdn/primevue/images/rating/cancel.png"] {
   cursor: pointer;
   transition: transform 0.3s ease-in-out;
+ margin-top: 8px;
+ margin-left: 10px;
+ 
 }
 
 img[src="https://primefaces.org/cdn/primevue/images/rating/cancel.png"]:hover {
   transform: scale(1.2);
 }
 
-/* Стили для пагинации */
-</style>
-
-
-
-<style scoped>
 .container {
   max-width: 960px;
   margin: 0 auto;
@@ -248,113 +221,8 @@ img[src="https://primefaces.org/cdn/primevue/images/rating/cancel.png"]:hover {
   z-index: 9999;
 }
 
-.jump-pagination {
-  z-index: 3;
-}
 
-.page-button {
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  padding: 5px 10px;
-  margin: 0 5px;
-  cursor: pointer;
-  background-color: #f7f7f7;
-}
 
-.page-button:hover {
-  background-color: #e1e1e1;
-}
-
-.page-button.active {
-  color: #fff;
-  background: #1c4b91;
-}
-
-.pagination-button {
-  background-color: #333;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  margin: 0 5px;
-  cursor: pointer;
-}
-
-.pagination-button:hover {
-  background-color: #555;
-}
-
-.pagination-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.star {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-color: transparent;
-  border: 1px solid #ccc;
-  cursor: pointer;
-}
-
-.star.active {
-  background-color: yellow;
-}
-
-.delete-button {
-  background-color: transparent;
-  border: none;
-  color: red;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.delete-button:hover {
-  color: darkred;
-}
-
-.movie-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-.movie-table td {
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
-}
-
-.poster {
-  width: 60px;
-  height: auto;
-}
-
-.clapperboard_icons {
-  display: flex;
-  justify-content: center;
-  align-items: center;
- 
-  margin-left: 50px;
-}
-
-@media screen and (max-width: 900px) {
-  .clapperboard_icons img:nth-child(1),
-  .clapperboard_icons img:nth-child(5) {
-    display: none;
-  }
-      }
-      @media screen and (max-width: 480px) {
-        .clapperboard_icons img:nth-child(1),
-  .clapperboard_icons img:nth-child(5) {
-    display: block;
-  }
-
-        .clapperboard_icons img:nth-child(3),
-      
-  .clapperboard_icons img:nth-child(2){
-    display: none;
-  }
-      }
 .section {
 
   margin-top: 140px;
@@ -368,11 +236,6 @@ img[src="https://primefaces.org/cdn/primevue/images/rating/cancel.png"]:hover {
 
 }
 
-.section-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
 
 .movie-card-list {
   list-style-type: none;
@@ -380,30 +243,14 @@ img[src="https://primefaces.org/cdn/primevue/images/rating/cancel.png"]:hover {
   margin: 0;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
-
 .movie-card-item {
   width: 250px;
 
 }
 
-/* Пример стилей для компонента MovieCard */
-.movie-card {
-  border-radius: 5px;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
 
-.movie-card img {
-
-  object-fit: cover;
-}
-
-.movie-card-title {
-  font-size: 16px;
-  font-weight: bold;
-  margin: 10px;
-}
 </style>
 
   

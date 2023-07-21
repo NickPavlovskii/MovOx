@@ -43,40 +43,30 @@
           </span>
         </div>
 
-        <div class="searchBox" :class="{ active: isSearchActive }">
-          <input type="text" placeholder="Search here..." v-model="searchQuery" @input="handleInput"
-            @keydown.enter="handleEnter" @blur="handleBlur" />
-          <ul v-if="showResults && filteredMoviesList.length > 0" class="dropdown">
-            <li v-for="movie in filteredMoviesList" :key="movie.id" class="dropdown-item">
-              <router-link :to="{ path: `/movie/${movie.id}` }" class="dropdown-link">
-                <img :src="movie.poster.url" alt="Постер фильма" class="dropdown-image">
-                <div class="dropdown-info">
-                  <h3 class="dropdown-name">{{ movie.name }}</h3>
-
-                  <p class="dropdown-shortDesc">{{ movie.shortDescription }}</p>
-                  <div class="row">
-                    <div class="info">
-                      <div class="infoItem dropdown-movieLength">
-                        <span class="text bold"><font-awesome-icon icon="globe" /></span>
-                        <span class="text">{{ movie.country }}</span>
-                      </div>
-                      <div class="infoItem dropdown-movieLength">
-                        <span class="text bold"><font-awesome-icon icon="clock" /></span>
-                        <span class="text">{{ convertMinutesToHours(movie.movieLength) }}</span>
-                      </div>
-                      <div class="infoItem">
-                        <span class="text bold"><font-awesome-icon icon="calendar-days" /></span>
-                        <span class="text">{{ movie.year }}</span>
-                      </div>
-                    </div>
-                  </div>
+    <div class="searchBox" :class="{ active: isSearchActive }">
+      <AutoComplete @keydown.enter="handleEnter"  class="input" v-model="searchQuery" :suggestions="filteredMoviesList" @complete="handleAutoCompleteComplete" @input="handleInput" @blur="handleBlur" :forceSelection="false">
+      <template #option="{ option }">
+          <img :src="option.poster.url" alt="Постер фильма" class="dropdown-image">
+          <div class="dropdown-info">
+            <h3 class="dropdown-name">{{ option.name }}</h3>
+            <p class="dropdown-shortDesc">{{ option.shortDescription }}</p>
+            <div class="row">
+              <div class="info">
+                <div class="infoItem dropdown-movieLength">
+                  <span class="text bold"><i class="pi pi-clock"></i></span>
+                  <span class="text">{{ convertMinutesToHours(option.movieLength) }}</span>
                 </div>
+                <div class="infoItem">
+                  <span class="text bold"><i class="pi pi-calendar"></i></span>
+                  <span class="text">{{ option.year }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
 
-
-              </router-link>
-            </li>
-          </ul>
-        </div>
+      </template>
+    </AutoComplete>
+  </div>
 
 
         <div class="mobileMenu" :class="{ active: show }" @click="toggleMenu">
@@ -332,18 +322,8 @@
   right: 0;
 }
 
-.searchBox input {
-  width: 100%;
-  border: none;
-  outline: none;
-  height: 40px;
-  font-size: 1em;
-  background: #04152d;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.5);
-  color: white;
-  margin-left: 70%;
-  padding-left: 15px;
-  border-radius: 12px;
+.searchBox .input {
+
 }
 
 .menuItems {
@@ -576,6 +556,7 @@
 
 
 <script>
+import AutoComplete from 'primevue/autocomplete';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch, faBars, faClose, faBookmark, faHeart } from '@fortawesome/free-solid-svg-icons';
@@ -590,6 +571,7 @@ library.add(faHeart);
 export default {
   components: {
     FontAwesomeIcon,
+    AutoComplete
   },
 
   data() {
@@ -612,16 +594,31 @@ export default {
   methods: {
     ...mapActions(['searchMovies']),
     ...mapMutations(['setSearchQuery']),
+    toggleResults() {
+    this.showResults = !this.showResults;
+  },
     convertMinutesToHours(minutes) {
       const hours = Math.floor(minutes / 60);
       const remainingMinutes = minutes % 60;
       return `${hours}h ${remainingMinutes}min`;
     },
     handleInput() {
-    this.showResults = true;
-    this.setSearchQuery(this.searchQuery); 
-    this.searchMovies();
-  },
+      // Устанавливаем задержку в миллисекундах (например, 500 мс = 0.5 сек)
+      const delayInMilliseconds = 500;
+
+      // Обнуляем предыдущий таймер, чтобы избежать ненужных вызовов
+      if (this.timerId) {
+        clearTimeout(this.timerId);
+      }
+
+      // Запускаем новый таймер с задержкой
+      this.timerId = setTimeout(() => {
+        this.showResults = true; // Изменяем значение showResults после задержки
+        this.setSearchQuery(this.searchQuery);
+        this.searchMovies();
+      }, delayInMilliseconds);
+    },
+  
 
     handleEnter() {
       if (event.key === 'Enter') {

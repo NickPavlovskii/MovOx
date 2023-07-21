@@ -437,12 +437,6 @@ export default {
   font-weight: 600;
 }
 
-@media (max-width: 768px) {
-  .castSection .listItem .name {
-    font-size: 18px;
-    line-height: 24px;
-  }
-}
 
 .castSection .listItem .character {
   font-size: 14px;
@@ -450,18 +444,6 @@ export default {
   opacity: 0.5;
 }
 
-@media (max-width: 768px) {
-  .castSection .listItem .character {
-    font-size: 16px;
-    line-height: 24px;
-  }
-
-}
-
-.Rating .p-rating-item {
-  font-size: 24px;
-  width: 25px;
-}
 
 .MyRecom {
   position: relative;

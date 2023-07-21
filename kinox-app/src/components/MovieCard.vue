@@ -100,11 +100,6 @@
   color: red;
 }
 
-.heart {
-  margin-bottom: 15px;
-}
-
-
 
 
 
@@ -191,53 +186,8 @@
   
   }
   
-  .loader {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 200px;
-    font-size: 20px;
-    color: #333;
-  }
-  
-  .pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
-  
-  .page-button {
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    padding: 5px 10px;
-    margin: 0 5px;
-    cursor: pointer;
-    background-color: #f7f7f7;
-  }
-  
-  .page-button:hover {
-    background-color: #e1e1e1;
-  }
-  
-  .page-button.active {
-    color: #fff;
-    background: linear-gradient(98.37deg, #f89e00 0.99%, #da2f68 100%);
-  }
-  
-  .jump-button {
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    padding: 5px 10px;
-    margin: 0 5px;
-    cursor: pointer;
-    color: #fff;
-    background: #020c1b;
-  }
-  
-  .jump-button:hover {
-    background-color: #e1e1e1;
-  }
-  
+
+ 
   .circle_progress {
     position: absolute;
     bottom: 70px;
@@ -245,19 +195,7 @@
     color: #ffffff;
   }
   
-  .circle_progress .percentage {
-    color: black;
-  }
-  
-  .ratingtext {
-    position: relative;
-    bottom: 110px;
-    margin-left: 26px;
-    font-size: 21px;
-    color: #020c1b;
-    font-weight: bold;
-    text-align: center;
-  }
+
   
   .container {
     max-width: 960px;

@@ -241,27 +241,7 @@ left: 1px;
   color: #ffffff;
 
 }
-.movie-name {
-  font-size: 19px;
-  margin-bottom: 5px;
-  position: relative;
-  bottom: 98px;
-  display: block;
-  width: 250px;
-  font-weight: bold;
-  word-break: break-all;
-}
-
-
-
-
-
-.year {
-  font-size: 16px;
-  color: #888;
-  position: relative;
-  bottom: 95px;
-} 
+ 
       .wrapper {
       height: 100%;
     

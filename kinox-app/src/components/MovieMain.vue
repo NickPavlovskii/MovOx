@@ -1,36 +1,18 @@
 <template>
   <div>
-
-
-
     <ContentWrapper @search="performSearch" class="ContentWrapper" />
     <MySocial />
     <div v-if="isLoading" class="loader">
       <MyLoader />
-    </div> <!-- Add loader element -->
+    </div> 
     <div v-else>
-
       <div>
         <WatchNow />
         <TopMovie />
-        <div style="" class="clapperboard_icons">
-          <img src="../assets/clapperboard.png" alt="" style="height: 40px; opacity: 0.3; margin-right: 70px;">
-          <img src="../assets/clapperboard.png" alt="" style="height: 80px; opacity: 0.75; margin-right: 70px;">
-          <img src="../assets/clapperboard.png" alt="" style="height: 140px; opacity: 1; margin-right: 70px;">
-          <img src="../assets/clapperboard.png" alt="" style="height: 80px; opacity: 0.75; margin-right: 70px;">
-          <img src="../assets/clapperboard.png" alt="" style="height: 40px; opacity: 0.3; margin-right: 50px;">
-        </div> 
-
+        <ClapperboardIcon />
       </div>
-
       <MovieList />
-
-
-
-
-
     </div>
-
   </div>
 </template>
 
@@ -41,11 +23,12 @@ import ContentWrapper from './main/ContentWrapper.vue';
 import TopMovie from './main/TopMovie.vue';
 import WatchNow from './main/WatchNow.vue';
 import MyLoader from './MyLoader.vue';
+import ClapperboardIcon from './ClapperboardIcon.vue';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faArrowUp91, faArrowUp19 } from '@fortawesome/free-solid-svg-icons';
 
-// import { faBookmark, faHeart } from '@fortawesome/free-solid-svg-icons'
+
 library.add(faArrowUp91);
 library.add(faArrowUp19);
 
@@ -56,11 +39,12 @@ export default {
     TopMovie,
     WatchNow,
     MyLoader,
-    MySocial
+    MySocial,
+    ClapperboardIcon
   },
   data() {
     return {
-   
+
       itemsPerPage: 21,
       currentPage: 1,
       sortOptions: [
@@ -84,7 +68,7 @@ export default {
     totalMovies() {
       return this.movies.length;
     },
- 
+
 
     shouldShowLoadMoreButton() {
       return this.currentPage * this.itemsPerPage < this.filteredMovies.length;
@@ -98,7 +82,7 @@ export default {
     handleEnter() {
       // Здесь вы можете выполнить действие при нажатии на клавишу Enter
       if (event.key === 'Enter') {
-     
+
         this.updateMovieList();
       }
     },
@@ -165,35 +149,7 @@ export default {
 </script>
 
 
-
-
 <style scoped>
-.clapperboard_icons {
-  display: flex;
-  justify-content: center;
-  align-items: center;
- 
-  margin-left: 50px;
-}
-
-@media screen and (max-width: 900px) {
-  .clapperboard_icons img:nth-child(1),
-  .clapperboard_icons img:nth-child(5) {
-    display: none;
-  }
-      }
-      @media screen and (max-width: 480px) {
-        .clapperboard_icons img:nth-child(1),
-  .clapperboard_icons img:nth-child(5) {
-    display: block;
-  }
-
-        .clapperboard_icons img:nth-child(3),
-      
-  .clapperboard_icons img:nth-child(2){
-    display: none;
-  }
-      }
 .loader {
   display: flex;
   justify-content: center;
@@ -208,9 +164,6 @@ export default {
   text-align: center;
   margin: 0 auto;
 }
-
-
-
 </style>
 
 
