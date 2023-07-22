@@ -1,15 +1,7 @@
 <template>
-
      <ContentWrapper v-if = "this.$route.path === '/search'" class="ContentWrapper" /> 
     <div class="container movieList">
-      
-      
       <h2 class="container_title" v-if="!searchQuery">Наша коллекция</h2>
-  
-       
-       
-   
-  
       <div class="sort-options">
         <Dropdown
           :class="['custom-dropdown', 'w-full', 'md:w-14rem', 'p-dropdown-indigo']"
@@ -34,33 +26,25 @@
           class="icon_select"
         />
       </div>
-  
       <ul class="movie-list">
         <li v-for="(movie, index) in displayedMovies" :key="movie.id" :class="{'movie-item': true, 'new-row': index % 5 === 0}">
           <MovieCard :movie="movie" />
         </li>
       </ul>
-  
-
- 
     <div class="pagination">
       <Paginator
       v-model:first="currentPage "
       :rows="1"
       :totalRecords="totalPages"
-    
     />
-</div>
-    
-
+  </div>
     </div>
-  </template>
+</template>
 
 
   
   <script>
-
-import Paginator from 'primevue/paginator';
+  import Paginator from 'primevue/paginator';
   import { mapState, mapActions, mapGetters } from 'vuex';
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   import { library } from '@fortawesome/fontawesome-svg-core';
@@ -95,7 +79,10 @@ import Paginator from 'primevue/paginator';
       };
     },
     computed: {
-      ...mapState(['filteredMovies', 'searchQuery', 'movies']),
+      ...mapState([
+      'filteredMovies', 
+      'searchQuery', 
+      'movies']),
       ...mapGetters(['getMovieById']),
  
       totalPages() {
@@ -103,9 +90,9 @@ import Paginator from 'primevue/paginator';
       },
       
       displayedMovies() {
-      const moviesList = this.$route.path === '/' ? this.movies : this.filteredMovies;
-      const startIndex = (this.currentPage ) * this.itemsPerPage;
-      return moviesList.slice(startIndex, startIndex + this.itemsPerPage);
+        const moviesList = this.$route.path === '/' ? this.movies : this.filteredMovies;
+        const startIndex = (this.currentPage ) * this.itemsPerPage;
+        return moviesList.slice(startIndex, startIndex + this.itemsPerPage);
     },
     totalMovies() {
       const moviesList = this.$route.path === '/' ? this.movies : this.filteredMovies;
@@ -157,10 +144,10 @@ import Paginator from 'primevue/paginator';
         this.currentPage++;
       },
       performSearch(query) {
-        this.$store.commit('setSearchQuery', query);
-        this.currentPage = 1;
-        this.setCurrentPage(1);
-      },
+      this.setSearchQuery(query);
+      this.currentPage = 1;
+      this.setCurrentPage(1);
+    },
       setSortOrder(order) {
         this.sortOrder = order;
       },
@@ -217,37 +204,7 @@ top: 2px;
   font-size: 21px;
   justify-items: center;
 }
-label {
-  font-size: 16px;
-  margin-right: 10px;
-}
 
-select {
-  padding: 8px 12px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  transition: border-color 0.3s ease;
-}
-
-select:focus {
-  outline: none;
-  border-color: #8cacc4;
-  box-shadow: 0 0 0 2px rgba(140, 172, 196, 0.2);
-}
-
-option {
-  font-size: 16px;
-}
-.row {
-    display: flex;
-    align-items: center;
-    gap: 25px;
-    margin-bottom: 20px;
-    position: relative;
-    bottom: 25px;
-}
 
 
 .pagination {
@@ -275,10 +232,7 @@ option {
 .movie-item {
 z-index: 2;
   padding: 10px;
-
 }
-
-
 
 
 </style>

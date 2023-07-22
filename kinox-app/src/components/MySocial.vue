@@ -22,7 +22,7 @@
           <a href="">
             whatsapp
             <i>
-              <font-awesome-icon icon="fa-brands fa-whatsapp"  class="icn"/>
+              <font-awesome-icon icon="fa-brands fa-whatsapp" class="icn" />
             </i>
           </a>
         </li>
@@ -49,11 +49,6 @@
 </template>
   
 <style scoped>
-a {
-  color: #fff;
-  text-decoration: none;
-}
-
 
 
 
@@ -62,11 +57,18 @@ a {
   position: fixed;
   top: 400px;
 }
-@media (max-width: 1000px){
-.social {
-display: none;
+.social a {
+  color: #fff;
+  text-decoration: none;
 }
+
+
+@media (max-width: 1000px) {
+  .social {
+    display: none;
+  }
 }
+
 .social ul {
   padding: 0px;
   transform: translate(-270px, 0);
@@ -122,12 +124,11 @@ body {
   
 <script>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-
-
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faGithub, faInstagram, faDiscord, faWhatsapp, faVk, faTelegram, faGitlab } from '@fortawesome/free-brands-svg-icons';
 
 library.add(faGithub, faInstagram, faDiscord, faWhatsapp, faVk, faTelegram, faGitlab);
+
 export default {
   components: {
     FontAwesomeIcon,

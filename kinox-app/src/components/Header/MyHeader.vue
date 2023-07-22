@@ -1,6 +1,7 @@
 <template>
   <header class="header" :class="{ active: isMenuOpen }">
     <div class="headerContent">
+      <!-- Logo -->
       <router-link to="/" style="text-decoration: none; color: white;">
         <div class="logo">
           <img src="../../assets/3.png" alt="" />
@@ -9,6 +10,7 @@
 
 
       <div class="group">
+      <!-----------------------------------------------menuItems -------------------------------------------------->
         <ul class="menuItems">
           <li>
             <router-link :to="{ path: '/movie' }" class="menuItem">
@@ -35,17 +37,30 @@
             </router-link>
           </li>
         </ul>
-
+      <!-----------------------------------------------search-------------------------------------------------->
         <div class="search">
           <span class="icon">
             <font-awesome-icon icon="search" class="searchBtn" v-if="!isSearchActive" @click="toggleSearch" />
             <font-awesome-icon icon="close" class="closeBtn" v-if="isSearchActive" @click="toggleSearch" />
           </span>
         </div>
-
+  <!-----------------------------------------------searchBox-------------------------------------------------->
     <div class="searchBox" :class="{ active: isSearchActive }">
-      <AutoComplete @keydown.enter="handleEnter"  class="input" v-model="searchQuery" :suggestions="filteredMoviesList" @complete="handleAutoCompleteComplete" @input="handleInput" @blur="handleBlur" :forceSelection="false">
-      <template #option="{ option }">
+      <AutoComplete 
+      @keydown.enter="handleEnter"  
+      class="input" 
+      v-model="searchQuery" 
+      :suggestions="filteredMoviesList"  
+      @input="handleInput" 
+      @blur="handleBlur" 
+      >
+      
+        <template #option="{ option }">
+          <router-link 
+          style=" display: flex; text-decoration: none; color: #000;" 
+          :to="{ name: 'movie-details', params: { id: option.id }}" 
+          @click="clearSearchQuery">
+
           <img :src="option.poster.url" alt="Постер фильма" class="dropdown-image">
           <div class="dropdown-info">
             <h3 class="dropdown-name">{{ option.name }}</h3>
@@ -64,11 +79,12 @@
             </div>
           </div>
 
+        </router-link>
       </template>
     </AutoComplete>
   </div>
 
-
+ <!-----------------------------------------------mobileMenu-------------------------------------------------->
         <div class="mobileMenu" :class="{ active: show }" @click="toggleMenu">
           <div class="toggleMenu">
             <span class="line top" :class="{ active: show }"></span>
@@ -89,28 +105,18 @@
 
 
 .text {
-
   margin-right: 5px;
-
   opacity: 0.5;
   line-height: 24px;
-
 }
 
-.detailsBanner .content .right .info .text.bold {
-  font-weight: 600;
-  opacity: 1;
-}
+
 
 .row {
   display: flex;
-
   gap: 25px;
-
   position: relative;
   bottom: 10px;
-
-
 }
 
 .info {
@@ -126,37 +132,6 @@
 
 }
 
-.icons {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  margin-bottom: 30px;
-  opacity: 0.7;
-}
-
-.dropdown {
-  position: absolute;
-  top: 100%;
-  left: 70%;
-  width: 28%;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 0;
-  margin-top: 4px;
-  list-style: none;
-}
-
-.dropdown-item {
-  padding: 8px;
-}
-
-.dropdown-link {
-  text-decoration: none;
-  color: #000;
-  display: flex;
-
-}
 
 .dropdown-image {
   width: 35%;
@@ -165,7 +140,10 @@
 
 .dropdown-name {}
 
-.dropdown-shortDesc {}
+.dropdown-shortDesc {
+
+  white-space: wrap;
+}
 
 .mobileMenu {
   cursor: pointer;
@@ -219,6 +197,7 @@
   transform: translateY(-8px) rotate(-45deg);
 }
 
+/* Header */
 .header {
   font-family: cursive;
   position: absolute;
@@ -235,12 +214,14 @@
   display: flex;
   align-items: center;
   z-index: 5;
+
+  /* Apply styles when the header is active */
+  &.active {
+    background-color: #020c1b;
+  }
 }
 
-.header.active {
-  background-color: #020c1b;
-}
-
+/* Header Content */
 .headerContent {
   display: flex;
   align-items: center;
@@ -248,8 +229,8 @@
   width: 100%;
 }
 
+/* Logo */
 .logo {
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -257,7 +238,6 @@
   img {
     height: 180px;
     margin-left: 30px;
-
   }
 
   p {
@@ -266,6 +246,9 @@
     font-family: cursive;
   }
 }
+
+
+
 
 .group {
   display: flex;
@@ -286,6 +269,7 @@
   display: none;
 }
 
+/* Search icon */
 .search {
   position: relative;
   z-index: 10;
@@ -294,19 +278,22 @@
   justify-items: center;
   font-size: 1.1em;
   cursor: pointer;
+
+  .searchBtn {
+    position: relative;
+  }
+
+  .closeBtn {
+    position: relative;
+    align-items: center;
+    top: 5px;
+    transition: 0.5s ease-in-out;
+  }
 }
 
-.searchBtn {
-  position: relative;
-}
 
-.closehBtn {
-  position: relative;
-  align-items: center;
-  top: 5px;
-  transition: 0.5s ease-in-out;
-}
 
+/* Search box */
 .searchBox {
   position: absolute;
   right: -120%;
@@ -316,52 +303,53 @@
   padding: 0 30px;
   transition: 0.5s ease-in-out;
   align-items: center;
+
+  /* Show search box when active */
+  &.active {
+    right: 0;
+  }
 }
 
-.searchBox.active {
-  right: 0;
-}
 
-.searchBox .input {
-
-}
-
+/* Menu items */
 .menuItems {
   list-style-type: none;
   display: flex;
   align-items: center;
   margin-left: auto;
-}
 
-.menuItem {
-  margin-right: 15px;
-  cursor: pointer;
-  text-decoration: none;
-  color: white;
-  list-style: none;
-}
+  .menuItem {
+    margin-right: 15px;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+    list-style: none;
 
-.menuItem a {
-  position: relative;
-  letter-spacing: 0.2em;
-  font-size: 1em;
-}
+    a {
+      position: relative;
+      letter-spacing: 0.2em;
+      font-size: 1em;
 
-.menuItem a::before {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  background: white;
-  bottom: -3px;
-  transform: scaleX(0);
-  transition: transform 0.5s ease-in-out;
-  transform-origin: right;
-}
+      /* Add underline effect on hover */
+      &:hover::before {
+        transform: scaleX(1);
+        transform-origin: left;
+      }
 
-.menuItem a:hover::before {
-  transform: scaleX(1);
-  transform-origin: left;
+      /* Underline animation */
+      &::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background: white;
+        bottom: -3px;
+        transform: scaleX(0);
+        transition: transform 0.5s ease-in-out;
+        transform-origin: right;
+      }
+    }
+  }
 }
 
 .toggleMenu {
@@ -544,7 +532,7 @@
 
 
 
-  .searchBar {}
+
 
   .bookmarks_icon {
     .menuItem {
@@ -584,7 +572,11 @@ export default {
   },
 
   computed: {
-    ...mapState(['movies', 'searchQuery', 'filteredMovies']),
+    ...mapState([
+    'movies', 
+    'searchQuery', 
+    'filteredMovies'
+  ]),
 
     filteredMoviesList() {
       return this.filteredMovies.slice(0, 3);
@@ -597,13 +589,14 @@ export default {
     toggleResults() {
     this.showResults = !this.showResults;
   },
+    // Convert minutes to hours and minutes format
     convertMinutesToHours(minutes) {
       const hours = Math.floor(minutes / 60);
       const remainingMinutes = minutes % 60;
       return `${hours}h ${remainingMinutes}min`;
     },
     handleInput() {
-      // Устанавливаем задержку в миллисекундах (например, 500 мс = 0.5 сек)
+     
       const delayInMilliseconds = 500;
 
       // Обнуляем предыдущий таймер, чтобы избежать ненужных вызовов
@@ -613,7 +606,7 @@ export default {
 
       // Запускаем новый таймер с задержкой
       this.timerId = setTimeout(() => {
-        this.showResults = true; // Изменяем значение showResults после задержки
+        this.showResults = true; 
         this.setSearchQuery(this.searchQuery);
         this.searchMovies();
       }, delayInMilliseconds);
@@ -624,6 +617,9 @@ export default {
       if (event.key === 'Enter') {
         this.$router.push({ path: `/search` });
       }
+    },
+    clearSearchQuery() {
+      this.searchQuery = ''; // Очистка значения searchQuery
     },
     handleBlur() {
       this.showResults = false;
@@ -637,14 +633,16 @@ export default {
     navigateToLikePage() {
       this.$router.push({ name: 'bookmarks-ratings' });
     },
+    // Perform the movie search
     performSearch() {
       this.searchMovies();
       this.$emit('search', this.searchQuery);
     },
-
+    // Toggle the search box
     toggleSearch() {
       this.isSearchActive = !this.isSearchActive;
     },
+     // Toggle the menu
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen;
     },

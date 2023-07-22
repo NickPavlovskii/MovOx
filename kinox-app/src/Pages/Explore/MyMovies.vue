@@ -1,12 +1,7 @@
 <template>
   <div class="container">
     <div class="title_container">
-      <h2 class="title" v-if="this.$route.path === '/movie'">Фильмы</h2>
-      <h2 class="title" v-if="this.$route.path === '/cartoon'">Мультфильмы</h2>
-      <h2 class="title" v-if="this.$route.path === '/tv-series'">Сериалы</h2>
-      <h2 class="title" v-if="this.$route.path === '/Комедия'">Комедии</h2>
-
-
+      <h2 class="title" v-if="titles[this.$route.path]">{{ titles[this.$route.path] }}</h2>
       <div class="sort-options">
         <Dropdown :class="['custom-dropdown', 'w-full', 'md:w-14rem', 'p-dropdown-indigo']" v-model="selectedSortOption"
           :options="sortOptions" optionLabel="label" optionValue="value" @change="sortMovies" placeholder="Сортировать по"
@@ -17,10 +12,6 @@
           class="icon_select" />
         <font-awesome-icon icon="arrow-up-1-9" v-else @click="updateSortOrder('asc')" class="icon_select" />
       </div>
-
-
-
-
     </div>
     <ul class="movie-list">
       <li v-for="(movie, index) in displayedMovies" :key="movie.id"
@@ -34,19 +25,30 @@
             <div class="movie-poster">
               <img :src="movie.poster.url" alt="Постер фильма" class="poster-image">
               <div class="movie-details">
-                <circle-progress class="circle_progress" :viewport="true" :on-viewport="movie.rating.kp.toFixed(1)"
-                  :size="60" :background="'white'" :is-gradient="true" :percent="movie.rating.kp * 10" :gradient="{
+                <circle-progress 
+                class="circle_progress" 
+                :viewport="true" 
+                :on-viewport="movie.rating.kp.toFixed(1)"
+                  :size="60" 
+                  :background="'white'" 
+                  :is-gradient="true" 
+                  :percent="movie.rating.kp * 10" 
+                  :gradient="{
                     angle: 90,
                     startColor: '#ff0000',
                     stopColor: '#ffff00'
-                  }" :is-bg-shadow="true" :bg-shadow="{
-  inset: true,
-  vertical: 2,
-  horizontal: 2,
-  blur: 4,
-  opacity: .4,
-  color: '#000000'
-}" :border-width="5" :border-bg-width="5">
+                  }" 
+                  :is-bg-shadow="true" 
+                  :bg-shadow="{
+                    inset: true,
+                    vertical: 2,
+                    horizontal: 2,
+                    blur: 4,
+                    opacity: .4,
+                    color: '#000000'
+                  }" 
+                  :border-width="5" 
+                  :border-bg-width="5">
                 </circle-progress>
                 <span class="ratingtext">{{ movie.rating.kp.toFixed(1) }}</span>
               </div>
@@ -58,12 +60,10 @@
               <div class="genres">
                 <div v-for="genre in movie.genres" :key="genre">
                   <span class="genre">{{ genre }}</span>
-
                 </div>
               </div>
               <p>{{ movie.description }}</p>
               <div class="row">
-
                 <div class="info">
                   <div class="infoItem dropdown-movieLength">
                     <span class="text bold"><font-awesome-icon icon="globe" /></span>
@@ -93,39 +93,18 @@
                     <span class="text">{{ movie.rating.kp }}</span>
                   </div>
                 </div>
-
-
               </div>
-
             </div>
-
-
-
-
-
-
           </div>
         </router-link>
-
       </li>
     </ul>
     <div class="pagination">
       <Paginator v-model:first="currentPage" :rows="1" :totalRecords="totalPages" />
     </div>
-
-
-
-
-
-
   </div>
 </template>
-
 <script>
-
-
-
-
 import "primevue/resources/primevue.min.css";
 import { mapState, mapActions } from 'vuex';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -160,7 +139,17 @@ export default {
       ],
       selectedSortOption: 'Сортировать по',
       sortOrder: 'asc',
-      isLoading: false
+      isLoading: false,
+      titles: {
+        '/movie': 'Фильмы',
+        '/cartoon': 'Мультфильмы',
+        '/tv-series': 'Сериалы',
+        '/Комедия': 'Комедии',
+        '/Боевик': 'Боевики',
+        '/Драма': 'Драмы',
+        '/Фэнтези': 'Фэнтези',
+        '/Фантастика': 'Фантастика',
+      },
     };
   },
   computed: {
@@ -209,8 +198,6 @@ export default {
     updateDisplayedMovies() {
       this.displayedMovies = this.movies.slice(this.startIndex, this.endIndex + 1);
     },
-    // Обработчик изменения страницы
-
 
     convertMinutesToHours(minutes) {
       const hours = Math.floor(minutes / 60);
@@ -250,7 +237,6 @@ export default {
       }
       return value;
     },
-
 
     setCurrentPage(pageNumber) {
       this.currentPage = pageNumber;
@@ -359,39 +345,6 @@ export default {
   z-index: 1111;
 }
 
-.page-button {
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  padding: 5px 10px;
-  margin: 0 5px;
-  cursor: pointer;
-  background-color: #f7f7f7;
-}
-
-.page-button:hover {
-  background-color: #e1e1e1;
-}
-
-
-.jump-button {
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  padding: 5px 10px;
-  margin: 0 5px;
-  cursor: pointer;
-  color: #fff;
-  background: #020c1b;
-}
-
-.jump-button:hover {
-  background: #1c4b91;
-}
-
-.jump-button:active {
-  background: #1c4b91;
-}
-
-
 
 .icon_select {
   position: relative;
@@ -409,7 +362,6 @@ export default {
   margin-right: 30px;
   color: #ffffff;
 }
-
 
 
 .ratingtext {
@@ -477,9 +429,6 @@ export default {
 }
 
 
-
-
-
 .movie-item {
   padding: 20px;
 }
@@ -517,6 +466,7 @@ export default {
 
 .genres {
   display: flex;
+  flex-wrap: wrap;
   gap: 5px;
   margin-bottom: 6px;
 }

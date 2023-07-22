@@ -1,16 +1,11 @@
 <template>
   <div class="overlay">
-   <router-link
-  :to="{ name: 'movie-details', params: { id: movie.id }}"
-  style="cursor: pointer; text-decoration: none; list-style-type: none;"
-
->
+    <router-link :to="{ name: 'movie-details', params: { id: movie.id } }"
+      style="cursor: pointer; text-decoration: none; list-style-type: none;">
       <div class="movie-poster">
         <img :src="movie.poster.url" alt="Постер фильма" class="poster-image">
         <div class="description-overlay">
           <div class="shortDescription">
-          
-           
             <p>{{ movie.shortDescription }}</p>
             <div class="row">
               <div class="info">
@@ -28,20 +23,20 @@
         </div>
       </div>
       <div class="movie-details">
-        <circle-progress
-          class="circle_progress"
-          :viewport="true"
-          :on-viewport="movie.rating.kp.toFixed(1)"
-          :size="60"
-          :background="'white'"
-          :is-gradient="true"
-          :percent="movie.rating.kp * 10"
-          :gradient="{
+        <circle-progress 
+        class="circle_progress" 
+        :viewport="true" 
+        :on-viewport="movie.rating.kp.toFixed(1)" 
+        :size="60"
+        :background="'white'" 
+        :is-gradient="true" 
+        :percent="movie.rating.kp * 10" 
+        :gradient="{
             angle: 90,
             startColor: '#ff0000',
             stopColor: '#ffff00'
-          }"
-          :is-bg-shadow="true"
+          }" 
+          :is-bg-shadow="true" 
           :bg-shadow="{
             inset: true,
             vertical: 2,
@@ -49,212 +44,180 @@
             blur: 4,
             opacity: .4,
             color: '#000000'
-          }"
-          :border-width="5"
-          :border-bg-width="5"
-        ></circle-progress>
+          }" 
+          :border-width="5" 
+          :border-bg-width="5">
+        </circle-progress>
         <span class="ratingtext">{{ movie.rating.kp.toFixed(1) }}</span>
         <h3 class="movie-name">{{ movie.name }}</h3>
         <div class="year">{{ movie.year }}</div>
       </div>
     </router-link>
     <div class="icons">
-  
-  <font-awesome-icon
-    icon="bookmark"
-    class="bookmark"
-    :class="{ active: isBookmarked }"
-    @click.stop="toggleBookmark($event)"
-    
-  />
 
-</div>
-</div>
-  </template>
+      <font-awesome-icon icon="bookmark" class="bookmark" :class="{ active: isBookmarked }"
+        @click.stop="toggleBookmark($event)" />
+
+    </div>
+  </div>
+</template>
   
-  <style scoped>
-  .overlay{
-    height: 100%;
-    width: 100%;
-  }
- .icons {
+<style scoped>
+.overlay {
+  height: 100%;
+  width: 100%;
+}
+
+.icons {
   position: relative;
- bottom: 397px;
- left: 75px;
+  bottom: 397px;
+  left: 75px;
   transform: translate(-50%, -50%);
   opacity: 0;
-  
-  
+
+
 }
+
 .bookmark {
   opacity: 0;
   margin-right: 1px;
 }
-.overlay:hover .bookmark{
-  opacity: 1; /* Появление иконок при наведении на .movie-poster или при активном состоянии */
+
+.overlay:hover .bookmark {
+  opacity: 1;
+  /* Появление иконок при наведении на .movie-poster или при активном состоянии */
 
 }
 
 .bookmark.active {
-  opacity: 2; 
+  opacity: 2;
   color: red;
 }
 
-
-
-
-
-  .text {
-     
-      margin-right: 5px;
-      
-      opacity: 0.5;
-      line-height: 24px;
-  
-  }
-  
-  .detailsBanner .content .right .info .text.bold {
-      font-weight: 600;
-      opacity: 1;
-  }
-  .row {
-    display: flex;
-    align-items: center;
-    gap: 25px;
-    justify-content: center;
-    position: relative;
-   bottom: 10px;
-  
-      
-  }
-  
-  .info {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 15px 0;
-    display: flex;
-  }
-  
-  .info .infoItem {
-    margin-right: 10px;
-    display: flex;
-    flex-flow: row wrap;
-    
-  }
-  .icons .bookmark.active {
-  display: block;
+.text {
+  margin-right: 5px;
+  opacity: 0.5;
+  line-height: 24px;
 }
-  .movie-poster:hover + .icons {
+
+.detailsBanner .content .right .info .text.bold {
+  font-weight: 600;
   opacity: 1;
 }
- 
-  .movie-poster {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .description-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: #fff;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
-  
-  .movie-poster:hover .description-overlay {
-    opacity: 1;
-  }
-  
-  .shortDescription {
-    max-width: 100%;
-    padding: 20px;
-    word-wrap: break-word;
-    white-space: normal;
-  }
-  
-  p {
-    word-wrap: break-word;
-    opacity: 0.7;
-      line-height: 24px;
-  
-  }
-  
 
- 
-  .circle_progress {
-    position: absolute;
-    bottom: 70px;
-    left: 10px;
-    color: #ffffff;
-  }
-  
+.row {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  justify-content: center;
+  position: relative;
+  bottom: 10px;
 
-  
-  .container {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 20px;
-    color: #fff;
-  }
-  
-  .movie-list {
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    grid-gap: 20px;
-  }
-  
-  .movie-item {
-    padding: 10px;
-  }
-  
-  .movie-poster {
-    text-align: center;
-    border-radius: 8px;
-    margin-right: 30px;
-  }
-  
-  .poster-image {
-    max-width: 100%;
-    height: auto;
-    border-radius: 11px;
-  }
-  
-  .movie-details {
-    padding-top: 10px;
-    width: 100%;
-    color: white;
-    height: 80px;
-  }
-  
-  .movie-name {
-    font-size: 19px;
-    margin-bottom: 5px;
-    position: relative;
-    bottom: 90px;
-    font-weight: bold;
-    width: 180px;
-  }
-  
-  .movie-info {
-    display: flex;
-    align-items: center;
-  }
-  
-  .year {
-    font-size: 16px;
-    color: #888;
-    position: relative;
-    bottom: 90px;
-  }
-  </style>
+
+}
+
+.info {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 15px 0;
+  display: flex;
+}
+
+.info .infoItem {
+  margin-right: 10px;
+  display: flex;
+  flex-flow: row wrap;
+
+}
+
+.icons .bookmark.active {
+  display: block;
+}
+
+.movie-poster:hover+.icons {
+  opacity: 1;
+}
+
+.movie-poster {
+  position: relative;
+  display: inline-block;
+}
+
+.description-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.movie-poster:hover .description-overlay {
+  opacity: 1;
+}
+
+
+
+.shortDescription p {
+  word-wrap: break-word;
+  opacity: 0.7;
+  line-height: 24px;
+
+}
+
+
+
+.circle_progress {
+  position: absolute;
+  bottom: 70px;
+  left: 10px;
+  color: #ffffff;
+}
+
+
+
+.movie-poster {
+  text-align: center;
+  border-radius: 8px;
+  margin-right: 30px;
+}
+
+.poster-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 11px;
+}
+
+.movie-details {
+  padding-top: 10px;
+  width: 100%;
+  color: white;
+  height: 80px;
+}
+
+.movie-name {
+  font-size: 19px;
+  margin-bottom: 5px;
+  position: relative;
+  bottom: 90px;
+  font-weight: bold;
+  width: 180px;
+}
+
+
+.year {
+  font-size: 16px;
+  color: #888;
+  position: relative;
+  bottom: 90px;
+}
+</style>
 
 
 <script>
@@ -262,11 +225,11 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faBookmark, faHeart } from '@fortawesome/free-solid-svg-icons'
 import CircleProgress from "vue3-circle-progress";
-library.add(faBookmark)
-library.add(faHeart)
+library.add(faBookmark, faHeart)
+
 
 export default {
-  
+
   components: {
     FontAwesomeIcon,
     CircleProgress
@@ -330,224 +293,3 @@ export default {
 };
 </script>
 
-<style scoped>
-.text {
-   
-    margin-right: 5px;
-    
-    opacity: 0.5;
-    line-height: 24px;
-
-}
-
-.detailsBanner .content .right .info .text.bold {
-    font-weight: 600;
-    opacity: 1;
-}
-.row {
-  display: flex;
-  align-items: center;
-  gap: 25px;
-  justify-content: center;
-  position: relative;
- bottom: 10px;
-
-    
-}
-
-.info {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 15px 0;
-  display: flex;
-}
-
-.info .infoItem {
-  margin-right: 10px;
-  display: flex;
-  flex-flow: row wrap;
-  
-}
-
-.icons {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  margin-bottom: 30px;
-  opacity: 0.7;
-}
-.heart{
-    margin-bottom: 15px;
-}
-.bookmark{
-    margin-right: 1px;
-}
-
-.heart:hover,
-.bookmark:hover {
-  color: #ff0000; /* Цвет активного состояния */
-}
-.movie-poster {
-  position: relative;
-  display: inline-block;
-}
-
-.description-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.movie-poster:hover .description-overlay {
-  opacity: 1;
-}
-
-.shortDescription {
-  max-width: 100%;
-  padding: 20px;
-  word-wrap: break-word;
-  white-space: normal;
-}
-
-p {
-  word-wrap: break-word;
-  opacity: 0.7;
-    line-height: 24px;
-
-}
-
-.loader {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 200px;
-  font-size: 20px;
-  color: #333;
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.page-button {
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  padding: 5px 10px;
-  margin: 0 5px;
-  cursor: pointer;
-  background-color: #f7f7f7;
-}
-
-.page-button:hover {
-  background-color: #e1e1e1;
-}
-
-.page-button.active {
-  color: #fff;
-  background: linear-gradient(98.37deg, #f89e00 0.99%, #da2f68 100%);
-}
-
-.jump-button {
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  padding: 5px 10px;
-  margin: 0 5px;
-  cursor: pointer;
-  color: #fff;
-  background: #020c1b;
-}
-
-.jump-button:hover {
-  background-color: #e1e1e1;
-}
-
-.circle_progress {
-  position: absolute;
-  bottom: 70px;
-  left: 10px;
-  color: #ffffff;
-}
-
-.circle_progress .percentage {
-  color: black;
-}
-
-.ratingtext {
-  position: relative;
-  bottom: 110px;
-  margin-left: 26px;
-  font-size: 21px;
-  color: #020c1b;
-  font-weight: bold;
-  text-align: center;
-}
-
-.container {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 20px;
-  color: #fff;
-}
-
-.movie-list {
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  grid-gap: 20px;
-}
-
-.movie-item {
-  padding: 10px;
-}
-
-.movie-poster {
-  text-align: center;
-  border-radius: 8px;
-  margin-right: 30px;
-}
-
-.poster-image {
-  max-width: 100%;
-  height: auto;
-  border-radius: 11px;
-}
-
-.movie-details {
-  padding-top: 10px;
-  width: 100%;
-  color: white;
-  height: 80px;
-}
-
-.movie-name {
-  font-size: 19px;
-  margin-bottom: 5px;
-  position: relative;
-  bottom: 90px;
-  font-weight: bold;
-  width: 180px;
-}
-
-.movie-info {
-  display: flex;
-  align-items: center;
-}
-
-.year {
-  font-size: 16px;
-  color: #888;
-  position: relative;
-  bottom: 90px;
-}
-</style>

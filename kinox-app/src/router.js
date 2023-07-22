@@ -1,11 +1,11 @@
 // router.js
 import { createRouter, createWebHistory } from 'vue-router';
 import MyHeader from './components/Header/MyHeader.vue';
-import MovieMain from './components/MovieMain.vue';
+import MovieMain from './Pages/MainMain/MovieMain.vue';
 import MovieList from './components/MovieList.vue';
-import LikePage from './components/LikePage.vue';
-import MyMovies from './components/Explore/MyMovies.vue';
-import MoviePage from './components/MoviePage/MoviePage.vue';
+import LikePage from './Pages/LikePage/LikePage.vue';
+import MyMovies from './Pages/Explore/MyMovies.vue';
+import MoviePage from './Pages/MoviePage/MoviePage.vue';
 
 const routes = [
   {

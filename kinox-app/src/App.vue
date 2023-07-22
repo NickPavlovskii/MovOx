@@ -11,19 +11,18 @@
 </template>
 
 <script>
-// import MovieList from './components/MovieList.vue';
+import '../style/PrimeVue.css'; // Подключение файла стилей
 import  MyHeader from './components/Header/MyHeader.vue';
 import  Footer from './components/Footer/MyFooter.vue';
-// import MoviePage from './components/MoviePage/MoviePage.vue';
+
 import { mapState, mapActions } from 'vuex';
 // 
 export default {
   name: 'App',
   components: {
-    // MovieList,
     MyHeader,
     Footer,
-    // MoviePage
+ 
    
   },
   computed: {

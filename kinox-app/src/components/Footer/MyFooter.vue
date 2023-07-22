@@ -1,6 +1,5 @@
 <template>
   <footer class="footer">
-
     <div class="footer-content">
       <div class="footer-column">
         <h4>О нас</h4>
@@ -64,15 +63,24 @@
 <script>
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-
-
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faGithub, faInstagram, faDiscord, faWhatsapp, faVk, faTelegram, faGitlab } from '@fortawesome/free-brands-svg-icons';
-
-library.add(faGithub, faInstagram, faDiscord, faWhatsapp, faVk, faTelegram, faGitlab);
-
-
-
+import { 
+  faGithub, 
+  faInstagram, 
+  faDiscord, 
+  faWhatsapp, 
+  faVk, 
+  faTelegram, 
+  faGitlab } 
+  from '@fortawesome/free-brands-svg-icons';
+library.add(
+  faGithub,
+ faInstagram, 
+ faDiscord, 
+ faWhatsapp, 
+ faVk, 
+ faTelegram, 
+ faGitlab);
 export default {
   components: {
     FontAwesomeIcon,
@@ -89,9 +97,6 @@ export default {
 }
 
 
-
-
-
 .footer-content {
   display: flex;
   justify-content: space-between;
@@ -99,16 +104,13 @@ export default {
 }
 
 .footer-column {
-
   margin-bottom: 20px;
 }
-
 .footer h4 {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 10px;
 }
-
 .footer p {
   margin-bottom: 5px;
   width: 500px;

@@ -8,32 +8,22 @@
       </div>
       <div class="opacity-layer"></div>
       <div class="heroBannerContent">
-        <div v-if = "this.$route.path === '/'"> 
-           <h1 class="title" >WELCOME</h1>
-        <p class="subTitle" style="font-family: cursive;">Миллион фильмов и сериалов только для тебя</p>
-      </div>
-      
+        <div v-if="this.$route.path === '/'">
+          <h1 class="title">WELCOME</h1>
+          <p class="subTitle" style="font-family: cursive;">Миллион фильмов и сериалов только для тебя</p>
+        </div>
 
-        <div v-if = "this.$route.path === '/search'">
-          <div> 
-           <h2 class="title" >Результаты поиска</h2>
-       
-      </div>
+
+        <div v-if="this.$route.path === '/search'">
+          <div>
+            <h2 class="title">Результаты поиска</h2>
+
+          </div>
         </div>
         <div class="searchInput">
-          <input
-          type="text"
-         
-          placeholder="Поиск фильма"
-      v-model="searchQuery"
-      @input="handleInput"
-      @keydown.enter="handleEnter"
-      @blur="handleBlur"
-     
-         
-          class="search-input"
-        />
-        <button @click="this.$router.push({ path: `/search` })" class="search-button">Поиск</button>
+          <input type="text" placeholder="Поиск фильма" v-model="searchQuery" @input="handleInput"
+            @keydown.enter="handleEnter" @blur="handleBlur" class="search-input" />
+          <button @click="this.$router.push({ path: `/search` })" class="search-button">Поиск</button>
         </div>
       </div>
     </div>
@@ -41,7 +31,11 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import {
+  mapState,
+  mapActions,
+  mapMutations
+} from 'vuex';
 
 export default {
   data() {
@@ -53,23 +47,30 @@ export default {
     };
   },
   computed: {
-    ...mapState(['movies', 'searchQuery', 'filteredMovies']), // Добавить filteredMovies в computed
+    ...mapState([
+      'movies',
+      'searchQuery',
+      'filteredMovies'
+    ]),
   },
 
   methods: {
     ...mapActions(['searchMovies']),
-    handleEnter() {
-  if (event.key === 'Enter') {
-    this.$router.push({ path: `/search` });
-  }
-},
+    ...mapMutations(['setSearchQuery']),
 
-handleInput() {
-    this.showResults = true;
-    this.$store.commit('setSearchQuery', this.searchQuery); // Обновление значения searchQuery в хранилище
-    this.searchMovies();
-  },
-  handleBlur() {
+    handleInput() {
+      this.showResults = true;
+      this.setSearchQuery(this.searchQuery);
+      this.searchMovies();
+    },
+    handleEnter() {
+      if (event.key === 'Enter') {
+        this.$router.push({ path: `/search` });
+      }
+    },
+
+
+    handleBlur() {
       this.showResults = false;
     },
   },
@@ -84,13 +85,12 @@ handleInput() {
 
 
 
-  <style>
-  
+<style>
 .heroBanner {
-   
-    width: 100%;
-    height: 450px;
- 
+
+  width: 100%;
+  height: 450px;
+
   background-color: black;
   display: flex;
   align-items: center;
@@ -104,8 +104,8 @@ handleInput() {
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  justify-content: center;
+  align-items: center;
   opacity: 0.5;
   overflow: hidden;
 }
@@ -177,7 +177,7 @@ handleInput() {
 .heroBanner .heroBannerContent .searchInput button {
   width: 100px;
   height: 50px;
-  background: linear-gradient(98.37deg, #f89e00 0.99%, #da2f68 100%);  
+  background: linear-gradient(98.37deg, #f89e00 0.99%, #da2f68 100%);
   color: white;
   outline: 0;
   border: 0;
@@ -185,5 +185,4 @@ handleInput() {
   font-size: 16px;
   cursor: pointer;
 }
-
 </style>
