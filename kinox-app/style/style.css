@@ -1,0 +1,123 @@
+
+.p-rating-icon.p-rating-cancel {
+  color: #e74c3c !important;
+}
+
+.p-rating .p-rating-item.p-rating-item-active .p-rating-icon {
+    font-size: 21px !important;
+   color: rgba(28, 75, 145,1) !important;
+ background-color: linear-gradient(0deg, rgba(28, 75, 145,1) 0%, rgba(2,126,251,1) 100%) !important;
+
+  }
+ 
+  .p-rating-icon {
+    width:24px !important; 
+    height:40px !important ;/* Увеличение размера звезд до 30 пикселей */
+  }
+  @media (max-width: 768px) {
+   
+    .p-rating-icon {
+      width: 16px !important; 
+      height:20px !important ;/* Увеличение размера звезд до 30 пикселей */
+    }
+  
+   
+  }
+  
+  .p-progressbar-value{
+    background-color: #1c4b91!important;
+  }
+  .p-progressbar .p-progressbar-label {
+    color: #ffffff;
+    line-height: 1.5rem;
+    margin-bottom: 3px;
+}
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px;
+    height:100%;
+    color: #fff;
+  }  
+  .p-dropdown{
+
+   height: 80%!important;
+    background-color: #1c4b91!important;
+    border-radius: 20px!important;
+    
+  }
+  .p-dropdown .p-dropdown-label.p-placeholder {
+    color: #fff!important;
+
+    display: flex;
+    justify-content: center;
+}
+.p-dropdown-trigger{
+  color: #fff!important;
+  
+    display: flex;
+    justify-content: center;
+}
+.p-dropdown .p-dropdown-label {
+  
+  color: white;
+}
+
+.p-paginator{
+  border-radius: 15px!important;
+  height: 60px;
+  background:  #04152d!important;
+
+}
+.p-paginator-element{
+  color: #fff!important;
+}
+
+
+
+.p-paginator .p-highlight {
+
+  color: #1c4b91!important;
+  border-radius: 25px!important;
+}
+
+.p-autocomplete{
+  width: 100%;
+  border: none;
+  outline: none;
+  height: 40px;
+  font-size: 1em;
+  background: #04152d;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.5);
+  color: white;
+  margin-left:57%;
+
+  border-radius: 12px;
+}
+.p-autocomplete-input{
+  width: 100%;
+  border: none;
+  outline: none;
+  height: 40px;
+  font-size: 1em;
+  background: #04152d;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.5);
+  color: white;
+  
+
+
+}
+
+.p-autocomplete .p-inputtext {
+  background-color: #04152d!important;
+  color: white!important;
+  border-radius: 12px;
+  
+}
+.p-autocomplete-panel {
+  max-height: 600px!important;
+width: 40%;
+
+}
+
