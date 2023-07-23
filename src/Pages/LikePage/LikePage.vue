@@ -13,7 +13,16 @@
           </li>
         </ul>
         <div class="pagination">
-          <Paginator v-model:first="currentPageBookmarked" :rows="1" :totalRecords="bookmarkedPages" />
+          <Paginator 
+          :template="{
+                '640px': 'PrevPageLink CurrentPageReport NextPageLink',
+               
+                default: 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink'
+            }"
+          v-model:first="currentPageBookmarked" 
+          :rows="1" 
+          :totalRecords="bookmarkedPages" 
+          />
         </div>
 
       </div>
@@ -41,7 +50,13 @@
               </td>
               <td class="Rating">
                 <div style="display: flex; margin-top: -30px;">
-                  <Rating v-model="movie.like" :stars="10" :cancel="false" :readonly="true" class="custom-rating" />
+                  <Rating 
+                  v-model="movie.like" 
+                  :stars="10" 
+                  :cancel="false" 
+                  :readonly="true" 
+                  class="custom-rating" 
+                  />
 
                   <img src="https://primefaces.org/cdn/primevue/images/rating/cancel.png" height="24" width="24"
                     @click="removeRating(movie.id)" />
@@ -51,7 +66,10 @@
           </tbody>
         </table>
         <div class="pagination">
-          <Paginator v-model:first="currentPageRated" :rows="1" :totalRecords="ratedPages" />
+          <Paginator 
+          v-model:first="currentPageRated" 
+          :rows="1" 
+          :totalRecords="ratedPages" />
         </div>
 
       </div>

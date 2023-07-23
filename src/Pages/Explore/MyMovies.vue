@@ -2,17 +2,27 @@
   <div class="container">
     <div class="title_container">
       <h2 class="title" v-if="titles[this.$route.path]">{{ titles[this.$route.path] }}</h2>
+       <!-- Опции сортировки фильмов -->
       <div class="sort-options">
-        <Dropdown :class="['custom-dropdown', 'w-full', 'md:w-14rem', 'p-dropdown-indigo']" v-model="selectedSortOption"
-          :options="sortOptions" optionLabel="label" optionValue="value" @change="sortMovies" placeholder="Сортировать по"
-          class=" custom-dropdown w-full md:w-14rem">
+        <!-- Выпадающий список с опциями сортировки, реализованный с помощью компонента Dropdown -->
+        <!-- Изменение сортировки приводит к вызову метода sortMovies -->
+        <Dropdown 
+        :class="['custom-dropdown', 'w-full', 'md:w-14rem', 'p-dropdown-indigo']" 
+        v-model="selectedSortOption"
+        :options="sortOptions" 
+        optionLabel="label" 
+        optionValue="value" 
+        @change="sortMovies" 
+        placeholder="Сортировать по"
+        class=" custom-dropdown w-full md:w-14rem">
         </Dropdown>
-
+  <!-- Иконки для изменения порядка сортировки (по возрастанию или убыванию) -->
         <font-awesome-icon icon="arrow-up-9-1" v-if="sortOrder === 'asc'" @click="updateSortOrder('desc')"
           class="icon_select" />
         <font-awesome-icon icon="arrow-up-1-9" v-else @click="updateSortOrder('asc')" class="icon_select" />
       </div>
     </div>
+    <!-- Список фильмов -->
     <ul class="movie-list">
       <li v-for="(movie, index) in displayedMovies" :key="movie.id"
         :class="{ 'movie-item': true, 'new-row': index % 5 === 0 }">
@@ -21,10 +31,11 @@
           style="cursor: pointer; text-decoration: none; list-style-type: none;">
           <div class="movie">
 
-
+      <!-- Блок с информацией о фильме, включая изображение, название и рейтинг -->
             <div class="movie-poster">
               <img :src="movie.poster.url" alt="Постер фильма" class="poster-image">
               <div class="movie-details">
+                   <!-- Рейтинг фильма, отображенный в виде кругового прогресса -->
                 <circle-progress 
                 class="circle_progress" 
                 :viewport="true" 
@@ -54,6 +65,7 @@
               </div>
             </div>
 
+            <!-- Дополнительная информация о фильме -->
 
             <div style="cursor: pointer; text-decoration: none; list-style-type: none; color: white">
               <h2 class="movie-name">{{ movie.name }}</h2>
@@ -63,6 +75,7 @@
                 </div>
               </div>
               <p>{{ movie.description }}</p>
+               <!-- Дополнительная информация о фильме, такая как страна, длительность и год выпуска -->
               <div class="row">
                 <div class="info">
                   <div class="infoItem dropdown-movieLength">
@@ -80,6 +93,7 @@
                 </div>
 
               </div>
+              <!-- Рейтинг фильма на различных платформах -->
               <div class="row raiting" style="position: relative; bottom: 30px;">
                 <div class="info">
 
@@ -135,7 +149,6 @@ export default {
   },
   data() {
     return {
-
       itemsPerPage: 10,
       currentPage: 0,
       sortOptions: [
@@ -151,20 +164,21 @@ export default {
         '/movie': 'Фильмы',
         '/cartoon': 'Мультфильмы',
         '/tv-series': 'Сериалы',
-        '/Комедия': 'Комедии',
+        '/Comedy': 'Комедии',
         '/Боевик': 'Боевики',
         '/Драма': 'Драмы',
         '/Фэнтези': 'Фэнтези',
         '/Фантастика': 'Фантастика',
+        '/Adventures': 'Приключения',
       },
     };
   },
   computed: {
     ...mapState(['movies', 'searchQuery']),
-
+  // Фильтрация фильмов в зависимости от текущего пути маршрута
     filteredM() {
       const routePath = this.$route.path;
-      const validGenres = ['Комедия', 'Драма', 'Фэнтези', 'Фантастика', 'Боевик'];
+      const validGenres = ['Comedy', 'Drama', 'Fantasy', 'Fiction', 'Action movie','Adventures'];
 
       return this.movies.filter(movie => {
         if (routePath === '/movie') {
@@ -180,7 +194,7 @@ export default {
         return false;
       });
     },
-
+// Общее количество фильмов
     totalMovies() {
       return this.movies.length;
     },
@@ -188,16 +202,12 @@ export default {
     totalPages() {
       return Math.ceil(this.filteredM.length / this.itemsPerPage);
     },
-    totalJumpPages() {
-      return Math.ceil(this.totalPages / 5);
-    },
+  
     displayedMovies() {
       const startIndex = (this.currentPage) * this.itemsPerPage;
       return this.filteredM.slice(startIndex, startIndex + this.itemsPerPage);
     },
-    shouldShowLoadMoreButton() {
-      return this.currentPage * this.itemsPerPage < this.filteredM.length;
-    },
+    
   },
   methods: {
     ...mapActions(['searchMovies', 'searchQuery']),
@@ -211,6 +221,7 @@ export default {
       const remainingMinutes = minutes % 60;
       return `${hours}h ${remainingMinutes}min`;
     },
+    // Сортировка фильмов в соответствии с выбранной опцией сортировки и порядком
     sortMovies() {
       this.displayedMovies.sort((a, b) => {
         const aValue = this.getPropertyValue(a, this.selectedSortOption);
@@ -230,6 +241,7 @@ export default {
         }
       });
     },
+     // Обновление порядка сортировки и применение сортировки
     updateSortOrder(order) {
       this.sortOrder = order;
       this.sortMovies();
@@ -249,35 +261,18 @@ export default {
       this.currentPage = pageNumber;
     },
 
-    loadMore() {
-      this.currentPage++;
-    },
-    performSearch(query) {
-      this.$store.commit('setSearchQuery', query);
-      this.currentPage = 1;
-    },
-    setSortOrder(order) {
-      this.sortOrder = order;
-    },
-    async searchMovies() {
-      this.isLoading = true;
-      await this.$store.dispatch('searchMovies');
-      this.isLoading = false;
-    },
-  },
-  mounted() {
-    this.searchMovies();
 
   },
+ 
 };
 </script>
 
 
 <style scoped>
-/* -------------------- */
+
 .custom-dropdown::after {
   border-top-color: white;
-  /* Цвет стрелки */
+ 
 }
 
 .custom-dropdown {
@@ -289,7 +284,6 @@ export default {
 .text {
 
   margin-right: 5px;
-
   opacity: 0.5;
   line-height: 24px;
 
@@ -302,13 +296,9 @@ export default {
 
 .row {
   display: flex;
-
   gap: 25px;
-
   position: relative;
   bottom: 10px;
-
-
 }
 
 .info {
@@ -321,31 +311,18 @@ export default {
   margin-right: 10px;
   display: flex;
   flex-flow: row wrap;
-
 }
 
 
 
 
 .pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-
-
-.pagination {
-
   display: flex;
   justify-content: center;
   margin-top: 20px;
   z-index: 9999;
 }
 
-.jump-pagination {
-  z-index: 1111;
-}
 
 
 .icon_select {

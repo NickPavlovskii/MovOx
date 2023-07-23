@@ -1,7 +1,6 @@
-
 <template>
   <div class="container">
-
+    <!-- Блок с детальной информацией о фильме -->
     <div class="detailsBanner">
 
       <div class="backdrop-img">
@@ -10,14 +9,14 @@
         </div>
       </div>
       <div class="opacity-layer"></div>
-
+      <!-- Блок с содержимым баннера -->
       <div class="content">
-
+        <!-- Левая часть баннера с постером и возможностью оценки фильма -->
         <div class="left">
           <img :src="movie.poster.url" alt="Movie Poster" class="posterImg">
 
           <div style="display: flex;   flex-direction: column; ">
-
+            <!-- Блок с оценкой фильма -->
             <div style="display: flex; flex-direction: column;">
               <h3 style="margin: 25px -2px -2px -2px">Поставьте оценку</h3>
               <span class="text">Это улучшит ваши рекомендации</span>
@@ -25,11 +24,11 @@
             <div style="display: flex;">
               <img src="https://primefaces.org/cdn/primevue/images/rating/cancel.png" height="24" width="24"
                 @click="resetRating" style="position: relative; top: 8px;" />
+              <!-- Компонент для выбора оценки (звезды) -->
               <Rating v-model="rating" :stars="10" @input="saveRating" class="custom-rating" :cancel=false />
             </div>
-
+            <!-- Кнопка "Смотреть позже" (добавление фильма в закладки) -->
             <div style="display: flex; justify-content: flex-end;">
-
               <button :class="{ active: isBookmarked }" @click.stop="toggleBookmark($event)" class="myButton  btn-3">
                 <span>
                   <Icon v-if="!isBookmarked" icon="ic:outline-bookmark-add" class="icn" />
@@ -40,25 +39,25 @@
             </div>
           </div>
         </div>
+        <!-- Правая часть баннера с основной информацией о фильме -->
         <div class="right">
           <h1 class="title">{{ movie.name }} </h1>
 
-
-
-
+          <!-- Альтернативное название фильма -->
           <h4 class="subtitle">{{ movie.alternativeName }}</h4>
+          <!-- Жанры фильма -->
           <div class="genres">
             <div v-for="genre in movie.genres" :key="genre">
               <span class="genre">{{ genre }}</span>
-
             </div>
           </div>
+          <!-- Описание фильма -->
           <div class="overview">
             <h2 class="heading">О фильме</h2>
             <p class="description">{{ movie.description }}</p>
           </div>
 
-
+          <!-- Дополнительная информация о фильме -->
           <div class="right-rows">
             <div class="row">
               <div class="info">
@@ -72,8 +71,8 @@
                   <span class="text">{{ movie.director.screenwriter.join(', ') }}</span>
                 </div>
               </div>
-
             </div>
+            <!-- Информация о стране, длительности и годе выпуска -->
             <div class="row" style="position: relative; bottom: 30px;">
               <div class="info">
                 <div class="infoItem">
@@ -105,8 +104,6 @@
                   <span class="text">{{ movie.rating.kp }}</span>
                 </div>
               </div>
-
-
             </div>
 
 
@@ -133,8 +130,8 @@
                   <span class="text votes">{{ movie.votes.russianFilmCritics }} голосов</span>
                 </div>
               </div>
-
             </div>
+             <!-- Доступность фильма на различных платформах (если есть) -->
             <div class="watchability" v-if="movie.watchability.items != null">
               <p class="watchability-heading">Доступно на:</p>
               <ul class="watchability-list">
@@ -169,6 +166,7 @@
           </li>
         </ul>
       </div>
+      <!-- реккомендации -->
       <MyRecom class="MyRecom" />
     </div>
   </div>
@@ -236,13 +234,13 @@ export default {
   },
   computed: {
     ...mapState(['movies']),
-   
+
     movie() {
       // Получаем информацию о фильме на основе переданного id из маршрута
       const movieId = parseInt(this.$route.params.id);
       return this.movies.find((movie) => movie.id === movieId);
     },
-     // Создаем ключ для закладки на основе id фильма для хранения в LocalStorage
+    // Создаем ключ для закладки на основе id фильма для хранения в LocalStorage
     bookmarkKey() {
       return `bookmark_${this.movie.id}`;
     },
@@ -794,7 +792,6 @@ p {
   font-size: 16px;
   margin-bottom: 20px;
 }
-
 </style>
 
 

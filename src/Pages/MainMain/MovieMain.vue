@@ -2,15 +2,25 @@
   <div>
     <ContentWrapper @search="performSearch" class="ContentWrapper" />
     <MySocial />
-    <div v-if="isLoading" class="loader">
+     <!-- Блок с индикатором загрузки, отображается во время загрузки данных -->
+     <div v-if="isLoading" class="loader">
       <MyLoader />
     </div>
+    
+    <!-- Блок контента, отображаемый после окончания загрузки -->
     <div v-else>
       <div>
+        <!-- Компонент WatchNow для предложения "Смотреть сейчас" -->
         <WatchNow />
+        
+        <!-- Компонент TopMovie для отображения лучшего фильма -->
         <TopMovie />
+        
+        <!-- Компонент ClapperboardIcon для отображения иконки киноплёнки -->
         <ClapperboardIcon />
       </div>
+      
+      <!-- Компонент MovieList для отображения списка фильмов -->
       <MovieList />
     </div>
   </div>
@@ -48,11 +58,11 @@ export default {
     ...mapActions(['fetchMovies', 'searchMovies']),
     
 
-   // эмитация загрузки данных 
+
     async searchMovies() {
-      this.isLoading = true; // Set isLoading to true before starting the request
+      this.isLoading = true; 
       await this.$store.dispatch('searchMovies');
-      this.isLoading = false; // Set isLoading to false after the request is completed
+      this.isLoading = false; 
     },
    
   },
