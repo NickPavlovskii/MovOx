@@ -2,7 +2,7 @@
   <div class="container">
     <div class="movie-list">
           <!-- Section for bookmarked movies -->
-      <div class="section Bookmark">
+      <div class="section Bookmark" v-if="this.bookmarkedMovies.length > 0 ">
 
         <div class="title_container">
           <h2 class="title"><font-awesome-icon icon="fa-solid fa-film" /> Посмотреть позже</h2>
@@ -18,9 +18,9 @@
 
       </div>
 
-      <ClapperboardIcon style="margin-top: 40px;margin-bottom: -80px;" />
+      <ClapperboardIcon v-if="this.ratedMovies.length > 0 && this.bookmarkedMovies.length > 0 " style="margin-top: 40px;margin-bottom: -80px;" />
      <!-- Section for rated movies -->
-      <div class="section like">
+      <div class="section like" v-if="this.ratedMovies.length > 0 ">  
         <div class="title_container">
           <h2 class="title"><font-awesome-icon icon="fa-solid fa-star" /> Оцененные фильмы</h2>
         </div>
