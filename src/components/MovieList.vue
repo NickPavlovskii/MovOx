@@ -28,13 +28,38 @@
      />
    </div>
    <ul  class="movie-list">
-     <li v-for="(movie, index) in movies" :key="movie.id" :class="{'movie-item': true, 'new-row': index % 5 === 0}">
+     <li v-for="(movie, index) in moviess" :key="movie.id" :class="{'movie-item': true, 'new-row': index % 5 === 0}">
        <MovieCard :movie="movie" />
      </li>
    </ul>
+   
  </div>
  <div v-else-if="this.$route.path === '/search'">
    <h2 class="container_title" >Вы искали</h2>
+   <div class="sort-options">
+     <Dropdown
+       :class="['custom-dropdown', 'w-full', 'md:w-14rem', 'p-dropdown-indigo']"
+       v-model="selectedSortOption"
+       :options="sortOptions"
+       optionLabel="label"
+       optionValue="value"
+       @change="sortMovies"
+       placeholder="Сортировать по"
+       class="custom-dropdown w-full md:w-14rem"
+     ></Dropdown>
+     <font-awesome-icon
+       icon="arrow-up-9-1"
+       v-if="sortOrder === 'asc'"
+       @click="updateSortOrder('desc')"
+       class="icon_select"
+     />
+     <font-awesome-icon
+       icon="arrow-up-1-9"
+       v-else
+       @click="updateSortOrder('asc')"
+       class="icon_select"
+     />
+   </div>
    <ul  class="movie-list">
      <li v-for="(movie, index) in displayedMovies" :key="movie.id" :class="{'movie-item': true, 'new-row': index % 5 === 0}">
        <MovieCard :movie="movie" />
@@ -43,9 +68,14 @@
  </div>
  <div class="pagination">
    <Paginator
+   :template="{
+                '640px': 'PrevPageLink CurrentPageReport NextPageLink',
+               
+                default: 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink'
+            }"
    v-model:first="currentPage "
    :rows="1"
-   :totalRecords="totalPages"
+   :totalRecords="totalPages" 
  />
 </div>
  </div>
@@ -99,11 +129,24 @@ export default {
      return Math.ceil(this.totalMovies / this.itemsPerPage);
    },
    
+   moviess(){
+    const sortedMovies = this.sortMovie();
+
+// Calculate the starting index of the current page
+const startIndex = this.currentPage * this.itemsPerPage;
+
+// Return a subset of the sorted movies as per pagination
+return sortedMovies.slice(startIndex, startIndex + this.itemsPerPage);
+   },
    displayedMovies() {
-     const moviesList = this.$route.path === '/' ? this.movies : this.filteredMovies;
-     const startIndex = (this.currentPage ) * this.itemsPerPage;
-     return moviesList.slice(startIndex, startIndex + this.itemsPerPage);
- },
+    const sortedMovies = this.sortMovie();
+
+// Calculate the starting index of the current page
+const startIndex = this.currentPage * this.itemsPerPage;
+
+// Return a subset of the sorted movies as per pagination
+return sortedMovies.slice(startIndex, startIndex + this.itemsPerPage);
+},
  totalMovies() {
    const moviesList = this.$route.path === '/' ? this.movies : this.filteredMovies;
    return moviesList.length;
@@ -119,6 +162,42 @@ export default {
  methods: {
   
    ...mapActions(['fetchMovies', 'searchMovies']),
+   sortMovie() {
+      let moviesList = this.$route.path === '/' ? this.movies : this.filteredMovies;
+
+      if (this.selectedSortOption !== 'Сортировать по') {
+        // Custom sorting function based on selectedSortOption and sortOrder
+        moviesList.sort((a, b) => {
+          const sortOption = this.selectedSortOption;
+          let aValue, bValue;
+
+          // Extract the values to compare from the movie objects
+          if (sortOption === 'year') {
+            aValue = a.year;
+            bValue = b.year;
+          } else if (sortOption === 'rating.kp') {
+            aValue = a.rating.kp;
+            bValue = b.rating.kp;
+          } else if (sortOption === 'movieLength') {
+            aValue = a.movieLength;
+            bValue = b.movieLength;
+          }
+
+          // Compare the values based on the sort order
+          if (this.sortOrder === 'asc') {
+            return aValue - bValue;
+          } else {
+            return bValue - aValue;
+          }
+        });
+      }
+
+      return moviesList;
+    },
+    updateSortOrder(order) {
+      this.sortOrder = order;
+      this.currentPage = 0; // Reset the current page to the first page
+    },
   
    onPageChange(pageNumber) {
    this.currentPage = pageNumber;
@@ -131,23 +210,15 @@ export default {
    navigateToLikePage() {
      this.$router.push({ name: 'bookmarks-ratings' });
    },
-   updateSortOrder(order) {
-     this.sortOrder = order;
-     this.sortMovies();
-   },
-   sortMovies() {
-     const moviesList = this.$route.path === '/' ? this.movies : this.filteredMovies;
-     moviesList.sort((a, b) => {
-       const aValue = a[this.selectedSortOption];
-       const bValue = b[this.selectedSortOption];
-       if (this.sortOrder === 'asc') {
-         return aValue - bValue;
-       } else {
-         return bValue - aValue;
-       }
-     });
-     this.setCurrentPage(1);
-   },
+
+    getPropertyValue(obj, propertyPath) {
+
+      const pathArray = propertyPath.split('.');
+      return pathArray.reduce((currentObj, key) => {
+        return currentObj ? currentObj[key] : undefined;
+      }, obj);
+    },
+
    setCurrentPage(event) {
    this.currentPage = event.page + 1;
  },

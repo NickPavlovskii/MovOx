@@ -100,7 +100,14 @@
       </li>
     </ul>
     <div class="pagination">
-      <Paginator v-model:first="currentPage" :rows="1" :totalRecords="totalPages" />
+      <Paginator  :template="{
+                '640px': 'PrevPageLink CurrentPageReport NextPageLink',
+               
+                default: 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink'
+            }" 
+            v-model:first="currentPage" 
+            :rows="1" 
+            :totalRecords="totalPages" />
     </div>
   </div>
 </template>
