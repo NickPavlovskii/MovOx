@@ -4,7 +4,7 @@
     <MySocial />
     <div v-if="isLoading" class="loader">
       <MyLoader />
-    </div> 
+    </div>
     <div v-else>
       <div>
         <WatchNow />
@@ -24,7 +24,7 @@ import TopMovie from '../../components/main/TopMovie.vue';
 import WatchNow from '../../components/main/WatchNow.vue';
 import MyLoader from '../../components/MyLoader.vue';
 import ClapperboardIcon from '../../components/ClapperboardIcon.vue';
-
+import {  mapActions} from 'vuex';
 
 
 
@@ -40,12 +40,28 @@ export default {
   },
   data() {
     return {
-      isLoading: false, // Add isLoading state property
+      isLoading: false,
     };
   },
+  methods: {
+   
+    ...mapActions(['fetchMovies', 'searchMovies']),
+    
 
- 
-};
+   // эмитация загрузки данных 
+    async searchMovies() {
+      this.isLoading = true; // Set isLoading to true before starting the request
+      await this.$store.dispatch('searchMovies');
+      this.isLoading = false; // Set isLoading to false after the request is completed
+    },
+   
+  },
+    mounted() {
+      this.searchMovies();
+      this.$store.dispatch('movies/fetchMovieList');
+    }
+
+  };
 </script>
 
 
