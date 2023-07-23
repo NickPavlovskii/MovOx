@@ -58,13 +58,14 @@ margin-top: 12px;
 
 
 #left{
+  z-index: 3;
  bottom: 290px;
 left: 5px;
  background-color: #020c1b99;
  color: #ffffff;
 }
 #right{
-
+  z-index: 3;
  bottom: 290px;
  right: 5px;
  background-color: #020c1b99;

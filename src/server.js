@@ -1,4 +1,10 @@
 // server.js
+
+//Я пытался разобраться с rest api 
+//но как то без успешно в итоге оставил json, 
+//может хоть скажешь что нет, данные не беруться с сервера((
+
+
 const express = require('express');
 const app = express();
 const port = 3000;
