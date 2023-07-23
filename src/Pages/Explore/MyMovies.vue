@@ -335,11 +335,6 @@ export default {
 
 
 
-.page-button.active {
-  color: #fff;
-  background: #1c4b91;
-}
-
 .pagination {
 
   display: flex;
