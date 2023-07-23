@@ -1,4 +1,4 @@
-
+/* Стили для звезды с отменой оценки в компоненте рейтинга */
 .p-rating-icon.p-rating-cancel {
   color: #e74c3c !important;
 }
@@ -12,18 +12,18 @@
  
   .p-rating-icon {
     width:24px !important; 
-    height:40px !important ;/* Увеличение размера звезд до 30 пикселей */
+    height:40px !important ;
   }
   @media (max-width: 768px) {
    
     .p-rating-icon {
       width: 16px !important; 
-      height:20px !important ;/* Увеличение размера звезд до 30 пикселей */
+      height:20px !important ;
     }
   
    
   }
-  
+  /* Стили для полосы прогресса */
   .p-progressbar-value{
     background-color: #1c4b91!important;
   }
@@ -40,6 +40,8 @@
     height:100%;
     color: #fff;
   }  
+
+  /* Стили для выпадающего списка */
   .p-dropdown{
 
    height: 80%!important;
@@ -63,7 +65,7 @@
   
   color: white;
 }
-
+/* Стили для элементов пагинатора */
 .p-paginator{
   border-radius: 15px!important;
   height: 60px;
@@ -81,7 +83,7 @@
   color: #1c4b91!important;
   border-radius: 25px!important;
 }
-
+/* Стили для автозаполнения */
 .p-autocomplete{
   width: 100%;
   border: none;
