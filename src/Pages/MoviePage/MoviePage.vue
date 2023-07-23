@@ -300,6 +300,7 @@ export default {
   display: flex;
   gap: 5px;
   margin-bottom: 6px;
+  flex-wrap: wrap;
 }
 
 .genre {

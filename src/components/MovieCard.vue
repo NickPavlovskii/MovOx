@@ -103,10 +103,6 @@ color: red;
 
 }
 
-.detailsBanner .content .right .info .text.bold {
-    font-weight: 600;
-    opacity: 1;
-}
 .row {
   display: flex;
   align-items: center;
@@ -186,24 +182,6 @@ p {
 }
 
 
-
-.container {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 20px;
-  color: #fff;
-}
-
-.movie-list {
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  grid-gap: 20px;
-}
-
-.movie-item {
-  padding: 10px;
-}
 
 .movie-poster {
   text-align: center;
