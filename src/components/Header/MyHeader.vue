@@ -215,7 +215,7 @@
   align-items: center;
   z-index: 5;
 
-  /* Apply styles when the header is active */
+
   &.active {
     background-color: #020c1b;
   }

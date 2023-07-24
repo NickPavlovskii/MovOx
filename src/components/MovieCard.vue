@@ -81,7 +81,7 @@ opacity: 0;
 margin-right: 1px;
 }
 .overlay:hover .bookmark{
-opacity: 1; /* Появление иконок при наведении на .movie-poster или при активном состоянии */
+opacity: 1; 
 
 }
 
