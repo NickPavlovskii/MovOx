@@ -1,27 +1,25 @@
 <template>
   <div id="app">
-    <MyHeader @search="updateSearchQuery" />
-    
+    <MainHeader @search="updateSearchQuery" />
     <router-view>
 </router-view>
 <!-- <MoviePage/> -->
-      <Footer/>
-   
+      <MainFooter/>
   </div>
 </template>
 
 <script>
 import '../style/PrimeVue.css'; // Подключение файла стилей
-import  MyHeader from './components/Header/MyHeader.vue';
-import  Footer from './components/Footer/MyFooter.vue';
+import  MainHeader from './components/Header/MainHeader.vue';
+import  MainFooter from './components/Footer/MainFooter.vue';
 
 import { mapState, mapActions } from 'vuex';
 // 
 export default {
   name: 'App',
   components: {
-    MyHeader,
-    Footer,
+    MainHeader,
+    MainFooter,
  
    
   },
@@ -35,7 +33,12 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['fetchMovies', 'selectMovie', 'searchMovies']),
+    ...mapActions([
+    'fetchMovies', 
+    'selectMovie', 
+    'searchMovies'
+  ]),
+
     changePage(page) {
       // Обработка изменения страницы
       this.currentPage = page;

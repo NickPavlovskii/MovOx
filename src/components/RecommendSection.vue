@@ -3,17 +3,23 @@
     <h2 class="title">Рекомендуем к просмотру</h2>
     <div class="wrapper">
       <i id="left" @click="scrollLeft"><font-awesome-icon icon="arrow-left" /></i>
-
-      <div class="carousel" @mousedown="dragStart" @touchstart="dragStart" @mousemove="dragging" @touchmove="dragging"
-        @mouseup="dragStop" @touchend="dragStop" :class="{ 'dragging': isDragging }">
-
+      <div 
+      class="carousel" 
+      :class="{ 'dragging': isDragging }"
+      @mousedown="dragStart" 
+      @touchstart="dragStart" 
+      @mousemove="dragging" 
+      @touchmove="dragging"
+      @mouseup="dragStop" 
+      @touchend="dragStop" 
+      >
         <div class="movie-poster" v-for="movie in recommendedMovies" :key="movie.id">
-
           <MovieCard :movie="movie" />
-
         </div>
       </div>
-      <i id="right" @click="scrollRight"><font-awesome-icon icon="arrow-right" /></i>
+      <i id="right" @click="scrollRight">
+        <font-awesome-icon icon="arrow-right" />
+      </i>
     </div>
   </div>
 </template>

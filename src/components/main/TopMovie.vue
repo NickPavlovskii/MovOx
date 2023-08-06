@@ -2,13 +2,24 @@
   <div class="container">
     <div>
       <div class="title_container">
-        <h2 class="title"> <font-awesome-icon icon="trophy" style=" color: #f89e00;" /> Top 10 </h2>
+        <h2 class="title">
+          <font-awesome-icon icon="trophy" style=" color: #f89e00;" />
+          Top 10
+        </h2>
         <div class="switchingTabs">
           <div class="tabItems">
-            <span @click="toggleTimeFrame('recent')" class="tabItem" :class="{ 'active': timeFrame === 'recent' }">
+            <span 
+            @click="toggleTimeFrame('recent')" 
+            class="tabItem" 
+            :class="{ 'active': timeFrame === 'recent' }">
               За год
             </span>
-            <span @click="toggleTimeFrame('all')" class="tabItem" :class="{ 'active': timeFrame === 'all' }">За все время</span>
+            <span 
+            @click="toggleTimeFrame('all')" 
+            class="tabItem" 
+            :class="{ 'active': timeFrame === 'all' }">
+              За все время
+            </span>
             <div class="movingBg" :style="{ left: activeTabLeft }"></div>
           </div>
         </div>
@@ -16,12 +27,18 @@
     </div>
     <div class="wrapper">
       <i id="left" @click="scrollLeft"><font-awesome-icon icon="arrow-left" /></i>
-      <div class="carousel" @mousedown="dragStart" @touchstart="dragStart" @mousemove="dragging" @touchmove="dragging"
-        @mouseup="dragStop" @touchend="dragStop" :class="{ 'dragging': isDragging }">
+      <div 
+      class="carousel" 
+      @mousedown="dragStart" 
+      @touchstart="dragStart" 
+      @mousemove="dragging" 
+      @touchmove="dragging"
+      @mouseup="dragStop" 
+      @touchend="dragStop" 
+      :class="{ 'dragging': isDragging }"
+      >
         <div class="movie-poster" v-for="movie in latestMovies" :key="movie.id">
-
           <MovieCard :movie="movie" />
-
         </div>
       </div>
       <i id="right" @click="scrollRight"><font-awesome-icon icon="arrow-right" /></i>
@@ -233,6 +250,7 @@ export default {
   }
 
 }
+
 //------------------wrapper---------------
 .wrapper {
   height: 100%;

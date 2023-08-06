@@ -205,10 +205,6 @@ export default {
 th,
 td {
   padding: 10px;
-
-
-
-
 }
 
 
@@ -218,12 +214,9 @@ td {
   td {
     display: flex;
     flex-direction: column;
-
   }
 
-
 }
-
 
 /* Стили для кнопки удаления */
 img[src="https://primefaces.org/cdn/primevue/images/rating/cancel.png"] {
@@ -254,10 +247,7 @@ img[src="https://primefaces.org/cdn/primevue/images/rating/cancel.png"]:hover {
   z-index: 9999;
 }
 
-
-
 .section {
-
   margin-top: 140px;
 }
 
@@ -266,9 +256,7 @@ img[src="https://primefaces.org/cdn/primevue/images/rating/cancel.png"]:hover {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-
 }
-
 
 .movie-card-list {
   list-style-type: none;

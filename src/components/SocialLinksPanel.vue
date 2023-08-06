@@ -48,9 +48,23 @@
   </div>
 </template>
   
+
+<script>
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faGithub, faInstagram, faDiscord, faWhatsapp, faVk, faTelegram, faGitlab } from '@fortawesome/free-brands-svg-icons';
+
+library.add(faGithub, faInstagram, faDiscord, faWhatsapp, faVk, faTelegram, faGitlab);
+
+export default {
+  components: {
+    FontAwesomeIcon,
+  },
+}
+</script>
+  
+
 <style scoped>
-
-
 
 .social {
   z-index: 999;
@@ -121,18 +135,4 @@ body {
   font-family: 'Raleway', sans-serif;
 }
 </style>
-  
-<script>
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faGithub, faInstagram, faDiscord, faWhatsapp, faVk, faTelegram, faGitlab } from '@fortawesome/free-brands-svg-icons';
-
-library.add(faGithub, faInstagram, faDiscord, faWhatsapp, faVk, faTelegram, faGitlab);
-
-export default {
-  components: {
-    FontAwesomeIcon,
-  },
-}
-</script>
   

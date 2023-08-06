@@ -28,7 +28,11 @@
      />
    </div>
    <ul  class="movie-list">
-     <li v-for="(movie, index) in moviess" :key="movie.id" :class="{'movie-item': true, 'new-row': index % 5 === 0}">
+     <li 
+     v-for="(movie) in moviess" 
+     :key="movie.id" 
+     :class="{'movie-item': true, }"
+     >
        <MovieCard :movie="movie" />
      </li>
    </ul>

@@ -10,20 +10,30 @@
       <div class="heroBannerContent">
         <div v-if="this.$route.path === '/'">
           <h1 class="title">WELCOME</h1>
-          <p class="subTitle" style="font-family: cursive;">Миллион фильмов и сериалов только для тебя</p>
+          <p class="subTitle" style="font-family: cursive;">
+            Миллион фильмов и сериалов только для тебя
+          </p>
         </div>
-
-
         <div v-if="this.$route.path === '/search'">
           <div>
             <h2 class="title">Результаты поиска</h2>
-
           </div>
         </div>
         <div class="searchInput">
-          <input type="text" placeholder="Поиск фильма" v-model="searchQuery" @input="handleInput"
-            @keydown.enter="handleEnter" @blur="handleBlur" class="search-input" />
-          <button @click="this.$router.push({ path: `/search` })" class="search-button">Поиск</button>
+          <input
+          class="search-input"
+          type="text" 
+          placeholder="Поиск фильма" 
+          v-model="searchQuery" 
+          @input="handleInput"
+          @keydown.enter="handleEnter" 
+          @blur="handleBlur" 
+           />
+          <button 
+          @click="this.$router.push({ path: `/search` })" 
+          class="search-button">
+          Поиск
+        </button>
         </div>
       </div>
     </div>
@@ -79,11 +89,6 @@ export default {
   },
 };
 </script>
-
-
-
-
-
 
 <style>
 .heroBanner {
