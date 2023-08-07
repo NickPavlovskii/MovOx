@@ -60,7 +60,8 @@
        class="icon_select"
      />
    </div>
-   <ul  class="movie-list">
+   
+   <ul  class="movie-list ">
      <li v-for="(movie, index) in displayedMovies" :key="movie.id" :class="{'movie-item': true, 'new-row': index % 5 === 0}">
        <MovieCard :movie="movie" />
      </li>
@@ -84,6 +85,7 @@
 
 
 <script>
+
 import Paginator from 'primevue/paginator';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -255,6 +257,7 @@ return sortedMovies.slice(startIndex, startIndex + this.itemsPerPage);
 
   
   <style scoped>
+  
 .custom-dropdown{
  width: 200px;
 
