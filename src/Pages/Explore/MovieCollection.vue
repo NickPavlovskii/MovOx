@@ -125,6 +125,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import "primevue/resources/primevue.min.css";
 import { mapState, mapActions } from 'vuex';
@@ -269,24 +270,18 @@ export default {
 
 
 <style scoped>
-
 .custom-dropdown::after {
   border-top-color: white;
- 
 }
 
 .custom-dropdown {
-
   height: 50px;
 }
 
-
 .text {
-
   margin-right: 5px;
   opacity: 0.5;
   line-height: 24px;
-
 }
 
 .info .text.bold {
@@ -314,16 +309,12 @@ export default {
 }
 
 
-
-
 .pagination {
   display: flex;
   justify-content: center;
   margin-top: 20px;
   z-index: 9999;
 }
-
-
 
 .icon_select {
   position: relative;
@@ -380,7 +371,6 @@ export default {
   height: 2px;
   background: white;
   bottom: -3px;
-
 }
 
 .title_container h2 {

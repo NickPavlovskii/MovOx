@@ -12,22 +12,40 @@
         <h4>Категории</h4>
         <ul style="display: flex; flex-direction: column;  ">
         
-          <router-link :to="{ path: '/Action movie' }" style="color: white; text-decoration: none;" >
+          <router-link 
+          :to="{ path: '/Action movie' }" 
+          style="color: white; text-decoration: none;" 
+          >
             <a>Боевик</a> 
           </router-link>
-          <router-link :to="{ path: '/Comedy' }" style="color: white; text-decoration: none;">
+          <router-link 
+          :to="{ path: '/Comedy' }" 
+          style="color: white; text-decoration: none;"
+          >
             <a>Комедия</a>
           </router-link>
-          <router-link :to="{ path: '/Drama' }" style="color: white; text-decoration: none;">
+          <router-link 
+          :to="{ path: '/Drama' }" 
+          style="color: white; text-decoration: none;"
+          >
             <a>Драма</a> 
           </router-link>
-          <router-link :to="{ path: '/Fantasy' }" style="color: white; text-decoration: none;">
+          <router-link 
+          :to="{ path: '/Fantasy' }" 
+          style="color: white; text-decoration: none;"
+          >
             <a>Фэнтези</a>
           </router-link>
-          <router-link :to="{ path: '/Fiction' }" style="color: white; text-decoration: none;">
+          <router-link 
+          :to="{ path: '/Fiction' }" 
+          style="color: white; text-decoration: none;"
+          >
             <a>Фантастика</a>
           </router-link>
-          <router-link :to="{ path: '/Adventures' }" style="color: white; text-decoration: none;">
+          <router-link 
+          :to="{ path: '/Adventures' }" 
+          style="color: white; text-decoration: none;"
+          >
             <a>Приключения</a>
           </router-link>
         </ul>

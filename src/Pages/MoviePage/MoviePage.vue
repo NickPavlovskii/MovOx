@@ -88,12 +88,10 @@
                   <span class="text">{{ movie.year }}</span>
                 </div>
               </div>
-
             </div>
 
             <div class="row raiting">
               <div class="info">
-
                 <div class="infoItem">
                   <span class="text bold"><font-awesome-icon icon="fa-brands fa-imdb" size="2xl"
                       style="background: #1c4b91;" /></span>
@@ -105,27 +103,21 @@
                 </div>
               </div>
             </div>
-
-
             <div style=" position: relative; bottom: 70px;">
               <h3 style=" margin-bottom: -0px;   letter-spacing: 0.2em;">Рейтинг Кинокритиков</h3>
               <div class="progress-bars">
                 <div style="display: flex;     flex-direction: column; width: 315px;">
                   <h4 style="    letter-spacing: 0.2em;"> В Мире</h4>
                   <div class="progress-bar">
-
                     <ProgressBar :value="movie.rating.filmCritics * 10">{{ movie.rating.filmCritics }}</ProgressBar>
                   </div>
                   <span class="text votes">{{ movie.votes.filmCritics }} голосов</span>
-
                 </div>
                 <div style="display: flex;     flex-direction: column; width: 270px; ">
                   <h4>В России</h4>
                   <div class="progress-bar rf">
-
                     <ProgressBar :value="movie.rating.russianFilmCritics"> <span
                         style="margin-bottom: 2px;">{{ movie.rating.russianFilmCritics }}</span> </ProgressBar>
-
                   </div>
                   <span class="text votes">{{ movie.votes.russianFilmCritics }} голосов</span>
                 </div>
@@ -142,13 +134,9 @@
                 </li>
               </ul>
             </div>
-
           </div>
-
         </div>
-
       </div>
-
       <h4 class="link"> <router-link to="/" style="text-decoration: none;cursor: pointer; color: white;">
           <span style="text-decoration: underline; cursor: pointer;">KinOx</span>
         </router-link>/{{ movie.name }}</h4>
@@ -167,15 +155,14 @@
         </ul>
       </div>
       <!-- реккомендации -->
-      <MyRecom class="MyRecom" />
+      <RecommendSection class="MyRecom" />
     </div>
   </div>
 </template>
 
 
 <script>
-import MyRecom from '../../components/MyRecom.vue';
-
+import RecommendSection from '../../components/RecommendSection.vue';
 import { Icon } from '@iconify/vue';
 import { mapState } from 'vuex';
 import { mapActions } from 'vuex';
@@ -191,7 +178,7 @@ library.add(faClock, faCalendarDays, faGlobe, faBookmark, faImdb);
 export default {
   components: {
     FontAwesomeIcon,
-    MyRecom,
+    RecommendSection,
     Rating,
     ProgressBar,
     Icon,

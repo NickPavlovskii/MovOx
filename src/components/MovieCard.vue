@@ -62,168 +62,6 @@
   </div>
 </template>
   
-<style scoped>
-.overlay{
-  height: 100%;
-  width: 100%;
-}
-.icons {
-position: relative;
-bottom: 397px;
-left: 75px;
-transform: translate(-50%, -50%);
-opacity: 0;
-
-
-}
-.bookmark {
-opacity: 0;
-margin-right: 1px;
-}
-.overlay:hover .bookmark{
-opacity: 1; 
-
-}
-
-.bookmark.active {
-opacity: 2; 
-color: red;
-}
-
-
-
-
-
-.text {
-   
-    margin-right: 5px;
-    
-    opacity: 0.5;
-    line-height: 24px;
-
-}
-
-.row {
-  display: flex;
-  align-items: center;
-  gap: 25px;
-  justify-content: center;
-  position: relative;
- bottom: 10px;
-
-    
-}
-
-.info {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 15px 0;
-  display: flex;
-}
-
-.info .infoItem {
-  margin-right: 10px;
-  display: flex;
-  flex-flow: row wrap;
-  
-}
-.icons .bookmark.active {
-display: block;
-}
-.movie-poster:hover + .icons {
-opacity: 1;
-}
-
-.movie-poster {
-  position: relative;
-  display: inline-block;
-}
-
-.description-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.movie-poster:hover .description-overlay {
-  opacity: 1;
-}
-
-.shortDescription {
-  max-width: 100%;
-  padding: 20px;
-  word-wrap: break-word;
-  white-space: normal;
-}
-
-p {
-  word-wrap: break-word;
-  opacity: 0.7;
-    line-height: 24px;
-
-}
-
-
-
-.circle_progress {
-  position: absolute;
-  bottom: 70px;
-  left: 10px;
-  color: #ffffff;
-}
-
-
-
-.movie-poster {
-  text-align: center;
-  border-radius: 8px;
-  margin-right: 30px;
-}
-
-.poster-image {
-  max-width: 100%;
-  height: auto;
-  border-radius: 11px;
-}
-
-.movie-details {
-  padding-top: 10px;
-  width: 100%;
-  color: white;
-  height: 80px;
-}
-
-.movie-name {
-  font-size: 19px;
-  margin-bottom: 5px;
-  position: relative;
-  bottom: 90px;
-  font-weight: bold;
-  width: 180px;
-}
-
-.movie-info {
-  display: flex;
-  align-items: center;
-}
-
-.year {
-  font-size: 16px;
-  color: #888;
-  position: relative;
-  bottom: 90px;
-}
-</style>
-
 
 <script>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -469,5 +307,167 @@ font-size: 16px;
 color: #888;
 position: relative;
 bottom: 90px;
+}
+</style>
+
+<style scoped>
+.overlay{
+  height: 100%;
+  width: 100%;
+}
+.icons {
+position: relative;
+bottom: 397px;
+left: 75px;
+transform: translate(-50%, -50%);
+opacity: 0;
+
+
+}
+.bookmark {
+opacity: 0;
+margin-right: 1px;
+}
+.overlay:hover .bookmark{
+opacity: 1; 
+
+}
+
+.bookmark.active {
+opacity: 2; 
+color: red;
+}
+
+
+
+
+
+.text {
+   
+    margin-right: 5px;
+    
+    opacity: 0.5;
+    line-height: 24px;
+
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  justify-content: center;
+  position: relative;
+ bottom: 10px;
+
+    
+}
+
+.info {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 15px 0;
+  display: flex;
+}
+
+.info .infoItem {
+  margin-right: 10px;
+  display: flex;
+  flex-flow: row wrap;
+  
+}
+.icons .bookmark.active {
+display: block;
+}
+.movie-poster:hover + .icons {
+opacity: 1;
+}
+
+.movie-poster {
+  position: relative;
+  display: inline-block;
+}
+
+.description-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.movie-poster:hover .description-overlay {
+  opacity: 1;
+}
+
+.shortDescription {
+  max-width: 100%;
+  padding: 20px;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+p {
+  word-wrap: break-word;
+  opacity: 0.7;
+    line-height: 24px;
+
+}
+
+
+
+.circle_progress {
+  position: absolute;
+  bottom: 70px;
+  left: 10px;
+  color: #ffffff;
+}
+
+
+
+.movie-poster {
+  text-align: center;
+  border-radius: 8px;
+  margin-right: 30px;
+}
+
+.poster-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 11px;
+}
+
+.movie-details {
+  padding-top: 10px;
+  width: 100%;
+  color: white;
+  height: 80px;
+}
+
+.movie-name {
+  font-size: 19px;
+  margin-bottom: 5px;
+  position: relative;
+  bottom: 90px;
+  font-weight: bold;
+  width: 180px;
+}
+
+.movie-info {
+  display: flex;
+  align-items: center;
+}
+
+.year {
+  font-size: 16px;
+  color: #888;
+  position: relative;
+  bottom: 90px;
 }
 </style>
