@@ -51,15 +51,18 @@
               <td class="Rating">
                 <div style="display: flex; margin-top: -30px;">
                   <Rating 
-                  v-model="movie.like" 
-                  :stars="10" 
-                  :cancel="false" 
-                  :readonly="true" 
-                  class="custom-rating" 
+                    v-model="movie.like" 
+                    :stars="10" 
+                    :cancel="false" 
+                    :readonly="true" 
+                    class="custom-rating" 
                   />
-
-                  <img src="https://primefaces.org/cdn/primevue/images/rating/cancel.png" height="24" width="24"
-                    @click="removeRating(movie.id)" />
+                  <img 
+                    src="https://primefaces.org/cdn/primevue/images/rating/cancel.png" 
+                    height="24" 
+                    width="24"
+                    @click="removeRating(movie.id)" 
+                  />
                 </div>
               </td>
             </tr>

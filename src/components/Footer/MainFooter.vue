@@ -66,7 +66,10 @@
               <font-awesome-icon icon="fa-brands fa-whatsapp"  class="icn"/>
             </a>
             <a href="#" target="_blank" rel="noopener noreferrer">
-              <font-awesome-icon icon="fa-brands fa-github" class="icn" />
+              <font-awesome-icon 
+              icon="fa-brands fa-github" 
+              class="icn" 
+              />
             </a>
             <a href="#" target="_blank" rel="noopener noreferrer">
               <font-awesome-icon icon="fa-brands fa-gitlab icn" class="icn" />
