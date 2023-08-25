@@ -1,65 +1,91 @@
 <template>
   <div class="container">
     <div class="title_container">
-      <h2 class="title" v-if="titles[this.$route.path]">{{ titles[this.$route.path] }}</h2>
-       <!-- Опции сортировки фильмов -->
+      <h2 class="title" v-if="titles[this.$route.path]">
+        {{ titles[this.$route.path] }}
+      </h2>
+      <!-- Опции сортировки фильмов -->
       <div class="sort-options">
         <!-- Выпадающий список с опциями сортировки, реализованный с помощью компонента Dropdown -->
         <!-- Изменение сортировки приводит к вызову метода sortMovies -->
-        <Dropdown 
-        :class="['custom-dropdown', 'w-full', 'md:w-14rem', 'p-dropdown-indigo']" 
-        v-model="selectedSortOption"
-        :options="sortOptions" 
-        optionLabel="label" 
-        optionValue="value" 
-        @change="sortMovies" 
-        placeholder="Сортировать по"
-        class=" custom-dropdown w-full md:w-14rem">
+        <Dropdown
+          :class="[
+            'custom-dropdown',
+            'w-full',
+            'md:w-14rem',
+            'p-dropdown-indigo',
+          ]"
+          v-model="selectedSortOption"
+          :options="sortOptions"
+          optionLabel="label"
+          optionValue="value"
+          @change="sortMovies"
+          placeholder="Сортировать по"
+          class="custom-dropdown w-full md:w-14rem"
+        >
         </Dropdown>
-  <!-- Иконки для изменения порядка сортировки (по возрастанию или убыванию) -->
-        <font-awesome-icon icon="arrow-up-9-1" v-if="sortOrder === 'asc'" @click="updateSortOrder('desc')"
-          class="icon_select" />
-        <font-awesome-icon icon="arrow-up-1-9" v-else @click="updateSortOrder('asc')" class="icon_select" />
+        <!-- Иконки для изменения порядка сортировки (по возрастанию или убыванию) -->
+        <font-awesome-icon
+          icon="arrow-up-9-1"
+          v-if="sortOrder === 'asc'"
+          @click="updateSortOrder('desc')"
+          class="icon_select"
+        />
+        <font-awesome-icon
+          icon="arrow-up-1-9"
+          v-else
+          @click="updateSortOrder('asc')"
+          class="icon_select"
+        />
       </div>
     </div>
     <!-- Список фильмов -->
     <ul class="movie-list">
-      <li v-for="(movie, index) in displayedMovies" :key="movie.id"
-        :class="{ 'movie-item': true, 'new-row': index % 5 === 0 }">
-
-        <router-link :movie="movie" :to="{ name: 'movie-details', params: { id: movie.id } }"
-          style="cursor: pointer; text-decoration: none; list-style-type: none;">
+      <li
+        v-for="(movie, index) in displayedMovies"
+        :key="movie.id"
+        :class="{ 'movie-item': true, 'new-row': index % 5 === 0 }"
+      >
+        <router-link
+          :movie="movie"
+          :to="{ name: 'movie-details', params: { id: movie.id } }"
+          style="cursor: pointer; text-decoration: none; list-style-type: none"
+        >
           <div class="movie">
-
-      <!-- Блок с информацией о фильме, включая изображение, название и рейтинг -->
+            <!-- Блок с информацией о фильме, включая изображение, название и рейтинг -->
             <div class="movie-poster">
-              <img :src="movie.poster.url" alt="Постер фильма" class="poster-image">
+              <img
+                :src="movie.poster.url"
+                alt="Постер фильма"
+                class="poster-image"
+              />
               <div class="movie-details">
-                   <!-- Рейтинг фильма, отображенный в виде кругового прогресса -->
-                <circle-progress 
-                class="circle_progress" 
-                :viewport="true" 
-                :on-viewport="movie.rating.kp.toFixed(1)"
-                  :size="60" 
-                  :background="'white'" 
-                  :is-gradient="true" 
-                  :percent="movie.rating.kp * 10" 
+                <!-- Рейтинг фильма, отображенный в виде кругового прогресса -->
+                <circle-progress
+                  class="circle_progress"
+                  :viewport="true"
+                  :on-viewport="movie.rating.kp.toFixed(1)"
+                  :size="60"
+                  :background="'white'"
+                  :is-gradient="true"
+                  :percent="movie.rating.kp * 10"
                   :gradient="{
                     angle: 90,
                     startColor: '#ff0000',
-                    stopColor: '#ffff00'
-                  }" 
-                  :is-bg-shadow="true" 
+                    stopColor: '#ffff00',
+                  }"
+                  :is-bg-shadow="true"
                   :bg-shadow="{
                     inset: true,
                     vertical: 2,
                     horizontal: 2,
                     blur: 4,
-                    opacity: .4,
-                    color: '#000000'
-                  }" 
-                  :border-width="5" 
-                  :border-bg-width="5">
+                    opacity: 0.4,
+                    color: '#000000',
+                  }"
+                  :border-width="5"
+                  :border-bg-width="5"
+                >
                 </circle-progress>
                 <span class="ratingtext">{{ movie.rating.kp.toFixed(1) }}</span>
               </div>
@@ -67,7 +93,14 @@
 
             <!-- Дополнительная информация о фильме -->
 
-            <div style="cursor: pointer; text-decoration: none; list-style-type: none; color: white">
+            <div
+              style="
+                cursor: pointer;
+                text-decoration: none;
+                list-style-type: none;
+                color: white;
+              "
+            >
               <h2 class="movie-name">{{ movie.name }}</h2>
               <div class="genres">
                 <div v-for="genre in movie.genres" :key="genre">
@@ -75,34 +108,51 @@
                 </div>
               </div>
               <p>{{ movie.description }}</p>
-               <!-- Дополнительная информация о фильме, такая как страна, длительность и год выпуска -->
+              <!-- Дополнительная информация о фильме, такая как страна, длительность и год выпуска -->
               <div class="row">
                 <div class="info">
                   <div class="infoItem dropdown-movieLength">
-                    <span class="text bold"><font-awesome-icon icon="globe" /></span>
+                    <span class="text bold"
+                      ><font-awesome-icon icon="globe"
+                    /></span>
                     <span class="text">{{ movie.country }}</span>
                   </div>
                   <div class="infoItem">
-                    <span class="text bold"><font-awesome-icon icon="clock" /></span>
-                    <span class="text">{{ convertMinutesToHours(movie.movieLength) }}</span>
+                    <span class="text bold"
+                      ><font-awesome-icon icon="clock"
+                    /></span>
+                    <span class="text">{{
+                      convertMinutesToHours(movie.movieLength)
+                    }}</span>
                   </div>
                   <div class="infoItem">
-                    <span class="text bold"><font-awesome-icon icon="calendar-days" /></span>
+                    <span class="text bold"
+                      ><font-awesome-icon icon="calendar-days"
+                    /></span>
                     <span class="text">{{ movie.year }}</span>
                   </div>
                 </div>
-
               </div>
               <!-- Рейтинг фильма на различных платформах -->
-              <div class="row raiting" style="position: relative; bottom: 30px;">
+              <div class="row raiting" style="position: relative; bottom: 30px">
                 <div class="info">
-
                   <div class="infoItem">
-                    <span class="text bold"><font-awesome-icon icon="fa-brands fa-imdb" size="2xl"
-                        style="background: #1c4b91;" /></span>
-                    <span class="text" style="display: flex; align-items: center;">{{ movie.rating.imdb }}</span>
+                    <span class="text bold"
+                      ><font-awesome-icon
+                        icon="fa-brands fa-imdb"
+                        size="2xl"
+                        style="background: #1c4b91"
+                    /></span>
+                    <span
+                      class="text"
+                      style="display: flex; align-items: center"
+                      >{{ movie.rating.imdb }}</span
+                    >
                   </div>
-                  <div class="infoItem" style="display: flex; align-items: center;">
+                  <div
+                    class="infoItem"
+                    style="display: flex; align-items: center"
+                  >
                     <span class="text bold">kp:</span>
                     <span class="text">{{ movie.rating.kp }}</span>
                   </div>
@@ -114,27 +164,35 @@
       </li>
     </ul>
     <div class="pagination">
-      <Paginator  :template="{
-                '640px': 'PrevPageLink CurrentPageReport NextPageLink',
-               
-                default: 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink'
-            }" 
-            v-model:first="currentPage" 
-            :rows="1" 
-            :totalRecords="totalPages" />
+      <Paginator
+        :template="{
+          '640px': 'PrevPageLink CurrentPageReport NextPageLink',
+
+          default:
+            'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink',
+        }"
+        v-model:first="currentPage"
+        :rows="1"
+        :totalRecords="totalPages"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import "primevue/resources/primevue.min.css";
-import { mapState, mapActions } from 'vuex';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faBookmark, faHeart, faArrowUp91, faArrowUp19 } from '@fortawesome/free-solid-svg-icons';
+import { mapState, mapActions } from "vuex";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faBookmark,
+  faHeart,
+  faArrowUp91,
+  faArrowUp19,
+} from "@fortawesome/free-solid-svg-icons";
 import CircleProgress from "vue3-circle-progress";
-import Paginator from 'primevue/paginator';
-import Dropdown from 'primevue/dropdown';
+import Paginator from "primevue/paginator";
+import Dropdown from "primevue/dropdown";
 
 library.add(faArrowUp91);
 library.add(faArrowUp19);
@@ -153,41 +211,48 @@ export default {
       itemsPerPage: 10,
       currentPage: 0,
       sortOptions: [
-        { value: 'Сортировать по', label: 'Сортировать по' },
-        { value: 'year', label: 'Год' },
-        { value: 'rating.kp', label: 'Рейтинг' },
-        { value: 'movieLength', label: 'Длительность' }
+        { value: "Сортировать по", label: "Сортировать по" },
+        { value: "year", label: "Год" },
+        { value: "rating.kp", label: "Рейтинг" },
+        { value: "movieLength", label: "Длительность" },
       ],
-      selectedSortOption: 'Сортировать по',
-      sortOrder: 'asc',
+      selectedSortOption: "Сортировать по",
+      sortOrder: "asc",
       isLoading: false,
       titles: {
-        '/movie': 'Фильмы',
-        '/cartoon': 'Мультфильмы',
-        '/tv-series': 'Сериалы',
-        '/Comedy': 'Комедии',
-        '/Боевик': 'Боевики',
-        '/Драма': 'Драмы',
-        '/Фэнтези': 'Фэнтези',
-        '/Фантастика': 'Фантастика',
-        '/Adventures': 'Приключения',
+        "/movie": "Фильмы",
+        "/cartoon": "Мультфильмы",
+        "/tv-series": "Сериалы",
+        "/Comedy": "Комедии",
+        "/Боевик": "Боевики",
+        "/Драма": "Драмы",
+        "/Фэнтези": "Фэнтези",
+        "/Фантастика": "Фантастика",
+        "/Adventures": "Приключения",
       },
     };
   },
   computed: {
-    ...mapState(['movies', 'searchQuery']),
-  // Фильтрация фильмов в зависимости от текущего пути маршрута
+    ...mapState(["movies", "searchQuery"]),
+    // Фильтрация фильмов в зависимости от текущего пути маршрута
     filteredM() {
       const routePath = this.$route.path;
-      const validGenres = ['Comedy', 'Drama', 'Fantasy', 'Fiction', 'Action movie','Adventures'];
+      const validGenres = [
+        "Comedy",
+        "Drama",
+        "Fantasy",
+        "Fiction",
+        "Action movie",
+        "Adventures",
+      ];
 
-      return this.movies.filter(movie => {
-        if (routePath === '/movie') {
-          return movie.type === 'movie';
-        } else if (routePath === '/cartoon') {
-          return movie.type === 'cartoon' || movie.type === 'animated-series';
-        } else if (routePath === '/tv-series') {
-          return movie.type === 'tv-series';
+      return this.movies.filter((movie) => {
+        if (routePath === "/movie") {
+          return movie.type === "movie";
+        } else if (routePath === "/cartoon") {
+          return movie.type === "cartoon" || movie.type === "animated-series";
+        } else if (routePath === "/tv-series") {
+          return movie.type === "tv-series";
         } else if (validGenres.includes(routePath.substring(1))) {
           return movie.genres.includes(routePath.substring(1));
         }
@@ -195,7 +260,7 @@ export default {
         return false;
       });
     },
-// Общее количество фильмов
+    // Общее количество фильмов
     totalMovies() {
       return this.movies.length;
     },
@@ -203,18 +268,20 @@ export default {
     totalPages() {
       return Math.ceil(this.filteredM.length / this.itemsPerPage);
     },
-  
+
     displayedMovies() {
-      const startIndex = (this.currentPage) * this.itemsPerPage;
+      const startIndex = this.currentPage * this.itemsPerPage;
       return this.filteredM.slice(startIndex, startIndex + this.itemsPerPage);
     },
-    
   },
   methods: {
-    ...mapActions(['searchMovies', 'searchQuery']),
+    ...mapActions(["searchMovies", "searchQuery"]),
 
     updateDisplayedMovies() {
-      this.displayedMovies = this.movies.slice(this.startIndex, this.endIndex + 1);
+      this.displayedMovies = this.movies.slice(
+        this.startIndex,
+        this.endIndex + 1
+      );
     },
 
     convertMinutesToHours(minutes) {
@@ -227,14 +294,14 @@ export default {
       this.displayedMovies.sort((a, b) => {
         const aValue = this.getPropertyValue(a, this.selectedSortOption);
         const bValue = this.getPropertyValue(b, this.selectedSortOption);
-        if (this.sortOrder === 'asc') {
-          if (typeof aValue === 'string' && typeof bValue === 'string') {
+        if (this.sortOrder === "asc") {
+          if (typeof aValue === "string" && typeof bValue === "string") {
             return aValue.localeCompare(bValue);
           } else {
             return aValue - bValue;
           }
         } else {
-          if (typeof aValue === 'string' && typeof bValue === 'string') {
+          if (typeof aValue === "string" && typeof bValue === "string") {
             return bValue.localeCompare(aValue);
           } else {
             return bValue - aValue;
@@ -242,15 +309,14 @@ export default {
         }
       });
     },
-     // Обновление порядка сортировки и применение сортировки
+    // Обновление порядка сортировки и применение сортировки
     updateSortOrder(order) {
       this.sortOrder = order;
       this.sortMovies();
     },
 
-
     getPropertyValue(object, path) {
-      const keys = path.split('.');
+      const keys = path.split(".");
       let value = object;
       for (const key of keys) {
         value = value[key];
@@ -261,13 +327,9 @@ export default {
     setCurrentPage(pageNumber) {
       this.currentPage = pageNumber;
     },
-
-
   },
- 
 };
 </script>
-
 
 <style scoped>
 .custom-dropdown::after {
@@ -308,7 +370,6 @@ export default {
   flex-flow: row wrap;
 }
 
-
 .pagination {
   display: flex;
   justify-content: center;
@@ -333,7 +394,6 @@ export default {
   color: #ffffff;
 }
 
-
 .ratingtext {
   position: relative;
   bottom: 110px;
@@ -357,7 +417,6 @@ export default {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-
 }
 
 .title {
@@ -365,7 +424,7 @@ export default {
 }
 
 .title::before {
-  content: '';
+  content: "";
   position: absolute;
   width: 75%;
   height: 2px;
@@ -397,7 +456,6 @@ export default {
   color: #fff;
 }
 
-
 .movie-item {
   padding: 20px;
 }
@@ -406,18 +464,14 @@ export default {
   text-align: center;
   border-radius: 8px;
   margin-right: 30px;
-
 }
 
 .poster-image {
   max-width: 150px;
   border-radius: 11px;
-
-
 }
 
 .movie-details {
-
   padding-top: 10px;
   width: 100%;
   color: white;
@@ -428,9 +482,7 @@ export default {
   font-size: 25px;
   margin-bottom: 5px;
 
-
   font-weight: bold;
-
 }
 
 .genres {
@@ -472,21 +524,17 @@ export default {
 @media (max-width: 768px) {
   .movie {
     flex-direction: column;
-
   }
 
   .poster-image {
     max-width: 60%;
     height: auto;
     border-radius: 11px;
-
   }
 
   .movie-details {
-
     display: none;
   }
-
 }
 
 .row {
@@ -499,13 +547,7 @@ export default {
   margin-right: 10px;
 }
 
-
 .ratingtext {
   margin-left: 5px;
 }
 </style>
-
-
-
-
-  

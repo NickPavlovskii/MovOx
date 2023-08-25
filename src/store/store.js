@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-
+import sortOption from 'src/store/modules/SortOption.js';  
 // Функция для имитации асинхронного получения данных о фильмах
 const fetchMoviesData = () => {
   return new Promise((resolve) => {
@@ -21,6 +21,9 @@ const setLocalStorageItem = (key, value) => {
 };
 
 const store = createStore({
+  modules: {
+    movies: sortOption,
+  },
   state() {
     return {
       // Загрузка фильмов из JSON
@@ -40,12 +43,13 @@ const store = createStore({
           const movieId = key.split('_')[1];
           const movie = state.movies.find(movie => movie.id === movieId);
           if (movie) {
-            ratedMovies.push(movie);
+            ratedMovies.push({ ...movie, like: parseInt(value) }); // Добавляем поле "like" с оценкой
           }
         }
       }
       return ratedMovies;
     },
+    
 
     // Получение списка фильмов в закладках из ratings
     getBookmarkedMovies: state => {
@@ -100,24 +104,24 @@ const store = createStore({
     setSearchQuery(state, query) {
       state.searchQuery = query;
     },
-    // Переключение "Лайка" фильма и обновление LocalStorage
-    toggleLike(state, movieId) {
-      const moviesList = state.searchQuery ? state.filteredMovies : state.movies;
-      const index = moviesList.findIndex((movie) => movie.id === movieId);
+    async toggleLike() {
+      const isLiked = this.isMovieRated(this.movie.id);
+      const actionType = isLiked ? 'removeFromRatings' : 'addToRatings';
+      const key = `rating_${this.movie.id}`;
+      
+      await this.$store.dispatch(actionType, { key });
+  
+      // You can also update the local state if necessary
+      this.movie.isLiked = !this.movie.isLiked;
+  
+      // Update the LocalStorage
       const ratings = getLocalStorageItem('ratings');
-      if (index !== -1) {
-        const movie = moviesList[index];
-        movie.isLiked = !movie.isLiked;
-        moviesList.splice(index, 1, movie);
-
-        // Обновление оценки в LocalStorage
-        if (movie.isLiked) {
-          ratings[`rating_${movieId}`] = 'true';
-        } else {
-          delete ratings[`rating_${movieId}`];
-        }
-        setLocalStorageItem('ratings', ratings);
+      if (this.movie.isLiked) {
+        ratings[key] = 'true';
+      } else {
+        delete ratings[key];
       }
+      setLocalStorageItem('ratings', ratings);
     },
   },
   actions: {

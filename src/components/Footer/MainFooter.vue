@@ -3,75 +3,76 @@
     <div class="footer-content">
       <div class="footer-column">
         <h4>О нас</h4>
-        <p>Добро пожаловать на наш сайт поиска кино!
-          Исследуйте бесконечную вселенную фильмов и найдите идеальный жанр для себя.
-          У нас есть огромный каталог фильмов, включающий все возможные жанры,
-          чтобы удовлетворить самый разнообразный вкус.</p>
+        <p>
+          Добро пожаловать на наш сайт поиска кино! Исследуйте бесконечную
+          вселенную фильмов и найдите идеальный жанр для себя. У нас есть
+          огромный каталог фильмов, включающий все возможные жанры, чтобы
+          удовлетворить самый разнообразный вкус.
+        </p>
       </div>
       <div class="footer-column">
         <h4>Категории</h4>
-        <ul style="display: flex; flex-direction: column;  ">
-        
-          <router-link 
-          :to="{ path: '/Action movie' }" 
-          style="color: white; text-decoration: none;" 
+        <ul style="display: flex; flex-direction: column">
+          <router-link
+            :to="{ path: '/Action movie' }"
+            style="color: white; text-decoration: none"
           >
-            <a>Боевик</a> 
+            <a>Боевик</a>
           </router-link>
-          <router-link 
-          :to="{ path: '/Comedy' }" 
-          style="color: white; text-decoration: none;"
+          <router-link
+            :to="{ path: '/Comedy' }"
+            style="color: white; text-decoration: none"
           >
             <a>Комедия</a>
           </router-link>
-          <router-link 
-          :to="{ path: '/Drama' }" 
-          style="color: white; text-decoration: none;"
+          <router-link
+            :to="{ path: '/Drama' }"
+            style="color: white; text-decoration: none"
           >
-            <a>Драма</a> 
+            <a>Драма</a>
           </router-link>
-          <router-link 
-          :to="{ path: '/Fantasy' }" 
-          style="color: white; text-decoration: none;"
+          <router-link
+            :to="{ path: '/Fantasy' }"
+            style="color: white; text-decoration: none"
           >
             <a>Фэнтези</a>
           </router-link>
-          <router-link 
-          :to="{ path: '/Fiction' }" 
-          style="color: white; text-decoration: none;"
+          <router-link
+            :to="{ path: '/Fiction' }"
+            style="color: white; text-decoration: none"
           >
             <a>Фантастика</a>
           </router-link>
-          <router-link 
-          :to="{ path: '/Adventures' }" 
-          style="color: white; text-decoration: none;"
+          <router-link
+            :to="{ path: '/Adventures' }"
+            style="color: white; text-decoration: none"
           >
             <a>Приключения</a>
           </router-link>
         </ul>
       </div>
-     
+
       <div class="footer-column">
         <h4>Контакты</h4>
         <p>Email: o_oniklado_o@list.ru</p>
         <p>Телефон: 89816921718</p>
         <div class="social-links">
-            <a href="#" target="_blank" rel="noopener noreferrer">
-              <font-awesome-icon icon="fa-brands fa-vk icn"  class="icn"/>
-            </a>
-            <a href="https://t.me/N1klad">
-        <font-awesome-icon icon="fa-brands fa-telegram icn" class="icn" />
-      </a>
-            <a href="#" target="_blank" rel="noopener noreferrer">
-              <font-awesome-icon icon="fa-brands fa-whatsapp"  class="icn"/>
-            </a>
-            <a href="#" target="_blank" rel="noopener noreferrer">
-              <font-awesome-icon icon="fa-brands fa-github" class="icn" />
-            </a>
-            <a href="#" target="_blank" rel="noopener noreferrer">
-              <font-awesome-icon icon="fa-brands fa-gitlab icn" class="icn" />
-            </a>
-          </div>
+          <a href="#" target="_blank" rel="noopener noreferrer">
+            <font-awesome-icon icon="fa-brands fa-vk icn" class="icn" />
+          </a>
+          <a href="https://t.me/N1klad">
+            <font-awesome-icon icon="fa-brands fa-telegram icn" class="icn" />
+          </a>
+          <a href="#" target="_blank" rel="noopener noreferrer">
+            <font-awesome-icon icon="fa-brands fa-whatsapp" class="icn" />
+          </a>
+          <a href="#" target="_blank" rel="noopener noreferrer">
+            <font-awesome-icon icon="fa-brands fa-github" class="icn" />
+          </a>
+          <a href="#" target="_blank" rel="noopener noreferrer">
+            <font-awesome-icon icon="fa-brands fa-gitlab icn" class="icn" />
+          </a>
+        </div>
       </div>
     </div>
     <div class="footer-bottom">
@@ -79,43 +80,41 @@
     </div>
   </footer>
 </template>
-  
-<script>
 
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { 
-  faGithub, 
-  faInstagram, 
-  faDiscord, 
-  faWhatsapp, 
-  faVk, 
-  faTelegram, 
-  faGitlab } 
-  from '@fortawesome/free-brands-svg-icons';
+<script>
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faGithub,
+  faInstagram,
+  faDiscord,
+  faWhatsapp,
+  faVk,
+  faTelegram,
+  faGitlab,
+} from "@fortawesome/free-brands-svg-icons";
 library.add(
   faGithub,
- faInstagram, 
- faDiscord, 
- faWhatsapp, 
- faVk, 
- faTelegram, 
- faGitlab);
+  faInstagram,
+  faDiscord,
+  faWhatsapp,
+  faVk,
+  faTelegram,
+  faGitlab
+);
 export default {
   components: {
     FontAwesomeIcon,
   },
-}
+};
 </script>
-  
-  
+
 <style lang="scss" scoped>
 .footer {
   background-color: #020c1b;
   color: #ffffff;
   padding: 20px;
 }
-
 
 .footer-content {
   display: flex;
@@ -137,10 +136,10 @@ export default {
 }
 @media (max-width: 768px) {
   .footer p {
-  margin-bottom: 5px;
-  width: 100%;
-}
+    margin-bottom: 5px;
+    width: 100%;
   }
+}
 .footer ul {
   list-style: none;
   padding: 0;
@@ -169,9 +168,8 @@ export default {
 
 .footer-bottom {
   margin-top: 20px;
-  display: flex ;
+  display: flex;
   text-align: center;
   justify-content: center;
 }
 </style>
-  

@@ -264,12 +264,15 @@ export default {
   },
   methods: {
     ...mapActions(['fetchMovies']),
+    ...mapActions(['toggleRating', 'toggleBookmark']),
     // Сохраняем рейтинг в LocalStorage, когда пользователь оценивает фильм
     resetRating() {
       this.rating = 0;
     },
+  
+   
     saveRating() {
-      this.$store.dispatch('toggleRating', { movieId: this.movie.id, isLiked: true });
+      this.toggleRating({ movieId: this.movie.id, isLiked: true });
       localStorage.setItem(this.ratingKey, this.rating);
     },
     toggleBookmark() {
