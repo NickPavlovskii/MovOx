@@ -66,10 +66,12 @@
    </div>
    
    <ul  class="movie-list ">
+
      <li 
      v-for="(movie) in displayedMovies" 
      :key="movie.id" 
-     :class="{'movie-item': true}">
+     :class="{'movie-item': true}"
+     >
        <MovieCard :movie="movie" />
      </li>
    </ul>
@@ -78,7 +80,6 @@
    <Paginator
    :template="{
                 '640px': 'PrevPageLink CurrentPageReport NextPageLink',
-               
                 default: 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink'
             }"
    v-model:first="currentPage "
@@ -129,9 +130,10 @@ export default {
  },
  computed: {
    ...mapState([
-   'filteredMovies', 
-   'searchQuery', 
-   'movies']),
+    'filteredMovies', 
+    'searchQuery', 
+    'movies'
+  ]),
    ...mapGetters(['getMovieById']),
 
    totalPages() {
@@ -166,8 +168,10 @@ return sortedMovies.slice(startIndex, startIndex + this.itemsPerPage);
  },
  mounted() {
   this.fetchMovies(); 
-    this.searchMovies(); 
+  this.searchMovies(); 
  },
+
+
  methods: {
    ...mapActions(['fetchMovies', 'searchMovies']),
    sortMovie() {
@@ -265,7 +269,6 @@ return sortedMovies.slice(startIndex, startIndex + this.itemsPerPage);
   
 .custom-dropdown{
  width: 200px;
-
  color: #fff;
 }
 
@@ -273,7 +276,6 @@ return sortedMovies.slice(startIndex, startIndex + this.itemsPerPage);
   max-width: 960px;
   margin: 0 auto;
   padding: 20px;
-
   color: #fff;
 }
 .container_title{
