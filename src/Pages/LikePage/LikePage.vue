@@ -3,37 +3,36 @@
     <div class="movie-list">
           <!-- Section for bookmarked movies -->
       <div class="section Bookmark" v-if="this.bookmarkedMovies.length > 0 ">
-
         <div class="title_container">
-          <h2 class="title"><font-awesome-icon icon="fa-solid fa-film" /> Посмотреть позже</h2>
+          <h2 class="title"><font-awesome-icon icon="fa-solid fa-film" />Посмотреть позже</h2>
         </div>
         <ul class="movie-card-list">
-          <li v-for="movie in paginatedBookmarkedMovies" :key="movie.id" class="movie-card-item">
+          <li 
+            v-for="movie in paginatedBookmarkedMovies" 
+            :key="movie.id" 
+            class="movie-card-item"
+          >
             <MovieCard :movie="movie" />
           </li>
         </ul>
         <div class="pagination">
           <Paginator 
-          :template="{
-                '640px': 'PrevPageLink CurrentPageReport NextPageLink',
-               
-                default: 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink'
-            }"
-          v-model:first="currentPageBookmarked" 
-          :rows="1" 
-          :totalRecords="bookmarkedPages" 
+            :template="{
+                  '640px': 'PrevPageLink CurrentPageReport NextPageLink',
+                  default: 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink'
+              }"
+            v-model:first="currentPageBookmarked" 
+            :rows="1" 
+            :totalRecords="bookmarkedPages" 
           />
         </div>
-
       </div>
-
       <ClapperboardIcon v-if="this.ratedMovies.length > 0 && this.bookmarkedMovies.length > 0 " style="margin-top: 40px;margin-bottom: -80px;" />
      <!-- Section for rated movies -->
       <div class="section like" v-if="this.ratedMovies.length > 0 ">  
         <div class="title_container">
           <h2 class="title"><font-awesome-icon icon="fa-solid fa-star" /> Оцененные фильмы</h2>
         </div>
-
         <table class="table" style="margin: auto;">
           <thead>
             <tr>
@@ -46,20 +45,22 @@
             <tr v-for="movie in paginatedRatedMovies" :key="movie.id">
               <td>
                 <MovieCard :movie="movie" style="width: 250px; " />
-
               </td>
               <td class="Rating">
                 <div style="display: flex; margin-top: -30px;">
                   <Rating 
-                  v-model="movie.like" 
-                  :stars="10" 
-                  :cancel="false" 
-                  :readonly="true" 
-                  class="custom-rating" 
+                    v-model="movie.like" 
+                    :stars="10" 
+                    :cancel="false" 
+                    :readonly="true" 
+                    class="custom-rating" 
                   />
-
-                  <img src="https://primefaces.org/cdn/primevue/images/rating/cancel.png" height="24" width="24"
-                    @click="removeRating(movie.id)" />
+                  <img 
+                    src="https://primefaces.org/cdn/primevue/images/rating/cancel.png" 
+                    height="24" 
+                    width="24"
+                    @click="removeRating(movie.id)" 
+                  />
                 </div>
               </td>
             </tr>
@@ -67,9 +68,10 @@
         </table>
         <div class="pagination">
           <Paginator 
-          v-model:first="currentPageRated" 
-          :rows="1" 
-          :totalRecords="ratedPages" />
+            v-model:first="currentPageRated" 
+            :rows="1" 
+            :totalRecords="ratedPages" 
+          />
         </div>
 
       </div>
@@ -171,7 +173,6 @@ export default {
       if (movie) {
         movie.rating = rating;
         localStorage.setItem(`rating_${movie.id}`, rating.toString());
-        localStorage.setItem(`rating_date_${movie.id}`, new Date().toISOString());
         localStorage.setItem('movies', JSON.stringify(this.movies));
       }
     },
@@ -184,14 +185,8 @@ export default {
         localStorage.setItem('movies', JSON.stringify(this.movies));
       }
     },
-     // Get the rating date of a rated movie from local storage and format it
-    getRatingDate(movieId) {
-      const ratingDate = localStorage.getItem(`rating_date_${movieId}`);
-      if (ratingDate) {
-        return new Date(ratingDate).toLocaleDateString();
-      }
-      return '';
-    },
+    
+
   },
 };
 </script>
