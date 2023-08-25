@@ -61,10 +61,7 @@ export default {
     },
    
   },
-    mounted() {
-      this.searchMovies();
-      this.$store.dispatch('movies/fetchMovieList');
-    }
+ 
 
   };
 </script>

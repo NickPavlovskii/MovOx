@@ -7,14 +7,15 @@
     <div class="wrapper">
       <i id="left" @click="scrollLeft"><font-awesome-icon icon="arrow-left" /></i>
       <div 
-      class="carousel" 
-      @mousedown="dragStart" 
-      @touchstart="dragStart" 
-      @mousemove="dragging" 
-      @touchmove="dragging"
-      @mouseup="dragStop" 
-      @touchend="dragStop" 
-      :class="{ 'dragging': isDragging }">
+        class="carousel" 
+        @mousedown="dragStart" 
+        @touchstart="dragStart" 
+        @mousemove="dragging" 
+        @touchmove="dragging"
+        @mouseup="dragStop" 
+        @touchend="dragStop" 
+        :class="{ 'dragging': isDragging }"
+      >
         <div class="movie-poster" v-for="movie in latestMovies" :key="movie.id">
           <MovieCard :movie="movie" />
         </div>
