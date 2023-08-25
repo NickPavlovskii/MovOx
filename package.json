@@ -24,7 +24,6 @@
     "vue-circular-progress": "^1.0.0",
     "vue-icons": "^2.0.0",
     "vue-router": "^4.2.2",
-    "vue-select": "^4.0.0-beta.6",
     "vue3-circle-progress": "^1.0.7",
     "vuejs-paginate": "^2.1.0",
     "vuex": "^4.1.0"

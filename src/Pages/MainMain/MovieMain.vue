@@ -52,17 +52,12 @@ export default {
    
     ...mapActions(['fetchMovies', 'searchMovies']),
     
-
-
     async searchMovies() {
       this.isLoading = true; 
       await this.$store.dispatch('searchMovies');
       this.isLoading = false; 
     },
-   
   },
- 
-
   };
 </script>
 

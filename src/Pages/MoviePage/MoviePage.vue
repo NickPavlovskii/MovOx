@@ -5,7 +5,11 @@
 
       <div class="backdrop-img">
         <div class="lazy-load-image-background">
-          <img :src="movie.poster.url" alt="Movie Poster" class="posterImg">
+          <img 
+            :src="movie.poster.url" 
+            alt="Movie Poster" 
+            class="posterImg"
+          >
         </div>
       </div>
       <div class="opacity-layer"></div>
@@ -21,11 +25,23 @@
               <h3 style="margin: 25px -2px -2px -2px">Поставьте оценку</h3>
               <span class="text">Это улучшит ваши рекомендации</span>
             </div>
+                 <!-- Компонент для выбора оценки (звезды) -->
             <div style="display: flex;">
-              <img src="https://primefaces.org/cdn/primevue/images/rating/cancel.png" height="24" width="24"
-                @click="resetRating" style="position: relative; top: 8px;" />
-              <!-- Компонент для выбора оценки (звезды) -->
-              <Rating v-model="rating" :stars="10" @input="saveRating" class="custom-rating" :cancel=false />
+              <img 
+                src="https://primefaces.org/cdn/primevue/images/rating/cancel.png" 
+                height="24" 
+                width="24"
+                @click="resetRating" 
+                style="position: relative; top: 8px;" 
+              />
+         
+              <Rating 
+                v-model="rating" 
+                :stars="10" 
+                @input="saveRating" 
+                class="custom-rating" 
+                :cancel=false 
+              />
             </div>
             <!-- Кнопка "Смотреть позже" (добавление фильма в закладки) -->
             <div style="display: flex; justify-content: flex-end;">
@@ -37,6 +53,7 @@
                 </span>
               </button>
             </div>
+
           </div>
         </div>
         <!-- Правая часть баннера с основной информацией о фильме -->
@@ -165,7 +182,7 @@
 import RecommendSection from '../../components/RecommendSection.vue';
 import { Icon } from '@iconify/vue';
 import { mapState } from 'vuex';
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faClock, faCalendarDays, faGlobe, faBookmark } from '@fortawesome/free-solid-svg-icons';
@@ -221,7 +238,7 @@ export default {
   },
   computed: {
     ...mapState(['movies']),
-
+    ...mapGetters(['isMovieBookmarked']),
     movie() {
       // Получаем информацию о фильме на основе переданного id из маршрута
       const movieId = parseInt(this.$route.params.id);
@@ -237,6 +254,7 @@ export default {
     },
   },
   mounted() {
+    
     if (!this.movies.length) {
       this.fetchMovies();
     }
@@ -246,20 +264,20 @@ export default {
   },
   methods: {
     ...mapActions(['fetchMovies']),
+    ...mapActions(['toggleRating', 'toggleBookmark']),
     // Сохраняем рейтинг в LocalStorage, когда пользователь оценивает фильм
-    saveRating(rating) {
-      this.rating = rating;
-      const movieId = this.movie.id;
-      const localStorageKey = `rating_${movieId}`;
-      const ratingDateKey = `rating_date_${movieId}`;
-      const ratingDate = new Date().toISOString();
-
-      localStorage.setItem(localStorageKey, rating.toString());
-      localStorage.setItem(ratingDateKey, ratingDate);
-    },
-    // Сбрасываем значение рейтинга на null
     resetRating() {
-      this.rating = null;
+      this.rating = 0;
+    },
+  
+   
+    saveRating() {
+      this.toggleRating({ movieId: this.movie.id, isLiked: true });
+      localStorage.setItem(this.ratingKey, this.rating);
+    },
+    toggleBookmark() {
+      this.$store.dispatch('toggleRating', { movieId: this.movie.id, isLiked: false });
+      this.$store.dispatch('toggleBookmark', this.movie.id);
     },
     convertMinutesToHours(minutes) {
       const hours = Math.floor(minutes / 60);
@@ -267,10 +285,7 @@ export default {
       return `${hours}ч ${remainingMinutes}м`;
     },
     // Изменяем состояние закладки и обновляем LocalStorage соответственно
-    toggleBookmark(event) {
-      this.isBookmarked = !this.isBookmarked;
-      event.preventDefault();
-    },
+   
   },
 };
 </script>
