@@ -54,16 +54,16 @@ const store = createStore({
     },
   },
   actions: {
-    fetchMovies({ commit }) {
-      const moviesData = require('../components/kinopoisk.json');
-      commit('setMovies', moviesData.docs);
-    },
-    async searchMovies({ commit, state }) {
-      const movies = await fetchMoviesData();
-      const filteredMovies = movies.filter((movie) => {
-        return movie.name.toLowerCase().includes(state.searchQuery.toLowerCase());
-      });
-      commit('setFilteredMovies', filteredMovies);
+ async fetchMovies({ commit }) { 
+      const moviesData = await fetchMoviesData(); 
+      commit('setMovies', moviesData); 
+    }, 
+ 
+    async searchMovies({ commit, state }) { 
+      const filteredMovies = state.movies.filter((movie) => { 
+        return movie.name.toLowerCase().includes(state.searchQuery.toLowerCase()); 
+      }); 
+      commit('setFilteredMovies', filteredMovies); 
     },
    
   },

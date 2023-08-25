@@ -66,7 +66,10 @@
    </div>
    
    <ul  class="movie-list ">
-     <li v-for="(movie, index) in displayedMovies" :key="movie.id" :class="{'movie-item': true, 'new-row': index % 5 === 0}">
+     <li 
+     v-for="(movie) in displayedMovies" 
+     :key="movie.id" 
+     :class="{'movie-item': true}">
        <MovieCard :movie="movie" />
      </li>
    </ul>
@@ -162,11 +165,10 @@ return sortedMovies.slice(startIndex, startIndex + this.itemsPerPage);
    },
  },
  mounted() {
-   this.searchMovies();
-   this.$store.dispatch('movies/fetchMovieList');
+  this.fetchMovies(); 
+    this.searchMovies(); 
  },
  methods: {
-  
    ...mapActions(['fetchMovies', 'searchMovies']),
    sortMovie() {
       let moviesList = this.$route.path === '/' ? this.movies : this.filteredMovies;
@@ -218,7 +220,6 @@ return sortedMovies.slice(startIndex, startIndex + this.itemsPerPage);
    },
 
     getPropertyValue(obj, propertyPath) {
-
       const pathArray = propertyPath.split('.');
       return pathArray.reduce((currentObj, key) => {
         return currentObj ? currentObj[key] : undefined;
