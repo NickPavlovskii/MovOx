@@ -66,11 +66,14 @@
    </div>
    
    <ul  class="movie-list ">
+
      <li 
       v-for="(movie) in displayedMovies" 
       :key="movie.id" 
       :class="{'movie-item': true}"
      >
+
+   
        <MovieCard :movie="movie" />
      </li>
    </ul>
