@@ -21,8 +21,7 @@
           @change="sortMovies"
           placeholder="Сортировать по"
           class="custom-dropdown w-full md:w-14rem"
-        >
-        </Dropdown>
+        ></Dropdown>
         <font-awesome-icon
           icon="arrow-up-9-1"
           v-if="sortOrder === 'asc'"
@@ -56,15 +55,14 @@
             'md:w-14rem',
             'p-dropdown-indigo',
           ]"
-          v-model="selectedSortOption"
+          :value="selectedSortOption"
           :options="sortOptions"
           optionLabel="label"
           optionValue="value"
-          @change="sortMovies"
+          @change="sortedMovies"
           placeholder="Сортировать по"
           class="custom-dropdown w-full md:w-14rem"
-        >
-        </Dropdown>
+        />
         <font-awesome-icon
           icon="arrow-up-9-1"
           v-if="sortOrder === 'asc'"
@@ -78,6 +76,7 @@
           class="icon_select"
         />
       </div>
+
       <ul class="movie-list">
         <li
           v-for="movie in displayedMovies"
@@ -105,7 +104,7 @@
 
 <script>
 import Paginator from "primevue/paginator";
-import { mapState, mapActions, mapGetters } from "vuex";
+import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faArrowUp91, faArrowUp19 } from "@fortawesome/free-solid-svg-icons";
@@ -127,27 +126,36 @@ export default {
     return {
       itemsPerPage: 21,
       currentPage: 0,
-      sortOptions: [
-        { value: "Сортировать по", label: "Сортировать по" },
-        { value: "year", label: "Год" },
-        { value: "rating.kp", label: "Рейтинг" },
-        { value: "movieLength", label: "Длительность" },
-      ],
-      selectedSortOption: "Сортировать по",
-      sortOrder: "asc",
+
       isLoading: false,
     };
   },
   computed: {
-    ...mapState(["filteredMovies", "searchQuery", "movies"]),
-    ...mapGetters(["getMovieById"]),
-    ...mapGetters("movies", ["sortedMovies"]),
+    ...mapState([
+      "filteredMovies",
+      "searchQuery",
+      "movies",
+      "sortOptions",
+      "sortOrder",
+      "selectedSortOption",
+    ]),
+    ...mapGetters(["getMovieById", "sortedMovies"]),
+
+    selectedSortOption: {
+      get() {
+        return this.$store.state.selectedSortOption;
+      },
+      set(option) {
+        this.updateSelectedSortOption(option);
+      },
+    },
+
     totalPages() {
       return Math.ceil(this.totalMovies / this.itemsPerPage);
     },
 
     moviess() {
-      const sortedMovies = this.sortMovie();
+      const sortedMovies = this.sortedMovies; // Call the getter function
 
       // Calculate the starting index of the current page
       const startIndex = this.currentPage * this.itemsPerPage;
@@ -156,7 +164,7 @@ export default {
       return sortedMovies.slice(startIndex, startIndex + this.itemsPerPage);
     },
     displayedMovies() {
-      const sortedMovies = this.sortMovie();
+      const sortedMovies = this.sortedMovies;
 
       // Calculate the starting index of the current page
       const startIndex = this.currentPage * this.itemsPerPage;
@@ -177,44 +185,12 @@ export default {
     this.fetchMovies();
     this.searchMovies();
   },
-
   methods: {
-    ...mapActions(["fetchMovies", "searchMovies"]),
-    sortMovie() {
-      let moviesList =
-        this.$route.path === "/" ? this.movies : this.filteredMovies;
+    ...mapMutations(["updateSelectedSortOption", "SET_SORT_ORDER"]),
+    ...mapActions(["fetchMovies", "searchMovies", "updateSortOrder"]),
 
-      if (this.selectedSortOption !== "Сортировать по") {
-        // Custom sorting function based on selectedSortOption and sortOrder
-        moviesList.sort((a, b) => {
-          const sortOption = this.selectedSortOption;
-          let aValue, bValue;
-
-          // Extract the values to compare from the movie objects
-          if (sortOption === "year") {
-            aValue = a.year;
-            bValue = b.year;
-          } else if (sortOption === "rating.kp") {
-            aValue = a.rating.kp;
-            bValue = b.rating.kp;
-          } else if (sortOption === "movieLength") {
-            aValue = a.movieLength;
-            bValue = b.movieLength;
-          }
-
-          // Compare the values based on the sort order
-          if (this.sortOrder === "asc") {
-            return aValue - bValue;
-          } else {
-            return bValue - aValue;
-          }
-        });
-      }
-
-      return moviesList;
-    },
     updateSortOrder(order) {
-      this.$store.commit("movies/updateSortOrder", order);
+      this.SET_SORT_ORDER(order);
       this.currentPage = 0;
     },
 

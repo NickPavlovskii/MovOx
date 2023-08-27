@@ -1,5 +1,7 @@
 import { createStore } from 'vuex';
-import sortOption from 'src/store/modules/SortOption.js';  
+import sortingModule from './modules/sorting';
+import ratings from './modules/ratings';
+
 // Функция для имитации асинхронного получения данных о фильмах
 const fetchMoviesData = () => {
   return new Promise((resolve) => {
@@ -22,11 +24,18 @@ const setLocalStorageItem = (key, value) => {
 
 const store = createStore({
   modules: {
-    movies: sortOption,
+    sorting: sortingModule, 
+    ratings: ratings,
   },
   state() {
     return {
-      // Загрузка фильмов из JSON
+      itemsPerPage: 21,
+      sortOptions: [
+        { value: "Сортировать по", label: "Сортировать по" },
+        { value: "year", label: "Год" },
+        { value: "rating.kp", label: "Рейтинг" },
+        { value: "movieLength", label: "Длительность" },
+      ], 
       movies: require('../components/kinopoisk.json').docs,
       searchQuery: '',
       filteredMovies: [],
@@ -35,6 +44,7 @@ const store = createStore({
   },
 
   getters: {
+    
      // Получение списка оцененных фильмов из ratings
      getRatedMovies: state => {
       const ratedMovies = [];
@@ -81,6 +91,12 @@ const store = createStore({
     },
   },
   mutations: {
+    SET_SORT_ORDER(state, order) {
+      state.sortOrder = order;
+    },
+    updateSelectedSortOption(state, option) {
+      state.selectedSortOption = option;
+    },
     // Добавление оценки или закладки в ratings
     addRating(state, { key, value }) {
       state.ratings[key] = value;

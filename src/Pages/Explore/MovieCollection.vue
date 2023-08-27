@@ -6,8 +6,7 @@
       </h2>
       <!-- Опции сортировки фильмов -->
       <div class="sort-options">
-        <!-- Выпадающий список с опциями сортировки, реализованный с помощью компонента Dropdown -->
-        <!-- Изменение сортировки приводит к вызову метода sortMovies -->
+      
         <Dropdown
           :class="[
             'custom-dropdown',
@@ -27,7 +26,7 @@
         <!-- Иконки для изменения порядка сортировки (по возрастанию или убыванию) -->
         <font-awesome-icon
           icon="arrow-up-9-1"
-          v-if="sortOrder === 'asc'"
+              v-if="sortOrder === 'asc'"
           @click="updateSortOrder('desc')"
           class="icon_select"
         />
@@ -167,7 +166,6 @@
       <Paginator
         :template="{
           '640px': 'PrevPageLink CurrentPageReport NextPageLink',
-
           default:
             'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink',
         }"
@@ -181,7 +179,7 @@
 
 <script>
 import "primevue/resources/primevue.min.css";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -210,13 +208,7 @@ export default {
     return {
       itemsPerPage: 10,
       currentPage: 0,
-      sortOptions: [
-        { value: "Сортировать по", label: "Сортировать по" },
-        { value: "year", label: "Год" },
-        { value: "rating.kp", label: "Рейтинг" },
-        { value: "movieLength", label: "Длительность" },
-      ],
-      selectedSortOption: "Сортировать по",
+    
       sortOrder: "asc",
       isLoading: false,
       titles: {
@@ -225,15 +217,31 @@ export default {
         "/tv-series": "Сериалы",
         "/Comedy": "Комедии",
         "/Боевик": "Боевики",
-        "/Драма": "Драмы",
-        "/Фэнтези": "Фэнтези",
-        "/Фантастика": "Фантастика",
+        "/Drama": "Драмы",
+        "/Fiction": "Фэнтези",
+        "/Action movie": "Фантастика",
         "/Adventures": "Приключения",
       },
     };
   },
   computed: {
-    ...mapState(["movies", "searchQuery"]),
+    ...mapState([
+      "filteredMovies",
+      "searchQuery",
+      "movies",
+      "sortOptions",
+      "sortOrder",
+      "selectedSortOption",
+    ]),
+    ...mapGetters(["getMovieById", "sortedMovies"]),
+    selectedSortOption: {
+      get() {
+        return this.$store.state.selectedSortOption;
+      },
+      set(option) {
+        this.updateSelectedSortOption(option);
+      },
+    },
     // Фильтрация фильмов в зависимости от текущего пути маршрута
     filteredM() {
       const routePath = this.$route.path;
@@ -275,20 +283,10 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["searchMovies", "searchQuery"]),
 
-    updateDisplayedMovies() {
-      this.displayedMovies = this.movies.slice(
-        this.startIndex,
-        this.endIndex + 1
-      );
-    },
-
-    convertMinutesToHours(minutes) {
-      const hours = Math.floor(minutes / 60);
-      const remainingMinutes = minutes % 60;
-      return `${hours}h ${remainingMinutes}min`;
-    },
+    ...mapMutations(["updateSelectedSortOption", "SET_SORT_ORDER"]),
+    ...mapActions(["fetchMovies", "searchMovies", "updateSortOrder"]),
+    
     // Сортировка фильмов в соответствии с выбранной опцией сортировки и порядком
     sortMovies() {
       this.displayedMovies.sort((a, b) => {
@@ -314,7 +312,18 @@ export default {
       this.sortOrder = order;
       this.sortMovies();
     },
+    updateDisplayedMovies() {
+      this.displayedMovies = this.movies.slice(
+        this.startIndex,
+        this.endIndex + 1
+      );
+    },
 
+    convertMinutesToHours(minutes) {
+      const hours = Math.floor(minutes / 60);
+      const remainingMinutes = minutes % 60;
+      return `${hours}h ${remainingMinutes}min`;
+    },
     getPropertyValue(object, path) {
       const keys = path.split(".");
       let value = object;

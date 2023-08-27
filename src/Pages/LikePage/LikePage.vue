@@ -54,7 +54,7 @@
                 <MovieCard :movie="movie" style="width: 250px" />
               </td>
               <td class="Rating">
-<<<<<<< HEAD
+
                 <div style="display: flex; margin-top: -30px;">
                   <Rating 
                     v-model="movie.like" 
@@ -68,21 +68,6 @@
                     height="24" 
                     width="24"
                     @click="removeRating(movie.id)" 
-=======
-                <div style="display: flex; margin-top: -30px">
-                  <Rating
-                    v-model="movie.like"
-                    :stars="10"
-                    :cancel="false"
-                    :readonly="true"
-                    class="custom-rating"
-                  />
-                  <img
-                    src="https://primefaces.org/cdn/primevue/images/rating/cancel.png"
-                    height="24"
-                    width="24"
-                    @click="removeRating(movie.id)"
->>>>>>> 5b482f9227c32f755d28daadc367795db2da8d83
                   />
                 </div>
               </td>

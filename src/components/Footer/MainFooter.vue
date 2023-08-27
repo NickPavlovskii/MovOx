@@ -57,7 +57,7 @@
         <p>Email: o_oniklado_o@list.ru</p>
         <p>Телефон: 89816921718</p>
         <div class="social-links">
-<<<<<<< HEAD
+
             <a href="#" target="_blank" rel="noopener noreferrer">
               <font-awesome-icon icon="fa-brands fa-vk icn"  class="icn"/>
             </a>
@@ -77,24 +77,7 @@
               <font-awesome-icon icon="fa-brands fa-gitlab icn" class="icn" />
             </a>
           </div>
-=======
-          <a href="#" target="_blank" rel="noopener noreferrer">
-            <font-awesome-icon icon="fa-brands fa-vk icn" class="icn" />
-          </a>
-          <a href="https://t.me/N1klad">
-            <font-awesome-icon icon="fa-brands fa-telegram icn" class="icn" />
-          </a>
-          <a href="#" target="_blank" rel="noopener noreferrer">
-            <font-awesome-icon icon="fa-brands fa-whatsapp" class="icn" />
-          </a>
-          <a href="#" target="_blank" rel="noopener noreferrer">
-            <font-awesome-icon icon="fa-brands fa-github" class="icn" />
-          </a>
-          <a href="#" target="_blank" rel="noopener noreferrer">
-            <font-awesome-icon icon="fa-brands fa-gitlab icn" class="icn" />
-          </a>
-        </div>
->>>>>>> 5b482f9227c32f755d28daadc367795db2da8d83
+
       </div>
     </div>
     <div class="footer-bottom">
