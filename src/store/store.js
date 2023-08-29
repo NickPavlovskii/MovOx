@@ -16,18 +16,12 @@ const fetchMoviesData = () => {
 
 const store = createStore({
   modules: {
-    sorting: sortingModule, 
+   sorting: sortingModule, 
    ratings,
-    bookmarks
+   bookmarks
   },
   state() {
     return {
-       rating: null,
-    isBookmarked: false,
-    hasRating: false,
-    ratedMovies: {},
-  
-    bookmarkedMovies: {},
       itemsPerPage: 21,
       sortOptions: [
         { value: "Сортировать по", label: "Сортировать по" },
@@ -38,7 +32,7 @@ const store = createStore({
       movies: require('../components/kinopoisk.json').docs,
       searchQuery: '',
       filteredMovies: [],
-  
+      rating: null,
     };
   },
 
@@ -53,13 +47,15 @@ const store = createStore({
    
   },
   mutations: {
+    SET_BOOKMARK(state, value) {
+      state.isBookmarked = value;
+    },
     SET_SORT_ORDER(state, order) {
       state.sortOrder = order;
     },
     updateSelectedSortOption(state, option) {
       state.selectedSortOption = option;
     },
-    // Добавление оценки или закладки в ratings
    
     // Установка списка фильмов
     setMovies(state, movies) {
@@ -76,7 +72,7 @@ const store = createStore({
   
   },
   actions: {
-    
+   
     // Получение фильмов из JSON и установка списка
     async fetchMovies({ commit }) {
       const moviesData = await fetchMoviesData();

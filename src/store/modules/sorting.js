@@ -2,9 +2,14 @@
 export default {
   state: {
     currentPage: 0,
-      selectedSortOption: 'Сортировать по', // Текущий выбранный вариант сортировки
+    selectedSortOption: 'Сортировать по', // Текущий выбранный вариант сортировки
     sortOrder: 'asc', // Текущий порядок сортировки
-  
+    sortOptions: [
+      { value: "Сортировать по", label: "Сортировать по" },
+      { value: "year", label: "Год" },
+      { value: "rating.kp", label: "Рейтинг" },
+      { value: "movieLength", label: "Длительность" },
+    ], 
   },
   getters: {
     currentSortOrder(state) {

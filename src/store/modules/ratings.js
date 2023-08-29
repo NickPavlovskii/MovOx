@@ -1,8 +1,6 @@
 // store/modules/ratings.js
 const state = {
-
   rating: null,
- 
 };
 
 const mutations = {
