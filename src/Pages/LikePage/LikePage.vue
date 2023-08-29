@@ -54,20 +54,19 @@
                 <MovieCard :movie="movie" style="width: 250px" />
               </td>
               <td class="Rating">
-
-                <div style="display: flex; margin-top: -30px;">
-                  <Rating 
-                    v-model="movie.like" 
-                    :stars="10" 
-                    :cancel="false" 
-                    :readonly="true" 
-                    class="custom-rating" 
+                <div style="display: flex; margin-top: -30px">
+                  <Rating
+                    v-model="movie.like"
+                    :stars="10"
+                    :cancel="false"
+                    :readonly="true"
+                    class="custom-rating"
                   />
-                  <img 
-                    src="https://primefaces.org/cdn/primevue/images/rating/cancel.png" 
-                    height="24" 
+                  <img
+                    src="https://primefaces.org/cdn/primevue/images/rating/cancel.png"
+                    height="24"
                     width="24"
-                    @click="removeRating(movie.id)" 
+                    @click="removeRating(movie.id)"
                   />
                 </div>
               </td>
@@ -176,7 +175,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["toggleRating", "rateMovie", "removeRating", "fetchMovies"]),
+    ...mapActions([ "fetchMovies"]),
     // Handle the page change event for rated movies pagination
     handlePageChange(newPage) {
       this.currentPageRated = newPage;

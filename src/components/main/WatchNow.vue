@@ -5,16 +5,19 @@
       Новинки
     </h2>
     <div class="wrapper">
-      <i id="left" @click="scrollLeft"><font-awesome-icon icon="arrow-left" /></i>
-      <div 
-        class="carousel" 
-        @mousedown="dragStart" 
-        @touchstart="dragStart" 
-        @mousemove="dragging" 
+      <i id="left" @click="scrollLeft"
+        ><font-awesome-icon icon="arrow-left"
+      />
+      </i>
+      <div
+        class="carousel"
+        @mousedown="dragStart"
+        @touchstart="dragStart"
+        @mousemove="dragging"
         @touchmove="dragging"
-        @mouseup="dragStop" 
-        @touchend="dragStop" 
-        :class="{ 'dragging': isDragging }"
+        @mouseup="dragStop"
+        @touchend="dragStop"
+        :class="{ dragging: isDragging }"
       >
         <div class="movie-poster" v-for="movie in latestMovies" :key="movie.id">
           <MovieCard :movie="movie" />
@@ -27,27 +30,31 @@
   </div>
 </template>
 
-  
 <script>
-import { mapState, mapMutations } from 'vuex';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { library } from '@fortawesome/fontawesome-svg-core'
+import { mapState, mapMutations } from "vuex";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
 
-import { faArrowRight, faArrowLeft, faFire, faHeart } from '@fortawesome/free-solid-svg-icons'
-import MovieCard from '../MovieCard.vue';
-library.add(faArrowRight)
-library.add(faArrowLeft)
-library.add(faHeart)
-library.add(faFire)
+import {
+  faArrowRight,
+  faArrowLeft,
+  faFire,
+  faHeart,
+} from "@fortawesome/free-solid-svg-icons";
+import MovieCard from "../MovieCard.vue";
+library.add(faArrowRight);
+library.add(faArrowLeft);
+library.add(faHeart);
+library.add(faFire);
 
 export default {
   components: {
     FontAwesomeIcon,
 
-    MovieCard
+    MovieCard,
   },
   computed: {
-    ...mapState(['movies']),
+    ...mapState(["movies"]),
     latestMovies() {
       if (this.movies.length > 0) {
         const sortedMovies = [...this.movies]; // Создаем копию массива this.movies
@@ -56,7 +63,6 @@ export default {
       }
       return [];
     },
-
   },
   data() {
     return {
@@ -68,7 +74,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(['setMovies']), // Добавлено использование мутации setMovies
+    ...mapMutations(["setMovies"]), // Добавлено использование мутации setMovies
     scrollLeft() {
       const carousel = this.$el.querySelector(".carousel");
       const firstImg = carousel.querySelectorAll("img")[0];
@@ -87,8 +93,10 @@ export default {
       const carousel = this.$el.querySelector(".carousel");
       const scrollWidth = carousel.scrollWidth - carousel.clientWidth;
       const arrowIcons = this.$el.querySelectorAll(".wrapper i");
-      arrowIcons[0].style.display = carousel.scrollLeft === 0 ? "none" : "block";
-      arrowIcons[1].style.display = carousel.scrollLeft === scrollWidth ? "none" : "block";
+      arrowIcons[0].style.display =
+        carousel.scrollLeft === 0 ? "none" : "block";
+      arrowIcons[1].style.display =
+        carousel.scrollLeft === scrollWidth ? "none" : "block";
     },
     autoSlide() {
       const carousel = this.$el.querySelector(".carousel");
@@ -97,9 +105,15 @@ export default {
       const valDifference = firstImgWidth - Math.abs(this.positionDiff);
 
       if (carousel.scrollLeft > this.prevScrollLeft) {
-        carousel.scrollLeft += this.positionDiff > firstImgWidth / 3 ? valDifference : -this.positionDiff;
+        carousel.scrollLeft +=
+          this.positionDiff > firstImgWidth / 3
+            ? valDifference
+            : -this.positionDiff;
       } else {
-        carousel.scrollLeft -= this.positionDiff > firstImgWidth / 3 ? valDifference : -this.positionDiff;
+        carousel.scrollLeft -=
+          this.positionDiff > firstImgWidth / 3
+            ? valDifference
+            : -this.positionDiff;
       }
     },
     dragStart(e) {
@@ -113,7 +127,8 @@ export default {
       this.isDragging = true;
       this.$el.querySelector(".carousel").classList.add("dragging");
       this.positionDiff = (e.pageX || e.touches[0].pageX) - this.prevPageX;
-      this.$el.querySelector(".carousel").scrollLeft = this.prevScrollLeft - this.positionDiff;
+      this.$el.querySelector(".carousel").scrollLeft =
+        this.prevScrollLeft - this.positionDiff;
       this.showHideIcons();
     },
     dragStop() {
@@ -127,55 +142,50 @@ export default {
 };
 </script>
 
-
-<style  lang="scss" >
-
-.title{
-font-family: cursive;
-letter-spacing: 0.1em;
+<style lang="scss">
+.title {
+  font-family: cursive;
+  letter-spacing: 0.1em;
 }
-.longArrow{
- width: 20px;
-position: relative;
-top: 4px;
-margin-left: 3px;
-
+.longArrow {
+  width: 20px;
+  position: relative;
+  top: 4px;
+  margin-left: 3px;
 }
-.circle_progress{
- position: absolute;
-margin-top: 12px;
- left: 5px;
- color: #ffffff;
-
+.circle_progress {
+  position: absolute;
+  margin-top: 12px;
+  left: 5px;
+  color: #ffffff;
 }
-.circle_progress .percentage{
- color: black;
+.circle_progress .percentage {
+  color: black;
 }
 
-
-#left{
+#left {
   z-index: 3;
- bottom: 290px;
-left: 5px;
- background-color: #020c1b99;
- color: #ffffff;
+  bottom: 290px;
+  left: 5px;
+  background-color: #020c1b99;
+  color: #ffffff;
 }
-#right{
+#right {
   z-index: 3;
- bottom: 290px;
- right: 5px;
- background-color: #020c1b99;
- color: #ffffff;
+  bottom: 290px;
+  right: 5px;
+  background-color: #020c1b99;
+  color: #ffffff;
 }
 
 .container {
- max-width: 960px;
- margin: 0 auto;
- padding: 20px;
- color: #fff;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px;
+  color: #fff;
 
- /* Movie Poster */
- .movie-poster {
+  /* Movie Poster */
+  .movie-poster {
     position: relative;
     display: inline-block;
 
@@ -216,61 +226,57 @@ left: 5px;
     }
   }
 
+  .wrapper {
+    height: 100%;
+    color: #fff;
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    position: relative;
 
- .wrapper {
-  height: 100%;
-  color: #fff;
-  max-width: 960px;
-  margin: 0 auto;
-  display: flex;
-  position: relative;
+    i {
+      height: 44px;
+      width: 44px;
+      color: #343f4f;
+      cursor: pointer;
+      font-size: 1.15rem;
+      position: absolute;
+      text-align: center;
+      line-height: 44px;
+      background: #fff;
+      border-radius: 50%;
+      transform: translateY(-50%);
+      transition: transform 0.1s linear;
 
-  i {
-    height: 44px;
-    width: 44px;
-    color: #343F4F;
-    cursor: pointer;
-    font-size: 1.15rem;
-    position: absolute;
-    text-align: center;
-    line-height: 44px;
-    background: #fff;
-    border-radius: 50%;
-    transform: translateY(-50%);
-    transition: transform 0.1s linear;
+      &:active {
+        transform: translateY(-50%) scale(0.9);
+      }
 
-    &:active {
-      transform: translateY(-50%) scale(0.9);
+      &:hover {
+        background: #f2f2f2;
+      }
+
+      &:first-child {
+        left: -22px;
+        display: none;
+      }
     }
-
-    &:hover {
-      background: #f2f2f2;
-    }
-
-    &:first-child {
-      left: -22px;
-      display: none;
+    /* Carousel */
+    .carousel {
+      cursor: pointer;
+      overflow: hidden;
+      white-space: nowrap;
+      scroll-behavior: smooth;
     }
   }
-  /* Carousel */
-  .carousel {
-    cursor: pointer;
-    overflow: hidden;
-    white-space: nowrap;
-    scroll-behavior: smooth;
-  }
-     
 }
-     
 
-} 
- 
- @media screen and (max-width: 550px) {
-   .carousel .movie-poster img {
-     width: 100%;
-   }
-   .carousel .movie-poster {
-     margin-right: 10px; 
-   }
- }
-    </style>
+@media screen and (max-width: 550px) {
+  .carousel .movie-poster img {
+    width: 100%;
+  }
+  .carousel .movie-poster {
+    margin-right: 10px;
+  }
+}
+</style>

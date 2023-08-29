@@ -2,14 +2,9 @@
   <div class="container">
     <!-- Блок с детальной информацией о фильме -->
     <div class="detailsBanner">
-
       <div class="backdrop-img">
         <div class="lazy-load-image-background">
-          <img 
-            :src="movie.poster.url" 
-            alt="Movie Poster" 
-            class="posterImg"
-          >
+          <img :src="movie.poster.url" alt="Movie Poster" class="posterImg" />
         </div>
       </div>
       <div class="opacity-layer"></div>
@@ -17,48 +12,61 @@
       <div class="content">
         <!-- Левая часть баннера с постером и возможностью оценки фильма -->
         <div class="left">
-          <img :src="movie.poster.url" alt="Movie Poster" class="posterImg">
+          <img :src="movie.poster.url" alt="Movie Poster" class="posterImg" />
 
-          <div style="display: flex;   flex-direction: column; ">
+          <div style="display: flex; flex-direction: column">
             <!-- Блок с оценкой фильма -->
-            <div style="display: flex; flex-direction: column;">
+            <div style="display: flex; flex-direction: column">
               <h3 style="margin: 25px -2px -2px -2px">Поставьте оценку</h3>
               <span class="text">Это улучшит ваши рекомендации</span>
             </div>
-                 <!-- Компонент для выбора оценки (звезды) -->
-            <div style="display: flex;">
-              <img 
-                src="https://primefaces.org/cdn/primevue/images/rating/cancel.png" 
-                height="24" 
+            <!-- Компонент для выбора оценки (звезды) -->
+            <div style="display: flex">
+              <img
+                src="https://primefaces.org/cdn/primevue/images/rating/cancel.png"
+                height="24"
                 width="24"
-                @click="resetRating" 
-                style="position: relative; top: 8px;" 
+                @click="resetRating()"
+                style="position: relative; top: 8px"
               />
-         
-              <Rating 
-                v-model="rating" 
-                :stars="10" 
-                @input="saveRating" 
-                class="custom-rating" 
-                :cancel=false 
+
+              <Rating
+                v-model="rating"
+                :stars="10"
+                @input="saveRating"
+                class="custom-rating"
+                :cancel="false"
               />
             </div>
             <!-- Кнопка "Смотреть позже" (добавление фильма в закладки) -->
-            <div style="display: flex; justify-content: flex-end;">
-              <button :class="{ active: isBookmarked }" @click.stop="toggleBookmark($event)" class="myButton  btn-3">
+            <div style="display: flex; justify-content: flex-end">
+              <button
+                :class="{ active: isBookmarked }"
+                @click.stop="toggleBookmark()"
+                class="myButton btn-3"
+              >
                 <span>
-                  <Icon v-if="!isBookmarked" icon="ic:outline-bookmark-add" class="icn" />
-                  <Icon v-else icon="material-symbols:bookmark-add" class="icn" />
+                  <Icon
+                    v-if="!isBookmarked"
+                    icon="ic:outline-bookmark-add"
+                    class="icn"
+                  />
+                  <Icon
+                    v-else
+                    icon="material-symbols:bookmark-add"
+                    class="icn"
+                  />
                   Смотреть позже
                 </span>
               </button>
             </div>
 
+
           </div>
         </div>
         <!-- Правая часть баннера с основной информацией о фильме -->
         <div class="right">
-          <h1 class="title">{{ movie.name }} </h1>
+          <h1 class="title">{{ movie.name }}</h1>
 
           <!-- Альтернативное название фильма -->
           <h4 class="subtitle">{{ movie.alternativeName }}</h4>
@@ -79,29 +87,43 @@
             <div class="row">
               <div class="info">
                 <div class="infoItem">
-                  <span class="text bold" style="letter-spacing: 0.2em;">Режиссер</span>
+                  <span class="text bold" style="letter-spacing: 0.2em"
+                    >Режиссер</span
+                  >
 
-                  <span class="text">{{ movie.director.producer.join(', ') }}</span>
+                  <span class="text">{{
+                    movie.director.producer.join(", ")
+                  }}</span>
                 </div>
                 <div class="infoItem">
                   <span class="text bold">Cценарист:</span>
-                  <span class="text">{{ movie.director.screenwriter.join(', ') }}</span>
+                  <span class="text">{{
+                    movie.director.screenwriter.join(", ")
+                  }}</span>
                 </div>
               </div>
             </div>
             <!-- Информация о стране, длительности и годе выпуска -->
-            <div class="row" style="position: relative; bottom: 30px;">
+            <div class="row" style="position: relative; bottom: 30px">
               <div class="info">
                 <div class="infoItem">
-                  <span class="text bold"><font-awesome-icon icon="globe" /></span>
+                  <span class="text bold"
+                    ><font-awesome-icon icon="globe"
+                  /></span>
                   <span class="text">{{ movie.country }}</span>
                 </div>
                 <div class="infoItem">
-                  <span class="text bold"><font-awesome-icon icon="clock" /></span>
-                  <span class="text">{{ convertMinutesToHours(movie.movieLength) }}</span>
+                  <span class="text bold"
+                    ><font-awesome-icon icon="clock"
+                  /></span>
+                  <span class="text">{{
+                    convertMinutesToHours(movie.movieLength)
+                  }}</span>
                 </div>
                 <div class="infoItem">
-                  <span class="text bold"><font-awesome-icon icon="calendar-days" /></span>
+                  <span class="text bold"
+                    ><font-awesome-icon icon="calendar-days"
+                  /></span>
                   <span class="text">{{ movie.year }}</span>
                 </div>
               </div>
@@ -110,43 +132,73 @@
             <div class="row raiting">
               <div class="info">
                 <div class="infoItem">
-                  <span class="text bold"><font-awesome-icon icon="fa-brands fa-imdb" size="2xl"
-                      style="background: #1c4b91;" /></span>
-                  <span class="text" style="display: flex; align-items: center;">{{ movie.rating.imdb }}</span>
+                  <span class="text bold"
+                    ><font-awesome-icon
+                      icon="fa-brands fa-imdb"
+                      size="2xl"
+                      style="background: #1c4b91"
+                  /></span>
+                  <span
+                    class="text"
+                    style="display: flex; align-items: center"
+                    >{{ movie.rating.imdb }}</span
+                  >
                 </div>
-                <div class="infoItem" style="display: flex; align-items: center;">
+                <div
+                  class="infoItem"
+                  style="display: flex; align-items: center"
+                >
                   <span class="text bold">kp:</span>
                   <span class="text">{{ movie.rating.kp }}</span>
                 </div>
               </div>
             </div>
-            <div style=" position: relative; bottom: 70px;">
-              <h3 style=" margin-bottom: -0px;   letter-spacing: 0.2em;">Рейтинг Кинокритиков</h3>
+            <div style="position: relative; bottom: 70px">
+              <h3 style="margin-bottom: -0px; letter-spacing: 0.2em">
+                Рейтинг Кинокритиков
+              </h3>
               <div class="progress-bars">
-                <div style="display: flex;     flex-direction: column; width: 315px;">
-                  <h4 style="    letter-spacing: 0.2em;"> В Мире</h4>
+                <div
+                  style="display: flex; flex-direction: column; width: 315px"
+                >
+                  <h4 style="letter-spacing: 0.2em">В Мире</h4>
                   <div class="progress-bar">
-                    <ProgressBar :value="movie.rating.filmCritics * 10">{{ movie.rating.filmCritics }}</ProgressBar>
+                    <ProgressBar :value="movie.rating.filmCritics * 10">{{
+                      movie.rating.filmCritics
+                    }}</ProgressBar>
                   </div>
-                  <span class="text votes">{{ movie.votes.filmCritics }} голосов</span>
+                  <span class="text votes"
+                    >{{ movie.votes.filmCritics }} голосов</span
+                  >
                 </div>
-                <div style="display: flex;     flex-direction: column; width: 270px; ">
+                <div
+                  style="display: flex; flex-direction: column; width: 270px"
+                >
                   <h4>В России</h4>
                   <div class="progress-bar rf">
-                    <ProgressBar :value="movie.rating.russianFilmCritics"> <span
-                        style="margin-bottom: 2px;">{{ movie.rating.russianFilmCritics }}</span> </ProgressBar>
+                    <ProgressBar :value="movie.rating.russianFilmCritics">
+                      <span style="margin-bottom: 2px">{{
+                        movie.rating.russianFilmCritics
+                      }}</span>
+                    </ProgressBar>
                   </div>
-                  <span class="text votes">{{ movie.votes.russianFilmCritics }} голосов</span>
+                  <span class="text votes"
+                    >{{ movie.votes.russianFilmCritics }} голосов</span
+                  >
                 </div>
               </div>
             </div>
-             <!-- Доступность фильма на различных платформах (если есть) -->
+            <!-- Доступность фильма на различных платформах (если есть) -->
             <div class="watchability" v-if="movie.watchability.items != null">
               <p class="watchability-heading">Доступно на:</p>
               <ul class="watchability-list">
                 <li v-for="item in movie.watchability.items" :key="item._id">
                   <a :href="item.url" target="_blank">
-                    <img :src="item.logo.url" :alt="item.name" class="watchability-logo">
+                    <img
+                      :src="item.logo.url"
+                      :alt="item.name"
+                      class="watchability-logo"
+                    />
                   </a>
                 </li>
               </ul>
@@ -154,17 +206,27 @@
           </div>
         </div>
       </div>
-      <h4 class="link"> <router-link to="/" style="text-decoration: none;cursor: pointer; color: white;">
-          <span style="text-decoration: underline; cursor: pointer;">KinOx</span>
-        </router-link>/{{ movie.name }}</h4>
+      <h4 class="link">
+        <router-link
+          to="/"
+          style="text-decoration: none; cursor: pointer; color: white"
+        >
+          <span style="text-decoration: underline; cursor: pointer"
+            >KinOx</span
+          > </router-link
+        >/{{ movie.name }}
+      </h4>
     </div>
-    <div style="position: relative; bottom: 100px;">
+    <div style="position: relative; bottom: 100px">
       <div class="Cast" v-if="movie.type !== 'cartoon'">
         <h3 class="watchability-heading">Каст:</h3>
-        <ul class=" cast-list">
+        <ul class="cast-list">
           <li v-for="item in movie.cast" :key="item._id">
-            <div class="cast-log" :style="'background-image: url(' + item.photo.url + ');'"></div>
-            <div style="display: flex; flex-direction: column;">
+            <div
+              class="cast-log"
+              :style="'background-image: url(' + item.photo.url + ');'"
+            ></div>
+            <div style="display: flex; flex-direction: column">
               <span>{{ item.name }}</span>
               <span class="text">{{ item.role }}</span>
             </div>
@@ -177,18 +239,22 @@
   </div>
 </template>
 
-
 <script>
-import RecommendSection from '../../components/RecommendSection.vue';
-import { Icon } from '@iconify/vue';
-import { mapState } from 'vuex';
-import { mapActions, mapGetters } from 'vuex';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faClock, faCalendarDays, faGlobe, faBookmark } from '@fortawesome/free-solid-svg-icons';
-import { faImdb } from '@fortawesome/free-brands-svg-icons';
-import Rating from 'primevue/rating';
-import ProgressBar from 'primevue/progressbar';
+import RecommendSection from "../../components/RecommendSection.vue";
+import { Icon } from "@iconify/vue";
+import { mapState } from "vuex";
+import { mapActions, mapMutations, mapGetters } from "vuex";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faClock,
+  faCalendarDays,
+  faGlobe,
+  faBookmark,
+} from "@fortawesome/free-solid-svg-icons";
+import { faImdb } from "@fortawesome/free-brands-svg-icons";
+import Rating from "primevue/rating";
+import ProgressBar from "primevue/progressbar";
 
 library.add(faClock, faCalendarDays, faGlobe, faBookmark, faImdb);
 
@@ -205,40 +271,27 @@ export default {
       rating: null,
       isBookmarked: false,
       hasRating: false,
-      ratedMovies: [], // ?
+      ratedMovies: {}, // Object to store movie ratings
     };
   },
-  watch: {
-    // Следим за изменениями свойства 'isBookmarked', чтобы обновить LocalStorage
-    isBookmarked(value) {
-      localStorage.setItem(this.bookmarkKey, value.toString());
-    },
-    // Следим за изменениями свойства 'rating', чтобы обновить LocalStorage
-    rating(value) {
-      localStorage.setItem(this.ratingKey, value.toString());
-    },
-  },
-  created() {
-    // Загружаем оцененные фильмы из LocalStorage при создании компонента
-    const ratedMovies = localStorage.getItem('ratedMovies');
-    if (ratedMovies) {
-      this.ratedMovies = JSON.parse(ratedMovies);
-    }
-    const bookmarkKey = `bookmark_${this.movie.id}`;
-    const ratingKey = `rating_${this.movie.id}`;
 
-    // Проверяем сохраненные значения в локальном хранилище
-    if (localStorage.getItem(bookmarkKey) === 'true') {
-      this.isBookmarked = true;
-    }
 
-    if (localStorage.getItem(ratingKey)) {
-      this.rating = parseInt(localStorage.getItem(ratingKey));
-    }
-  },
   computed: {
-    ...mapState(['movies']),
-    ...mapGetters(['isMovieBookmarked']),
+    ...mapState(["movies"]),
+
+    ...mapGetters( [ 'isMovieRated']),
+  
+    // ratedMovies() {
+    //   return this.$store.state.movieData;
+    // },
+
+
+    movieRating() {
+      const ratedMovie = this.ratedMovies.find(
+        (movie) => movie.id === this.movie.id
+      );
+      return ratedMovie ? ratedMovie.rating : 0;
+    },
     movie() {
       // Получаем информацию о фильме на основе переданного id из маршрута
       const movieId = parseInt(this.$route.params.id);
@@ -253,40 +306,85 @@ export default {
       return `rating_${this.movie.id}`;
     },
   },
-  mounted() {
-    
-    if (!this.movies.length) {
-      this.fetchMovies();
-    }
-    if (localStorage.getItem('rating')) {
-      this.savedRating = parseInt(localStorage.getItem('rating'));
-    }
-  },
+ 
   methods: {
-    ...mapActions(['fetchMovies']),
-    ...mapActions(['toggleRating', 'toggleBookmark']),
-    // Сохраняем рейтинг в LocalStorage, когда пользователь оценивает фильм
+    ...mapActions(["fetchMovies"]),
+    ...mapMutations("movies"),
+    ...mapActions(['updateRating', 'toggleBookmark']),
     resetRating() {
       this.rating = 0;
+      this.updateRating({ movieId: this.movieId, rating: 0 });
     },
-  
-   
     saveRating() {
-      this.toggleRating({ movieId: this.movie.id, isLiked: true });
-      localStorage.setItem(this.ratingKey, this.rating);
+      this.updateRating({ movieId: this.movieId, rating: this.rating });
     },
+
+ 
     toggleBookmark() {
-      this.$store.dispatch('toggleRating', { movieId: this.movie.id, isLiked: false });
-      this.$store.dispatch('toggleBookmark', this.movie.id);
+      this.isBookmarked = !this.isBookmarked;
+      if (this.isBookmarked) {
+        localStorage.setItem("isBookmarked", "true");
+      } else {
+        localStorage.removeItem("isBookmarked");
+      }
     },
     convertMinutesToHours(minutes) {
       const hours = Math.floor(minutes / 60);
       const remainingMinutes = minutes % 60;
       return `${hours}ч ${remainingMinutes}м`;
     },
-    // Изменяем состояние закладки и обновляем LocalStorage соответственно
-   
+    
   },
+
+
+
+//=================================================================================================================
+
+
+  watch: {
+    // Следим за изменениями свойства 'isBookmarked', чтобы обновить LocalStorage
+    isBookmarked(value) {
+      localStorage.setItem(this.bookmarkKey, value.toString());
+    },
+    // Следим за изменениями свойства 'rating', чтобы обновить LocalStorage
+  rating(value) {
+    localStorage.setItem(this.ratingKey, value.toString());
+ 
+    this.ratedMovies[this.movie.id] = value;
+    // Serialize and save the ratedMovies object in LocalStorage under the 'ratings' key
+    localStorage.setItem("ratings", JSON.stringify(this.ratedMovies));
+  },
+  },
+  created() {
+
+
+    // Загружаем оцененные фильмы из LocalStorage при создании компонента
+    const ratedMovies = localStorage.getItem("ratedMovies");
+    if (ratedMovies) {
+      this.ratedMovies = JSON.parse(ratedMovies);
+    }
+    const bookmarkKey = `bookmark_${this.movie.id}`;
+    const ratingKey = `rating_${this.movie.id}`;
+
+    // Проверяем сохраненные значения в локальном хранилище
+    if (localStorage.getItem(bookmarkKey) === "true") {
+      this.isBookmarked = true;
+    }
+
+    if (localStorage.getItem(ratingKey)) {
+      this.rating = parseInt(localStorage.getItem(ratingKey));
+    }
+  },
+
+  mounted() {
+    if (!this.movies.length) {
+      this.fetchMovies();
+    }
+    if (localStorage.getItem("rating")) {
+      this.savedRating = parseInt(localStorage.getItem("rating"));
+    }
+  },
+ 
 };
 </script>
 
@@ -318,19 +416,15 @@ export default {
   padding: 20px;
 
   height: 80%;
-
 }
 
 .left {
   flex-shrink: 0;
   width: 40%;
-
 }
-
 
 .MyRecom {
   position: relative;
-
 }
 
 .custom-rating {
@@ -359,7 +453,11 @@ export default {
 }
 
 .btn-3 {
-  background: linear-gradient(0deg, rgba(28, 75, 145, 1) 0%, rgba(2, 126, 251, 1) 100%);
+  background: linear-gradient(
+    0deg,
+    rgba(28, 75, 145, 1) 0%,
+    rgba(2, 126, 251, 1) 100%
+  );
   line-height: 42px;
   padding: 0;
   border: none;
@@ -444,14 +542,11 @@ export default {
   margin-right: 5px;
   position: relative;
   top: 7px;
-
 }
 
 .progress-bars {
   display: flex;
   gap: 70px;
-
-
 }
 
 .progress-bar {
@@ -463,7 +558,6 @@ export default {
   height: 20px;
   overflow: hidden;
 }
-
 
 .right-rows {
   position: relative;
@@ -482,9 +576,7 @@ export default {
 }
 
 .watchability {
-
   position: relative;
-
 
   bottom: 70px;
 }
@@ -534,8 +626,6 @@ export default {
   height: 8px;
 }
 
-
-
 .cast-list::-webkit-scrollbar-thumb {
   background-color: #1c4b91;
   border-radius: 3px;
@@ -562,7 +652,6 @@ export default {
   background-position: center;
   border-radius: 50%;
 }
-
 
 .cast-logo img {
   width: 80%;
@@ -628,9 +717,7 @@ export default {
 .detailsBanner .opacity-layer {
   width: 100%;
   height: 250px;
-  background: linear-gradient(180deg,
-      rgba(4, 21, 45, 0) 0%,
-      #04152d 79.17%);
+  background: linear-gradient(180deg, rgba(4, 21, 45, 0) 0%, #04152d 79.17%);
   position: absolute;
   bottom: 0;
   left: 0;
@@ -641,9 +728,6 @@ export default {
   position: relative;
   flex-direction: column;
   gap: 20px;
-
-
-
 }
 
 @media (min-width: 768px) {
@@ -651,7 +735,6 @@ export default {
     gap: 50px;
     flex-direction: row;
   }
-
 }
 
 .left .row {
@@ -667,7 +750,6 @@ export default {
 @media (min-width: 768px) {
   .detailsBanner .content .left .posterImg {
     max-width: 350px;
-
   }
 }
 
@@ -677,19 +759,15 @@ export default {
 }
 
 @media (max-width: 768px) {
-
   .left,
   .right {
     width: 100%;
     max-width: none;
   }
-
 }
 
 .detailsBanner .content .right .title {
   font-size: 28px;
-
-
 }
 
 @media (min-width: 768px) {
@@ -715,7 +793,6 @@ export default {
   }
 }
 
-
 .detailsBanner .content .right .overview {
   margin-bottom: 25px;
   width: 100%;
@@ -738,19 +815,14 @@ export default {
   }
 }
 
-
 .votes {
   margin-top: -7px;
 }
 
 .detailsBanner .content .right .playbtn .text {
-
   font-size: 20px;
   transition: all 0.7s ease-in-out;
-
-
 }
-
 
 .detailsBanner .content .row {
   display: flex;
@@ -758,7 +830,6 @@ export default {
   gap: 25px;
   margin-bottom: 20px;
   position: relative;
-
 }
 
 .detailsBanner .content .info {
@@ -795,7 +866,3 @@ p {
   margin-bottom: 20px;
 }
 </style>
-
-
-
-  

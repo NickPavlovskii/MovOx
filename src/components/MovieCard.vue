@@ -10,13 +10,13 @@
           <div class="shortDescription">
             <p>{{ movie.shortDescription }}</p>
             <div class="row">
-              <div class="info"> 
+              <div class="info">
                 <div class="infoItem">
-                  <span class="text bold"
-                    ><font-awesome-icon icon="clock"
-                  /></span>
+                  <span class="text bold">
+                    <font-awesome-icon icon="clock" />
+                  </span>
                   <span class="text">
-                    {{convertMinutesToHours(movie.movieLength)}}
+                    {{ convertMinutesToHours(movie.movieLength) }}
                   </span>
                 </div>
                 <div class="infoItem">

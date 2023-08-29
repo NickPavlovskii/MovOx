@@ -1,30 +1,27 @@
 <template>
   <div id="app">
     <MainHeader @search="updateSearchQuery" />
-    <router-view>
-</router-view>
-<!-- <MoviePage/> -->
-      <MainFooter/>
+    <router-view/> 
+    <!-- <MoviePage/> -->
+    <MainFooter />
   </div>
 </template>
 
 <script>
-import '../style/PrimeVue.css'; // Подключение файла стилей
-import  MainHeader from './components/Header/MainHeader.vue';
-import  MainFooter from './components/Footer/MainFooter.vue';
+import "../style/PrimeVue.css"; // Подключение файла стилей
+import MainHeader from "./components/Header/MainHeader.vue";
+import MainFooter from "./components/Footer/MainFooter.vue";
 
-import { mapState, mapActions } from 'vuex';
-// 
+import { mapState, mapActions } from "vuex";
+//
 export default {
-  name: 'App',
+  name: "App",
   components: {
     MainHeader,
     MainFooter,
- 
-   
   },
   computed: {
-    ...mapState(['movies','filteredMovies']),
+    ...mapState(["movies", "filteredMovies"]),
   },
   data() {
     return {
@@ -33,11 +30,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions([
-    'fetchMovies', 
-    'selectMovie', 
-    'searchMovies'
-  ]),
+    ...mapActions(["fetchMovies", "selectMovie", "searchMovies"]),
 
     changePage(page) {
       // Обработка изменения страницы
@@ -45,7 +38,7 @@ export default {
       // Загрузка данных для новой страницы
     },
     updateSearchQuery(query) {
-      this.$store.commit('setSearchQuery', query); // Использовать мутацию setSearchQuery из хранилища Vuex
+      this.$store.commit("setSearchQuery", query); // Использовать мутацию setSearchQuery из хранилища Vuex
       this.currentPage = 1;
       this.searchMovies(); // Вызвать действие searchMovies из хранилища Vuex
     },
@@ -53,10 +46,8 @@ export default {
 };
 </script>
 
-
 <style>
 #app {
-  background: #04152d; 
-
+  background: #04152d;
 }
 </style>

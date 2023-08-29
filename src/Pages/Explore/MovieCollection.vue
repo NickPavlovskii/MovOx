@@ -6,7 +6,6 @@
       </h2>
       <!-- Опции сортировки фильмов -->
       <div class="sort-options">
-      
         <Dropdown
           :class="[
             'custom-dropdown',
@@ -26,7 +25,7 @@
         <!-- Иконки для изменения порядка сортировки (по возрастанию или убыванию) -->
         <font-awesome-icon
           icon="arrow-up-9-1"
-              v-if="sortOrder === 'asc'"
+          v-if="sortOrder === 'asc'"
           @click="updateSortOrder('desc')"
           class="icon_select"
         />
@@ -208,7 +207,7 @@ export default {
     return {
       itemsPerPage: 10,
       currentPage: 0,
-    
+
       sortOrder: "asc",
       isLoading: false,
       titles: {
@@ -283,10 +282,9 @@ export default {
     },
   },
   methods: {
-
     ...mapMutations(["updateSelectedSortOption", "SET_SORT_ORDER"]),
     ...mapActions(["fetchMovies", "searchMovies", "updateSortOrder"]),
-    
+
     // Сортировка фильмов в соответствии с выбранной опцией сортировки и порядком
     sortMovies() {
       this.displayedMovies.sort((a, b) => {

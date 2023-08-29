@@ -3,14 +3,14 @@
     <div class="heroBanner">
       <div class="backdrop-img">
         <div class="lazy-load-image-background">
-          <img src="../fon.png" alt="">
+          <img src="../fon.png" alt="" />
         </div>
       </div>
       <div class="opacity-layer"></div>
       <div class="heroBannerContent">
         <div v-if="this.$route.path === '/'">
           <h1 class="title">WELCOME</h1>
-          <p class="subTitle" style="font-family: cursive;">
+          <p class="subTitle" style="font-family: cursive">
             Миллион фильмов и сериалов только для тебя
           </p>
         </div>
@@ -21,19 +21,20 @@
         </div>
         <div class="searchInput">
           <input
-          class="search-input"
-          type="text" 
-          placeholder="Поиск фильма" 
-          v-model="searchQuery" 
-          @input="handleInput"
-          @keydown.enter="handleEnter" 
-          @blur="handleBlur" 
-           />
-          <button 
-          @click="this.$router.push({ path: `/search` })" 
-          class="search-button">
-          Поиск
-        </button>
+            class="search-input"
+            type="text"
+            placeholder="Поиск фильма"
+            v-model="searchQuery"
+            @input="handleInput"
+            @keydown.enter="handleEnter"
+            @blur="handleBlur"
+          />
+          <button
+            @click="this.$router.push({ path: `/search` })"
+            class="search-button"
+          >
+            Поиск
+          </button>
         </div>
       </div>
     </div>
@@ -41,32 +42,24 @@
 </template>
 
 <script>
-import {
-  mapState,
-  mapActions,
-  mapMutations
-} from 'vuex';
+import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
   data() {
     return {
       isSearchActive: false,
-      searchQuery: '',
+      searchQuery: "",
       isMenuOpen: false,
       showResults: false,
     };
   },
   computed: {
-    ...mapState([
-      'movies',
-      'searchQuery',
-      'filteredMovies'
-    ]),
+    ...mapState(["movies", "searchQuery", "filteredMovies"]),
   },
 
   methods: {
-    ...mapActions(['searchMovies']),
-    ...mapMutations(['setSearchQuery']),
+    ...mapActions(["searchMovies"]),
+    ...mapMutations(["setSearchQuery"]),
 
     handleInput() {
       this.showResults = true;
@@ -74,11 +67,10 @@ export default {
       this.searchMovies();
     },
     handleEnter() {
-      if (event.key === 'Enter') {
+      if (event.key === "Enter") {
         this.$router.push({ path: `/search` });
       }
     },
-
 
     handleBlur() {
       this.showResults = false;
@@ -92,7 +84,6 @@ export default {
 
 <style>
 .heroBanner {
-
   width: 100%;
   height: 450px;
 
@@ -153,7 +144,6 @@ export default {
   font-size: 50px;
   font-weight: 700;
   margin-bottom: 10px;
-
 }
 
 .heroBanner .heroBannerContent .subTitle {

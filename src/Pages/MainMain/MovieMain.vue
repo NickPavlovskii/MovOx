@@ -1,10 +1,10 @@
 <template>
   <div>
     <ContentWrapper @search="performSearch" class="ContentWrapper" />
-    <SocialLinksPanel/>
-     <!-- Блок с индикатором загрузки, отображается во время загрузки данных -->
-     <div v-if="isLoading" class="loader">
-      <BaseLoader/>
+    <SocialLinksPanel />
+    <!-- Блок с индикатором загрузки, отображается во время загрузки данных -->
+    <div v-if="isLoading" class="loader">
+      <BaseLoader />
     </div>
     <!-- Блок контента, отображаемый после окончания загрузки -->
     <div v-else>
@@ -23,15 +23,14 @@
 </template>
 
 <script>
-import BaseLoader from '../../components/BaseLoader.vue';
-import SocialLinksPanel from '../../components/SocialLinksPanel.vue';
-import MovieList from '../../components/MovieList.vue';
-import ContentWrapper from '../../components/main/ContentWrapper.vue';
-import TopMovie from '../../components/main/TopMovie.vue';
-import WatchNow from '../../components/main/WatchNow.vue';
-import ClapperboardIcon from '../../components/ClapperboardIcon.vue';
-import {mapActions} from 'vuex';
-
+import BaseLoader from "../../components/BaseLoader.vue";
+import SocialLinksPanel from "../../components/SocialLinksPanel.vue";
+import MovieList from "../../components/MovieList.vue";
+import ContentWrapper from "../../components/main/ContentWrapper.vue";
+import TopMovie from "../../components/main/TopMovie.vue";
+import WatchNow from "../../components/main/WatchNow.vue";
+import ClapperboardIcon from "../../components/ClapperboardIcon.vue";
+import { mapActions } from "vuex";
 
 export default {
   components: {
@@ -41,7 +40,7 @@ export default {
     MovieList,
     TopMovie,
     WatchNow,
-    ClapperboardIcon
+    ClapperboardIcon,
   },
   data() {
     return {
@@ -49,18 +48,16 @@ export default {
     };
   },
   methods: {
-   
-    ...mapActions(['fetchMovies', 'searchMovies']),
-    
+    ...mapActions(["fetchMovies", "searchMovies"]),
+
     async searchMovies() {
-      this.isLoading = true; 
-      await this.$store.dispatch('searchMovies');
-      this.isLoading = false; 
+      this.isLoading = true;
+      await this.$store.dispatch("searchMovies");
+      this.isLoading = false;
     },
   },
-  };
+};
 </script>
-
 
 <style scoped>
 .loader {
@@ -72,19 +69,8 @@ export default {
   color: #333;
 }
 
-
 .ContentWrapper {
   text-align: center;
   margin: 0 auto;
 }
 </style>
-
-
-
-
-
-
-
-
-
-
