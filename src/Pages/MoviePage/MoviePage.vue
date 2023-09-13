@@ -13,7 +13,6 @@
         <!-- Левая часть баннера с постером и возможностью оценки фильма -->
         <div class="left">
           <img :src="movie.poster.url" alt="Movie Poster" class="posterImg" />
-
           <div style="display: flex; flex-direction: column">
             <!-- Блок с оценкой фильма -->
             <div style="display: flex; flex-direction: column">
@@ -29,7 +28,6 @@
                 @click="resetRating()"
                 style="position: relative; top: 8px"
               />
-
               <Rating
                 v-model="rating"
                 :stars="10"
@@ -42,7 +40,7 @@
             <div style="display: flex; justify-content: flex-end">
               <button
                 :class="{ active: isBookmarked }"
-                @click.stop="toggleBookmark()"
+                @click.stop="toggleBookmark"
                 class="myButton btn-3"
               >
                 <span>
@@ -60,14 +58,11 @@
                 </span>
               </button>
             </div>
-
-
           </div>
         </div>
         <!-- Правая часть баннера с основной информацией о фильме -->
         <div class="right">
           <h1 class="title">{{ movie.name }}</h1>
-
           <!-- Альтернативное название фильма -->
           <h4 class="subtitle">{{ movie.alternativeName }}</h4>
           <!-- Жанры фильма -->
@@ -81,7 +76,6 @@
             <h2 class="heading">О фильме</h2>
             <p class="description">{{ movie.description }}</p>
           </div>
-
           <!-- Дополнительная информация о фильме -->
           <div class="right-rows">
             <div class="row">
@@ -90,7 +84,6 @@
                   <span class="text bold" style="letter-spacing: 0.2em"
                     >Режиссер</span
                   >
-
                   <span class="text">{{
                     movie.director.producer.join(", ")
                   }}</span>
@@ -128,7 +121,6 @@
                 </div>
               </div>
             </div>
-
             <div class="row raiting">
               <div class="info">
                 <div class="infoItem">
@@ -269,22 +261,15 @@ export default {
   data() {
     return {
       rating: null,
-      isBookmarked: false,
       hasRating: false,
-      ratedMovies: {}, // Object to store movie ratings
+      ratedMovies: {},
     };
   },
 
-
   computed: {
     ...mapState(["movies"]),
-
-    ...mapGetters( [ 'isMovieRated']),
-  
-    // ratedMovies() {
-    //   return this.$store.state.movieData;
-    // },
-
+    ...mapState(["isBookmarked", "rating"]),
+    ...mapGetters(["isMovieRated"]),
 
     movieRating() {
       const ratedMovie = this.ratedMovies.find(
@@ -306,11 +291,11 @@ export default {
       return `rating_${this.movie.id}`;
     },
   },
- 
+
   methods: {
+    ...mapActions(["toggleBookmark","updateRating",]),
     ...mapActions(["fetchMovies"]),
     ...mapMutations("movies"),
-    ...mapActions(['updateRating', 'toggleBookmark']),
     resetRating() {
       this.rating = 0;
       this.updateRating({ movieId: this.movieId, rating: 0 });
@@ -319,27 +304,14 @@ export default {
       this.updateRating({ movieId: this.movieId, rating: this.rating });
     },
 
- 
-    toggleBookmark() {
-      this.isBookmarked = !this.isBookmarked;
-      if (this.isBookmarked) {
-        localStorage.setItem("isBookmarked", "true");
-      } else {
-        localStorage.removeItem("isBookmarked");
-      }
-    },
     convertMinutesToHours(minutes) {
       const hours = Math.floor(minutes / 60);
       const remainingMinutes = minutes % 60;
       return `${hours}ч ${remainingMinutes}м`;
     },
-    
   },
 
-
-
-//=================================================================================================================
-
+  //=================================================================================================================
 
   watch: {
     // Следим за изменениями свойства 'isBookmarked', чтобы обновить LocalStorage
@@ -347,17 +319,15 @@ export default {
       localStorage.setItem(this.bookmarkKey, value.toString());
     },
     // Следим за изменениями свойства 'rating', чтобы обновить LocalStorage
-  rating(value) {
-    localStorage.setItem(this.ratingKey, value.toString());
- 
-    this.ratedMovies[this.movie.id] = value;
-    // Serialize and save the ratedMovies object in LocalStorage under the 'ratings' key
-    localStorage.setItem("ratings", JSON.stringify(this.ratedMovies));
-  },
+    rating(value) {
+      localStorage.setItem(this.ratingKey, value.toString());
+
+      this.ratedMovies[this.movie.id] = value;
+      // Serialize and save the ratedMovies object in LocalStorage under the 'ratings' key
+      localStorage.setItem("ratings", JSON.stringify(this.ratedMovies));
+    },
   },
   created() {
-
-
     // Загружаем оцененные фильмы из LocalStorage при создании компонента
     const ratedMovies = localStorage.getItem("ratedMovies");
     if (ratedMovies) {
@@ -384,7 +354,6 @@ export default {
       this.savedRating = parseInt(localStorage.getItem("rating"));
     }
   },
- 
 };
 </script>
 

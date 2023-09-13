@@ -2,7 +2,6 @@
   <div id="app">
     <MainHeader @search="updateSearchQuery" />
     <router-view/> 
-    <!-- <MoviePage/> -->
     <MainFooter />
   </div>
 </template>
@@ -21,7 +20,7 @@ export default {
     MainFooter,
   },
   computed: {
-    ...mapState(["movies", "filteredMovies"]),
+    ...mapState([ 'movie', "movies", "filteredMovies"]),
   },
   data() {
     return {
@@ -30,7 +29,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["fetchMovies", "selectMovie", "searchMovies"]),
+    ...mapActions([ 'movie',"fetchMovies", "selectMovie", "searchMovies"]),
 
     changePage(page) {
       // Обработка изменения страницы

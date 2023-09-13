@@ -1,8 +1,7 @@
-// store/modules/ratings.js
+// store/modules/movie.js
 const state = {
-
   rating: null,
- 
+  movies: require('../../components/kinopoisk.json').docs,
 };
 
 const mutations = {

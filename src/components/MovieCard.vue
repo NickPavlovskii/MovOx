@@ -39,20 +39,9 @@
           :background="'white'"
           :is-gradient="true"
           :percent="movie.rating.kp * 10"
-          :gradient="{
-            angle: 90,
-            startColor: '#ff0000',
-            stopColor: '#ffff00',
-          }"
+          :gradient="circleProgressStyleObject.gradient"
           :is-bg-shadow="true"
-          :bg-shadow="{
-            inset: true,
-            vertical: 2,
-            horizontal: 2,
-            blur: 4,
-            opacity: 0.4,
-            color: '#000000',
-          }"
+          :bg-shadow="circleProgressStyleObject.bgShadow"
           :border-width="5"
           :border-bg-width="5"
         >
@@ -96,6 +85,21 @@ export default {
     return {
       isBookmarked: false,
       hasRating: false,
+      circleProgressStyleObject: {
+        gradient: {
+          angle: 90,
+          startColor: '#ff0000',
+          stopColor: '#ffff00',
+        },
+        bgShadow: {
+          inset: true,
+          vertical: 2,
+          horizontal: 2,
+          blur: 4,
+          opacity: 0.4,
+          color: '#000000',
+        },
+      },
     };
   },
   created() {

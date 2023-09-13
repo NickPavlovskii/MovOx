@@ -224,23 +224,27 @@ export default {
     };
   },
   computed: {
+    ...mapState("sorting", [
+      "currentPage",
+      "selectedSortOption",
+      "sortOrder",
+      "sortOptions"
+    ]),
     ...mapState([
+      "sorting",
       "filteredMovies",
       "searchQuery",
       "movies",
-      "sortOptions",
-      "sortOrder",
-      "selectedSortOption",
     ]),
-    ...mapGetters(["getMovieById", "sortedMovies"]),
-    selectedSortOption: {
-      get() {
-        return this.$store.state.selectedSortOption;
-      },
-      set(option) {
-        this.updateSelectedSortOption(option);
-      },
+    ...mapGetters(["sorting","getMovieById", "sortedMovies"]),
+  selectedSortOption: {
+    get() {
+      return this.$store.state.sorting.selectedSortOption;
     },
+    set(option) {
+      this.$store.commit("sorting/updateSelectedSortOption", option);
+    },
+  },
     // Фильтрация фильмов в зависимости от текущего пути маршрута
     filteredM() {
       const routePath = this.$route.path;
@@ -282,7 +286,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["updateSelectedSortOption", "SET_SORT_ORDER"]),
+    ...mapMutations(["updateSelectedSortOption", "SET_SORT_ORDER", "sortOptions"]),
     ...mapActions(["fetchMovies", "searchMovies", "updateSortOrder"]),
 
     // Сортировка фильмов в соответствии с выбранной опцией сортировки и порядком

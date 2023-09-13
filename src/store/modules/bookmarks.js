@@ -1,45 +1,30 @@
-// store/modules/bookmarks.js
-const state = {
-    bookmarks: JSON.parse(localStorage.getItem('bookmarks')) || [],
-    isBookmarked: false,
-  };
-  
-  const mutations = {
-    addToBookmarks(state, movieId) {
-      if (!state.bookmarks.includes(movieId)) {
-        state.bookmarks.push(movieId);
-        localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
-      }
+
+
+export default {
+    state: {
+     isBookmarked: false,
     },
-    removeFromBookmarks(state, movieId) {
-      const index = state.bookmarks.indexOf(movieId);
-      if (index !== -1) {
-        state.bookmarks.splice(index, 1);
-        localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
-      }
+    mutations: {
+      SET_BOOKMARK(state, val) {
+        state.isBookmarked = val;
+      },
     },
-  };
-  
-  const actions = {
-    toggleBookmark({ commit, state }, movieId) {
-      if (state.bookmarks.includes(movieId)) {
-        commit('removeFromBookmarks', movieId);
-      } else {
-        commit('addToBookmarks', movieId);
-      }
-    },
-  };
-  
-  const getters = {
-    isMovieBookmarked: state => movieId => {
-      return state.bookmarks.includes(movieId);
+    actions: {
+        toggleBookmark({ commit, state }) {
+            // console.log('toggleBookmark action triggered');
+            
+            const newBookmarkValue = !state.isBookmarked;
+            // console.log('newBookmarkValue:', newBookmarkValue);
+          
+            commit('SET_BOOKMARK', newBookmarkValue);
+          
+            if (newBookmarkValue) {
+              localStorage.setItem('isBookmarked', 'true');
+            //   console.log('Bookmark set in local storage');
+            } else {
+              localStorage.removeItem('isBookmarked');
+            //   console.log('Bookmark removed from local storage');
+            }
+          },
     },
   };
-  
-  export default {
-    state,
-    mutations,
-    actions,
-    getters,
-  };
-  

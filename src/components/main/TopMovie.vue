@@ -70,7 +70,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['movies']),
+    ...mapState([ 'movie', 'movies']),
 
     latestMovies() {
       if (this.movies.length > 0) {
@@ -111,7 +111,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(['setMovies']),
+    ...mapMutations([ 'movie', 'setMovies']),
     scrollLeft() {
       const carousel = this.$el.querySelector(".carousel");
       const firstImg = carousel.querySelectorAll("img")[0];

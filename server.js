@@ -1,16 +1,11 @@
-// server.js
-
-//Я пытался разобраться с rest api 
-//но как то без успешно в итоге оставил json, 
-//может хоть скажешь что нет, данные не беруться с сервера((
-
-
 const express = require('express');
+const cors = require('cors'); // Подключите cors
 const app = express();
-const port = 3000;
+const port = 3001;
 
-const movies = require('./kinopoisk.json'); // Подключаем файл с данными фильмов
+const movies = require('./src/components/kinopoisk.json'); // Подключаем файл с данными фильмов
 
+app.use(cors()); // Используйте cors middleware
 app.use(express.json());
 
 // Получить список всех фильмов
