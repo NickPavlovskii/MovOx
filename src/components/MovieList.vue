@@ -132,6 +132,7 @@ export default {
   },
   computed: {
     ...mapState([
+      'sorting',
       "filteredMovies",
       "searchQuery",
       "movies",
@@ -141,14 +142,19 @@ export default {
     ]),
     ...mapGetters(["getMovieById", "sortedMovies"]),
 
-    selectedSortOption: {
-      get() {
-        return this.$store.state.selectedSortOption;
-      },
-      set(option) {
-        this.updateSelectedSortOption(option);
-      },
+    sortOptions() {
+    // Получите sortOptions из хранилища
+    return this.sorting.sortOptions;
+  },
+
+  selectedSortOption: {
+    get() {
+      return this.sorting.selectedSortOption;
     },
+    set(option) {
+      this.updateSelectedSortOption(option);
+    },
+  },
 
     totalPages() {
       return Math.ceil(this.totalMovies / this.itemsPerPage);
