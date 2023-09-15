@@ -114,7 +114,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["movie","movies"]),
+    ...mapState(["movie", "movies"]),
 
     ...mapGetters(["isMovieBookmarked", "getRatedMovies"]),
     // Filter movies that are bookmarked by checking local storage
@@ -175,7 +175,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([ "fetchMovies"]),
+    ...mapActions(["fetchMovies"]),
     // Handle the page change event for rated movies pagination
     handlePageChange(newPage) {
       this.currentPageRated = newPage;

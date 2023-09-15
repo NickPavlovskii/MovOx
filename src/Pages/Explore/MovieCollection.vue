@@ -206,7 +206,6 @@ export default {
     return {
       itemsPerPage: 10,
       currentPage: 0,
-
       isLoading: false,
       titles: {
         "/movie": "Фильмы",
@@ -222,35 +221,25 @@ export default {
     };
   },
   computed: {
-    ...mapState([
-    "movie",
-      "sorting",
-      "filteredMovies",
-      "searchQuery",
-    
-    ]),
+    ...mapState(["movie", "sorting", "filteredMovies", "searchQuery"]),
     ...mapGetters(["getMovieById", "sortedMovies"]),
 
-
     sortOrder() {
- 
- return this.sorting.sortOrder;
-},
-
-
+      return this.sorting.sortOrder;
+    },
 
     sortOptions() {
-    // Получите sortOptions из хранилища
-    return this.sorting.sortOptions;
-  },
-  selectedSortOption: {
-    get() {
-      return this.sorting.selectedSortOption;
+      // Получите sortOptions из хранилища
+      return this.sorting.sortOptions;
     },
-    set(option) {
-      this.updateSelectedSortOption(option);
+    selectedSortOption: {
+      get() {
+        return this.sorting.selectedSortOption;
+      },
+      set(option) {
+        this.updateSelectedSortOption(option);
+      },
     },
-  },
     // Фильтрация фильмов в зависимости от текущего пути маршрута
     filteredM() {
       const routePath = this.$route.path;

@@ -124,40 +124,30 @@ export default {
   },
   data() {
     return {
-   
       currentPage: 0,
-
       isLoading: false,
     };
   },
   computed: {
-    ...mapState([
-      'movie',
-      'sorting',
-      "filteredMovies",
-     
-     
-    ]),
+    ...mapState(["movie", "sorting", "filteredMovies"]),
     ...mapGetters(["getMovieById", "sortedMovies"]),
 
     sortOrder() {
- 
-    return this.sorting.sortOrder;
-  },
+      return this.sorting.sortOrder;
+    },
 
     sortOptions() {
-    // Получите sortOptions из хранилища
-    return this.sorting.sortOptions;
-  },
+      return this.sorting.sortOptions;
+    },
 
-  selectedSortOption: {
-    get() {
-      return this.sorting.selectedSortOption;
+    selectedSortOption: {
+      get() {
+        return this.sorting.selectedSortOption;
+      },
+      set(option) {
+        this.updateSelectedSortOption(option);
+      },
     },
-    set(option) {
-      this.updateSelectedSortOption(option);
-    },
-  },
 
     totalPages() {
       return Math.ceil(this.totalMovies / this.movie.itemsPerPage);
@@ -170,24 +160,34 @@ export default {
       const startIndex = this.currentPage * this.movie.itemsPerPage;
 
       // Return a subset of the sorted movies as per pagination
-      return sortedMovies.slice(startIndex, startIndex + this.movie.itemsPerPage);
+      return sortedMovies.slice(
+        startIndex,
+        startIndex + this.movie.itemsPerPage
+      );
     },
     displayedMovies() {
       const sortedMovies = this.sortedMovies;
-  // Фильтрация фильмов
-  const filteredMovies = sortedMovies.filter(movie => {
-      // Ваш код фильтрации, например, по searchQuery
-      return movie.name.toLowerCase().includes(this.movie.searchQuery.toLowerCase());
-    });
+      // Фильтрация фильмов
+      const filteredMovies = sortedMovies.filter((movie) => {
+        // Ваш код фильтрации, например, по searchQuery
+        return movie.name
+          .toLowerCase()
+          .includes(this.movie.searchQuery.toLowerCase());
+      });
       // Calculate the starting index of the current page
       const startIndex = this.currentPage * this.movie.itemsPerPage;
 
       // Return a subset of the sorted movies as per pagination
-      return filteredMovies.slice(startIndex, startIndex + this.movie.itemsPerPage);
+      return filteredMovies.slice(
+        startIndex,
+        startIndex + this.movie.itemsPerPage
+      );
     },
     totalMovies() {
       const moviesList =
-        this.$route.path === "/" ? this.$store.state.movie.movies : this.$store.state.movie.filteredMovies;
+        this.$route.path === "/"
+          ? this.$store.state.movie.movies
+          : this.$store.state.movie.filteredMovies;
       return moviesList.length;
     },
     shouldShowLoadMoreButton() {
@@ -207,8 +207,8 @@ export default {
       this.currentPage = 0;
     },
     setSortOrder(order) {
-    this.$store.commit('sorting/SET_SORT_ORDER', order); // Устанавливаем сортировку через мутацию
-  },
+      this.$store.commit("sorting/SET_SORT_ORDER", order); // Устанавливаем сортировку через мутацию
+    },
     onPageChange(pageNumber) {
       this.currentPage = pageNumber;
     },
@@ -239,20 +239,20 @@ export default {
       this.currentPage = 1;
       this.setCurrentPage(1);
     },
-  
+
     async searchMovies() {
       this.isLoading = true;
       await this.$store.dispatch("movie/searchMovies");
       this.isLoading = false;
     },
     async fetchMovieData() {
-    const movieId = this.$route.params.id;
-    this.movie = this.$store.getters["getMovieById"](movieId); // Используем геттер getMovieById из модуля movie
-    if (!this.movie) {
-      await this.$store.dispatch("movie/fetchMovie", movieId); // Используем действие fetchMovie из модуля movie
-      this.movie = this.$store.getters["movie/getMovieById"](movieId); // Обновляем this.movie после загрузки
-    }
-  },
+      const movieId = this.$route.params.id;
+      this.movie = this.$store.getters["getMovieById"](movieId); // Используем геттер getMovieById из модуля movie
+      if (!this.movie) {
+        await this.$store.dispatch("movie/fetchMovie", movieId); // Используем действие fetchMovie из модуля movie
+        this.movie = this.$store.getters["movie/getMovieById"](movieId); // Обновляем this.movie после загрузки
+      }
+    },
   },
   created() {
     this.fetchMovieData();

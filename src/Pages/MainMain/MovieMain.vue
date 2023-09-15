@@ -56,24 +56,24 @@ export default {
     ...mapState(["movie"]),
   },
   methods: {
-    ...mapActions(['movie',"fetchMovies", "searchMovies"]),
+    ...mapActions(["movie", "fetchMovies", "searchMovies"]),
 
     async searchMoviesWithLoader() {
-    this.isLoading = true;
+      this.isLoading = true;
 
-    // Задержка выполнения на 2 секунды (2000 миллисекунд)
-    await new Promise(resolve => setTimeout(resolve, 2000));
+      // Задержка выполнения на 2 секунды (2000 миллисекунд)
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    await this.$store.dispatch("movie/searchMovies"); // Выполняем поиск
+      await this.$store.dispatch("movie/searchMovies"); // Выполняем поиск
 
-    this.isLoading = false; // Отключаем лоадер
-  },
-  mounted() {
-    // Имитация задержки загрузки на 2 секунды (можно заменить на реальную логику загрузки)
-    setTimeout(() => {
-      this.isLoading = false; // Выключаем лоадер после загрузки
-    }, 2000);
-  },
+      this.isLoading = false; // Отключаем лоадер
+    },
+    mounted() {
+      // Имитация задержки загрузки на 2 секунды (можно заменить на реальную логику загрузки)
+      setTimeout(() => {
+        this.isLoading = false; // Выключаем лоадер после загрузки
+      }, 2000);
+    },
   },
 };
 </script>
