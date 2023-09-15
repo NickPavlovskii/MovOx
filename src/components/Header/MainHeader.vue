@@ -155,10 +155,10 @@ export default {
   },
 
   computed: {
-    ...mapState(["movies", "searchQuery", "filteredMovies"]),
+    ...mapState(["movie","movies", "searchQuery", "filteredMovies"]),
 
     filteredMoviesList() {
-      return this.filteredMovies.slice(0, 3);
+      return this.movie.filteredMovies.slice(0, 3);
     },
   },
 

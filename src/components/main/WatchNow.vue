@@ -54,10 +54,10 @@ export default {
     MovieCard,
   },
   computed: {
-    ...mapState(["movies"]),
+    ...mapState([ 'movie']),
     latestMovies() {
-      if (this.movies.length > 0) {
-        const sortedMovies = [...this.movies]; // Создаем копию массива this.movies
+      if (this.movie.movies.length > 0) {
+        const sortedMovies = [...this.movie.movies]; // Создаем копию массива this.movies
         sortedMovies.sort((a, b) => b.year - a.year); // Сортировка фильмов по убыванию года
         return sortedMovies.slice(0, 10); // Возвращаем только первые 10 фильмов
       }

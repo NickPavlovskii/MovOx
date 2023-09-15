@@ -1,6 +1,7 @@
 // store/modules/sorting.js
 export default {
   state: {
+    movies: require('../../components/kinopoisk.json').docs,
     currentPage: 0,
     selectedSortOption: 'Сортировать по', // Текущий выбранный вариант сортировки
     sortOrder: 'asc', // Текущий порядок сортировки
@@ -15,8 +16,10 @@ export default {
     currentSortOrder(state) {
       return state.sortOrder;
     },
-    sortedMovies(state, getters, rootState) {
-      const moviesList = rootState.movies.slice(); 
+
+
+    sortedMovies(state) {
+      const moviesList = state.movies.slice(); 
       const sortOption = state.selectedSortOption;
       const sortOrder = state.sortOrder;
 

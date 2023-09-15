@@ -20,8 +20,7 @@
           @change="sortMovies"
           placeholder="Сортировать по"
           class="custom-dropdown w-full md:w-14rem"
-        >
-        </Dropdown>
+        ></Dropdown>
         <!-- Иконки для изменения порядка сортировки (по возрастанию или убыванию) -->
         <font-awesome-icon
           icon="arrow-up-9-1"
@@ -208,7 +207,6 @@ export default {
       itemsPerPage: 10,
       currentPage: 0,
 
-      sortOrder: "asc",
       isLoading: false,
       titles: {
         "/movie": "Фильмы",
@@ -224,25 +222,33 @@ export default {
     };
   },
   computed: {
-    ...mapState("sorting", [
-      "currentPage",
-      "selectedSortOption",
-      "sortOrder",
-      "sortOptions"
-    ]),
     ...mapState([
+    "movie",
       "sorting",
       "filteredMovies",
       "searchQuery",
-      "movies",
+    
     ]),
-    ...mapGetters(["sorting","getMovieById", "sortedMovies"]),
+    ...mapGetters(["getMovieById", "sortedMovies"]),
+
+
+    sortOrder() {
+ 
+ return this.sorting.sortOrder;
+},
+
+
+
+    sortOptions() {
+    // Получите sortOptions из хранилища
+    return this.sorting.sortOptions;
+  },
   selectedSortOption: {
     get() {
-      return this.$store.state.sorting.selectedSortOption;
+      return this.sorting.selectedSortOption;
     },
     set(option) {
-      this.$store.commit("sorting/updateSelectedSortOption", option);
+      this.updateSelectedSortOption(option);
     },
   },
     // Фильтрация фильмов в зависимости от текущего пути маршрута
@@ -257,7 +263,7 @@ export default {
         "Adventures",
       ];
 
-      return this.movies.filter((movie) => {
+      return this.movie.movies.filter((movie) => {
         if (routePath === "/movie") {
           return movie.type === "movie";
         } else if (routePath === "/cartoon") {
@@ -273,7 +279,7 @@ export default {
     },
     // Общее количество фильмов
     totalMovies() {
-      return this.movies.length;
+      return this.movie.movies.length;
     },
 
     totalPages() {
@@ -286,7 +292,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["updateSelectedSortOption", "SET_SORT_ORDER", "sortOptions"]),
+    ...mapMutations(["updateSelectedSortOption", "SET_SORT_ORDER"]),
     ...mapActions(["fetchMovies", "searchMovies", "updateSortOrder"]),
 
     // Сортировка фильмов в соответствии с выбранной опцией сортировки и порядком
@@ -294,7 +300,7 @@ export default {
       this.displayedMovies.sort((a, b) => {
         const aValue = this.getPropertyValue(a, this.selectedSortOption);
         const bValue = this.getPropertyValue(b, this.selectedSortOption);
-        if (this.sortOrder === "asc") {
+        if (this.sorting.sortOrder === "asc") {
           if (typeof aValue === "string" && typeof bValue === "string") {
             return aValue.localeCompare(bValue);
           } else {
@@ -311,7 +317,7 @@ export default {
     },
     // Обновление порядка сортировки и применение сортировки
     updateSortOrder(order) {
-      this.sortOrder = order;
+      this.sorting.sortOrder = order;
       this.sortMovies();
     },
     updateDisplayedMovies() {

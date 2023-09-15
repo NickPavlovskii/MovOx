@@ -1,5 +1,5 @@
 
-
+// store/modules/bookmarks.js
 export default {
     state: {
      isBookmarked: false,

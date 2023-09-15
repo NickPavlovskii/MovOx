@@ -51,18 +51,11 @@
         <div class="year">{{ movie.year }}</div>
       </div>
     </router-link>
-    <div class="icons">
-      <font-awesome-icon
-        icon="bookmark"
-        class="bookmark"
-        :class="{ active: isBookmarked }"
-        @click.stop="toggleBookmark($event)"
-      />
-    </div>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBookmark, faHeart } from "@fortawesome/free-solid-svg-icons";
@@ -83,8 +76,7 @@ export default {
   },
   data() {
     return {
-      isBookmarked: false,
-      hasRating: false,
+
       circleProgressStyleObject: {
         gradient: {
           angle: 90,
@@ -116,30 +108,12 @@ export default {
     }
   },
   computed: {
-    bookmarkKey() {
-      return `bookmark_${this.movie.id}`;
-    },
-    ratingKey() {
-      return `rating_${this.movie.id}`;
-    },
+    ...mapState(["movie"]),
+   
   },
-  watch: {
-    isBookmarked(value) {
-      localStorage.setItem(this.bookmarkKey, value.toString());
-    },
-    hasRating(value) {
-      localStorage.setItem(this.ratingKey, value.toString());
-    },
-  },
+
   methods: {
-    toggleBookmark(event) {
-      event.stopPropagation();
-      this.isBookmarked = !this.isBookmarked;
-    },
-    rateMovie(event) {
-      event.stopPropagation();
-      this.hasRating = !this.hasRating;
-    },
+ 
     convertMinutesToHours(minutes) {
       const hours = Math.floor(minutes / 60);
       const remainingMinutes = minutes % 60;

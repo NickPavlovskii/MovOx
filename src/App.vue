@@ -3,10 +3,12 @@
     <MainHeader @search="updateSearchQuery" />
     <router-view/> 
     <MainFooter />
+
   </div>
 </template>
 
 <script>
+
 import "../style/PrimeVue.css"; // Подключение файла стилей
 import MainHeader from "./components/Header/MainHeader.vue";
 import MainFooter from "./components/Footer/MainFooter.vue";
@@ -45,7 +47,11 @@ export default {
 };
 </script>
 
+
+
 <style>
+
+
 #app {
   background: #04152d;
 }

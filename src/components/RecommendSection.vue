@@ -51,10 +51,10 @@ export default {
     MovieCard,
   },
   computed: {
-    ...mapState(["movies"]),
+    ...mapState(["movie"]),
     recommendedMovies() {
       // Получаем список фильмов с закладками или лайками
-      const bookmarkedMovies = this.movies.filter((movie) => {
+      const bookmarkedMovies = this.movie.movies.filter((movie) => {
         const bookmarkKey = `bookmark_${movie.id}`;
         const hasBookmark = localStorage.getItem(bookmarkKey) === "true";
 
@@ -83,7 +83,7 @@ export default {
 
       // Группируем все фильмы по жанрам
       const groupedMoviesByGenres = {};
-      this.movies.forEach((movie) => {
+      this.movie.movies.forEach((movie) => {
         movie.genres.forEach((genre) => {
           if (!groupedMoviesByGenres[genre]) {
             groupedMoviesByGenres[genre] = [];
@@ -94,7 +94,7 @@ export default {
 
       // Группируем все фильмы по странам
       const groupedMoviesByCountries = {};
-      this.movies.forEach((movie) => {
+      this.movie.movies.forEach((movie) => {
         const country = movie.country;
         if (!groupedMoviesByCountries[country]) {
           groupedMoviesByCountries[country] = [];
@@ -104,7 +104,7 @@ export default {
 
       // Группируем все фильмы по актерам
       const groupedMoviesByActors = {};
-      this.movies.forEach((movie) => {
+      this.movie.movies.forEach((movie) => {
         if (movie.cast && Array.isArray(movie.cast)) {
           movie.cast.forEach((actor) => {
             if (!groupedMoviesByActors[actor.name]) {

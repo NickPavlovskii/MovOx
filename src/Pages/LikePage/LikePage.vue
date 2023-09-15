@@ -114,19 +114,19 @@ export default {
     };
   },
   computed: {
-    ...mapState(["movies"]),
+    ...mapState(["movie","movies"]),
 
     ...mapGetters(["isMovieBookmarked", "getRatedMovies"]),
     // Filter movies that are bookmarked by checking local storage
     bookmarkedMovies() {
-      return this.movies.filter((movie) => {
+      return this.movie.movies.filter((movie) => {
         const bookmarkKey = `bookmark_${movie.id}`;
         return localStorage.getItem(bookmarkKey) === "true";
       });
     },
     // Filter movies that are rated by checking local storage and map them with their ratings
     ratedMovies() {
-      return this.movies
+      return this.movie.movies
         .filter((movie) => {
           const ratingKey = `rating_${movie.id}`;
           const like = localStorage.getItem(ratingKey);
@@ -182,11 +182,11 @@ export default {
     },
     // Rate a movie and save the rating in local storage
     rateMovie(movieId, rating) {
-      const movie = this.movies.find((movie) => movie.id === movieId);
+      const movie = this.movie.movies.find((movie) => movie.id === movieId);
       if (movie) {
         movie.rating = rating;
         localStorage.setItem(`rating_${movie.id}`, rating.toString());
-        localStorage.setItem("movies", JSON.stringify(this.movies));
+        localStorage.setItem("movies", JSON.stringify(this.movie.movies));
       }
     },
     // Remove the rating of a movie from the rated movies list
@@ -195,7 +195,7 @@ export default {
       if (index !== -1) {
         this.ratedMovies.splice(index, 1);
         localStorage.removeItem(`rating_${movieId}`);
-        localStorage.setItem("movies", JSON.stringify(this.movies));
+        localStorage.setItem("movies", JSON.stringify(this.movie.movies));
       }
     },
   },

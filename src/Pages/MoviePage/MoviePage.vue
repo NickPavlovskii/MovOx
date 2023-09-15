@@ -4,7 +4,7 @@
     <div class="detailsBanner">
       <div class="backdrop-img">
         <div class="lazy-load-image-background">
-          <img :src="movie.poster.url" alt="Movie Poster" class="posterImg" />
+          <img :src="movieData.poster.url" alt="Movie Poster" class="posterImg" />
         </div>
       </div>
       <div class="opacity-layer"></div>
@@ -12,7 +12,7 @@
       <div class="content">
         <!-- Левая часть баннера с постером и возможностью оценки фильма -->
         <div class="left">
-          <img :src="movie.poster.url" alt="Movie Poster" class="posterImg" />
+          <img :src="movieData.poster.url" alt="Movie Poster" class="posterImg" />
           <div style="display: flex; flex-direction: column">
             <!-- Блок с оценкой фильма -->
             <div style="display: flex; flex-direction: column">
@@ -62,19 +62,19 @@
         </div>
         <!-- Правая часть баннера с основной информацией о фильме -->
         <div class="right">
-          <h1 class="title">{{ movie.name }}</h1>
+          <h1 class="title">{{ movieData.name }}</h1>
           <!-- Альтернативное название фильма -->
-          <h4 class="subtitle">{{ movie.alternativeName }}</h4>
+          <h4 class="subtitle">{{ movieData.alternativeName }}</h4>
           <!-- Жанры фильма -->
           <div class="genres">
-            <div v-for="genre in movie.genres" :key="genre">
+            <div v-for="genre in  movieData.genres" :key="genre">
               <span class="genre">{{ genre }}</span>
             </div>
           </div>
           <!-- Описание фильма -->
           <div class="overview">
             <h2 class="heading">О фильме</h2>
-            <p class="description">{{ movie.description }}</p>
+            <p class="description">{{  movieData.description }}</p>
           </div>
           <!-- Дополнительная информация о фильме -->
           <div class="right-rows">
@@ -85,13 +85,13 @@
                     >Режиссер</span
                   >
                   <span class="text">{{
-                    movie.director.producer.join(", ")
+                     movieData.director.producer.join(", ")
                   }}</span>
                 </div>
                 <div class="infoItem">
                   <span class="text bold">Cценарист:</span>
                   <span class="text">{{
-                    movie.director.screenwriter.join(", ")
+                     movieData.director.screenwriter.join(", ")
                   }}</span>
                 </div>
               </div>
@@ -103,21 +103,21 @@
                   <span class="text bold"
                     ><font-awesome-icon icon="globe"
                   /></span>
-                  <span class="text">{{ movie.country }}</span>
+                  <span class="text">{{  movieData.country }}</span>
                 </div>
                 <div class="infoItem">
                   <span class="text bold"
                     ><font-awesome-icon icon="clock"
                   /></span>
                   <span class="text">{{
-                    convertMinutesToHours(movie.movieLength)
+                    convertMinutesToHours( movieData.movieLength)
                   }}</span>
                 </div>
                 <div class="infoItem">
                   <span class="text bold"
                     ><font-awesome-icon icon="calendar-days"
                   /></span>
-                  <span class="text">{{ movie.year }}</span>
+                  <span class="text">{{  movieData.year }}</span>
                 </div>
               </div>
             </div>
@@ -133,7 +133,7 @@
                   <span
                     class="text"
                     style="display: flex; align-items: center"
-                    >{{ movie.rating.imdb }}</span
+                    >{{  movieData.rating.imdb }}</span
                   >
                 </div>
                 <div
@@ -141,7 +141,7 @@
                   style="display: flex; align-items: center"
                 >
                   <span class="text bold">kp:</span>
-                  <span class="text">{{ movie.rating.kp }}</span>
+                  <span class="text">{{  movieData.rating.kp }}</span>
                 </div>
               </div>
             </div>
@@ -155,12 +155,12 @@
                 >
                   <h4 style="letter-spacing: 0.2em">В Мире</h4>
                   <div class="progress-bar">
-                    <ProgressBar :value="movie.rating.filmCritics * 10">{{
-                      movie.rating.filmCritics
+                    <ProgressBar :value=" movieData.rating.filmCritics * 10">{{
+                       movieData.rating.filmCritics
                     }}</ProgressBar>
                   </div>
                   <span class="text votes"
-                    >{{ movie.votes.filmCritics }} голосов</span
+                    >{{  movieData.votes.filmCritics }} голосов</span
                   >
                 </div>
                 <div
@@ -168,23 +168,23 @@
                 >
                   <h4>В России</h4>
                   <div class="progress-bar rf">
-                    <ProgressBar :value="movie.rating.russianFilmCritics">
+                    <ProgressBar :value=" movieData.rating.russianFilmCritics">
                       <span style="margin-bottom: 2px">{{
-                        movie.rating.russianFilmCritics
+                         movieData.rating.russianFilmCritics
                       }}</span>
                     </ProgressBar>
                   </div>
                   <span class="text votes"
-                    >{{ movie.votes.russianFilmCritics }} голосов</span
+                    >{{  movieData.votes.russianFilmCritics }} голосов</span
                   >
                 </div>
               </div>
             </div>
             <!-- Доступность фильма на различных платформах (если есть) -->
-            <div class="watchability" v-if="movie.watchability.items != null">
+            <div class="watchability" v-if=" movieData.watchability.items != null">
               <p class="watchability-heading">Доступно на:</p>
               <ul class="watchability-list">
-                <li v-for="item in movie.watchability.items" :key="item._id">
+                <li v-for="item in movieData.watchability.items" :key="item._id">
                   <a :href="item.url" target="_blank">
                     <img
                       :src="item.logo.url"
@@ -206,14 +206,14 @@
           <span style="text-decoration: underline; cursor: pointer"
             >KinOx</span
           > </router-link
-        >/{{ movie.name }}
+        >/{{  movieData.name }}
       </h4>
     </div>
     <div style="position: relative; bottom: 100px">
-      <div class="Cast" v-if="movie.type !== 'cartoon'">
+      <div class="Cast" v-if=" movieData.type !== 'cartoon'">
         <h3 class="watchability-heading">Каст:</h3>
         <ul class="cast-list">
-          <li v-for="item in movie.cast" :key="item._id">
+          <li v-for="item in  movieData.cast" :key="item._id">
             <div
               class="cast-log"
               :style="'background-image: url(' + item.photo.url + ');'"
@@ -235,7 +235,7 @@
 import RecommendSection from "../../components/RecommendSection.vue";
 import { Icon } from "@iconify/vue";
 import { mapState } from "vuex";
-import { mapActions, mapMutations, mapGetters } from "vuex";
+import { mapActions,mapGetters } from "vuex";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -260,43 +260,50 @@ export default {
   },
   data() {
     return {
-      rating: null,
-      hasRating: false,
+      rating: null, 
       ratedMovies: {},
     };
   },
 
   computed: {
-    ...mapState(["movies"]),
-    ...mapState(["isBookmarked", "rating"]),
+    ...mapState(["movie"]),
+    ...mapState(["isBookmarked", "rating",'bookmarks']),
     ...mapGetters(["isMovieRated"]),
 
+
+    isBookmarked() {
+    return this.$store.state.bookmarks.isBookmarked; 
+    },
+  
+    // rating() {
+    // return this.$store.state.rating.rating; 
+    // },
     movieRating() {
       const ratedMovie = this.ratedMovies.find(
-        (movie) => movie.id === this.movie.id
+        (movie) => movie.id === this.movie.movies.id
       );
       return ratedMovie ? ratedMovie.rating : 0;
     },
-    movie() {
+    movieData() {
       // Получаем информацию о фильме на основе переданного id из маршрута
       const movieId = parseInt(this.$route.params.id);
-      return this.movies.find((movie) => movie.id === movieId);
+      return this.movie.movies.find((movie) => movie.id === movieId);
     },
     // Создаем ключ для закладки на основе id фильма для хранения в LocalStorage
     bookmarkKey() {
-      return `bookmark_${this.movie.id}`;
+      return `bookmark_${this.movieData.id}`;
     },
     // Создаем ключ для рейтинга на основе id фильма для хранения в LocalStorage
     ratingKey() {
-      return `rating_${this.movie.id}`;
+      return `rating_${this.movieData.id}`;
     },
   },
 
   methods: {
     ...mapActions(["toggleBookmark","updateRating",]),
     ...mapActions(["fetchMovies"]),
-    ...mapMutations("movies"),
-    resetRating() {
+  
+    resetRating() { 
       this.rating = 0;
       this.updateRating({ movieId: this.movieId, rating: 0 });
     },
@@ -322,24 +329,24 @@ export default {
     rating(value) {
       localStorage.setItem(this.ratingKey, value.toString());
 
-      this.ratedMovies[this.movie.id] = value;
+      this.ratedMovies[this.movieData.id] = value;
       // Serialize and save the ratedMovies object in LocalStorage under the 'ratings' key
       localStorage.setItem("ratings", JSON.stringify(this.ratedMovies));
     },
   },
   created() {
+    const ratingKey = `rating_${this.movieData.id}`;
     // Загружаем оцененные фильмы из LocalStorage при создании компонента
     const ratedMovies = localStorage.getItem("ratedMovies");
     if (ratedMovies) {
       this.ratedMovies = JSON.parse(ratedMovies);
     }
-    const bookmarkKey = `bookmark_${this.movie.id}`;
-    const ratingKey = `rating_${this.movie.id}`;
+    const isBookmarked = localStorage.getItem('isBookmarked');
 
-    // Проверяем сохраненные значения в локальном хранилище
-    if (localStorage.getItem(bookmarkKey) === "true") {
-      this.isBookmarked = true;
-    }
+// Если есть значение в локальном хранилище, устанавливаем его в состояние Vuex
+if (isBookmarked === 'true') {
+  this.$store.commit('SET_BOOKMARK', true);
+}
 
     if (localStorage.getItem(ratingKey)) {
       this.rating = parseInt(localStorage.getItem(ratingKey));
@@ -347,7 +354,7 @@ export default {
   },
 
   mounted() {
-    if (!this.movies.length) {
+    if (!this.movie.movies.length) {
       this.fetchMovies();
     }
     if (localStorage.getItem("rating")) {

@@ -70,11 +70,11 @@ export default {
   },
 
   computed: {
-    ...mapState([ 'movie', 'movies']),
+    ...mapState(['movie']),
 
     latestMovies() {
-      if (this.movies.length > 0) {
-        const sortedMovies = [...this.movies];
+      if (this.movie.movies.length > 0) {
+        const sortedMovies = [...this.movie.movies];
         sortedMovies.sort((a, b) => b.rating.kp - a.rating.kp); // Сортировка фильмов по убыванию рейтинга
 
         if (this.timeFrame === 'recent') {
@@ -111,7 +111,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations([ 'movie', 'setMovies']),
+    ...mapMutations(['setMovies']),
     scrollLeft() {
       const carousel = this.$el.querySelector(".carousel");
       const firstImg = carousel.querySelectorAll("img")[0];

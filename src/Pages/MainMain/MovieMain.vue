@@ -30,7 +30,7 @@ import ContentWrapper from "../../components/main/ContentWrapper.vue";
 import TopMovie from "../../components/main/TopMovie.vue";
 import WatchNow from "../../components/main/WatchNow.vue";
 import ClapperboardIcon from "../../components/ClapperboardIcon.vue";
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   components: {
@@ -44,17 +44,36 @@ export default {
   },
   data() {
     return {
-      isLoading: false,
+      isLoading: true,
     };
   },
+  async beforeMount() {
+    // Имитация загрузки данных (задержка в 2 секунды)
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    this.isLoading = false; // Закончили имитацию загрузки, скрываем лоадер
+  },
+  computed: {
+    ...mapState(["movie"]),
+  },
   methods: {
-    ...mapActions(["fetchMovies", "searchMovies"]),
+    ...mapActions(['movie',"fetchMovies", "searchMovies"]),
 
-    async searchMovies() {
-      this.isLoading = true;
-      await this.$store.dispatch("searchMovies");
-      this.isLoading = false;
-    },
+    async searchMoviesWithLoader() {
+    this.isLoading = true;
+
+    // Задержка выполнения на 2 секунды (2000 миллисекунд)
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    await this.$store.dispatch("movie/searchMovies"); // Выполняем поиск
+
+    this.isLoading = false; // Отключаем лоадер
+  },
+  mounted() {
+    // Имитация задержки загрузки на 2 секунды (можно заменить на реальную логику загрузки)
+    setTimeout(() => {
+      this.isLoading = false; // Выключаем лоадер после загрузки
+    }, 2000);
+  },
   },
 };
 </script>
