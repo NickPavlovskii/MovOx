@@ -7,7 +7,7 @@ const store = createStore({
   modules: {
    sorting: sortingModule, 
    movie:movie,
-   bookmarks
+   bookmarks:bookmarks
   },
  
 });
