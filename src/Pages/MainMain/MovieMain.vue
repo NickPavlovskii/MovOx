@@ -56,7 +56,7 @@ export default {
     ...mapState(["movie"]),
   },
   methods: {
-    ...mapActions(["movie", "fetchMovies", "searchMovies"]),
+    ...mapActions(["movie", "fetchMovies"]),
 
     async searchMoviesWithLoader() {
       this.isLoading = true;
