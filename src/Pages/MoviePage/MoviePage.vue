@@ -274,10 +274,7 @@ export default {
     isBookmarked() {
     return this.$store.state.bookmarks.isBookmarked; 
     },
-  
-    // rating() {
-    // return this.$store.state.rating.rating; 
-    // },
+
     movieRating() {
       const ratedMovie = this.ratedMovies.find(
         (movie) => movie.id === this.movie.movies.id

@@ -54,7 +54,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["movie","movies", "searchQuery", "filteredMovies"]),
+    ...mapState(["movie"]),
   },
 
   methods: {

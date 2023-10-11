@@ -114,7 +114,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["movie", "movies"]),
+    ...mapState(["movie"]),
 
     ...mapGetters(["isMovieBookmarked", "getRatedMovies"]),
     // Filter movies that are bookmarked by checking local storage
