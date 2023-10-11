@@ -3,7 +3,8 @@ const cors = require('cors'); // Подключите cors
 const app = express();
 const port = 3001;
 
-const movies = require('./src/components/kinopoisk.json'); // Подключаем файл с данными фильмов
+const moviesData = require('./src/components/kinopoisk.json'); // Подключаем файл с данными фильмов
+const movies = moviesData.docs; // Извлеките массив фильмов из 'docs'
 
 app.use(cors()); // Используйте cors middleware
 app.use(express.json());
