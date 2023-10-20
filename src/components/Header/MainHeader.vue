@@ -2,15 +2,14 @@
   <header class="header" :class="{ active: isMenuOpen }">
     <div class="headerContent">
       <!-- Logo -->
-      <router-link to="/" style="text-decoration: none; color: white;">
+      <router-link to="/" style="text-decoration: none; color: white">
         <div class="logo">
-          <img src="../../assets/3.png" alt="" />
+          <img src="../../assets/Icon.png" alt="" />
         </div>
       </router-link>
 
-
       <div class="group">
-      <!-----------------------------------------------menuItems -------------------------------------------------->
+        <!-----------------------------------------------menuItems -------------------------------------------------->
         <ul class="menuItems">
           <li>
             <router-link :to="{ path: '/movie' }" class="menuItem">
@@ -29,7 +28,12 @@
           </li>
 
           <li class="menuItem bookmarksItem">
-            <font-awesome-icon icon="bookmark" class="Bookmark" v-if="!isSearchActive" @click="navigateToLikePage" />
+            <font-awesome-icon
+              icon="bookmark"
+              class="Bookmark"
+              v-if="!isSearchActive"
+              @click="navigateToLikePage"
+            />
           </li>
           <li class="bookmarksLink">
             <router-link :to="{ path: '/bookmarks-ratings' }" class="menuItem">
@@ -37,54 +41,73 @@
             </router-link>
           </li>
         </ul>
-      <!-----------------------------------------------search-------------------------------------------------->
+        <!-----------------------------------------------search-------------------------------------------------->
         <div class="search">
           <span class="icon">
-            <font-awesome-icon icon="search" class="searchBtn" v-if="!isSearchActive" @click="toggleSearch" />
-            <font-awesome-icon icon="close" class="closeBtn" v-if="isSearchActive" @click="toggleSearch" />
+            <font-awesome-icon
+              icon="search"
+              class="searchBtn"
+              v-if="!isSearchActive"
+              @click="toggleSearch"
+            />
+            <font-awesome-icon
+              icon="close"
+              class="closeBtn"
+              v-if="isSearchActive"
+              @click="toggleSearch"
+            />
           </span>
         </div>
-  <!-----------------------------------------------searchBox-------------------------------------------------->
-    <div class="searchBox" :class="{ active: isSearchActive }">
-      <AutoComplete 
-      @keydown.enter="handleEnter"  
-      class="input" 
-      v-model="searchQuery" 
-      :suggestions="filteredMoviesList"  
-      @input="handleInput" 
-      @blur="handleBlur" 
-      >
-      
-        <template #option="{ option }">
-          <router-link 
-          style=" display: flex; text-decoration: none; color: #000;" 
-          :to="{ name: 'movie-details', params: { id: option.id }}" 
-          @click="clearSearchQuery">
-
-          <img :src="option.poster.url" alt="Постер фильма" class="dropdown-image">
-          <div class="dropdown-info">
-            <h3 class="dropdown-name">{{ option.name }}</h3>
-            <p class="dropdown-shortDesc">{{ option.shortDescription }}</p>
-            <div class="row">
-              <div class="info">
-                <div class="infoItem dropdown-movieLength">
-                  <span class="text bold"><i class="pi pi-clock"></i></span>
-                  <span class="text">{{ convertMinutesToHours(option.movieLength) }}</span>
+        <!-----------------------------------------------searchBox-------------------------------------------------->
+        <div class="searchBox" :class="{ active: isSearchActive }">
+          <AutoComplete
+            @keydown.enter="handleEnter"
+            class="input"
+            v-model="searchQuery"
+            :suggestions="filteredMoviesList"
+            @input="handleInput"
+            @blur="handleBlur"
+          >
+            <template #option="{ option }">
+              <router-link
+                style="display: flex; text-decoration: none; color: #000"
+                :to="{ name: 'movie-details', params: { id: option.id } }"
+                @click="clearSearchQuery"
+              >
+                <img
+                  :src="option.poster.url"
+                  alt="Постер фильма"
+                  class="dropdown-image"
+                />
+                <div class="dropdown-info">
+                  <h3 class="dropdown-name">{{ option.name }}</h3>
+                  <p class="dropdown-shortDesc">
+                    {{ option.shortDescription }}
+                  </p>
+                  <div class="row">
+                    <div class="info">
+                      <div class="infoItem dropdown-movieLength">
+                        <span class="text bold"
+                          ><i class="pi pi-clock"></i
+                        ></span>
+                        <span class="text">{{
+                          convertMinutesToHours(option.movieLength)
+                        }}</span>
+                      </div>
+                      <div class="infoItem">
+                        <span class="text bold"
+                          ><i class="pi pi-calendar"></i
+                        ></span>
+                        <span class="text">{{ option.year }}</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="infoItem">
-                  <span class="text bold"><i class="pi pi-calendar"></i></span>
-                  <span class="text">{{ option.year }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </router-link>
-      </template>
-    </AutoComplete>
-  </div>
-
- <!-----------------------------------------------mobileMenu-------------------------------------------------->
+              </router-link>
+            </template>
+          </AutoComplete>
+        </div>
+        <!-----------------------------------------------mobileMenu-------------------------------------------------->
         <div class="mobileMenu" :class="{ active: show }" @click="toggleMenu">
           <div class="toggleMenu">
             <span class="line top" :class="{ active: show }"></span>
@@ -97,20 +120,122 @@
   </header>
 </template>
 
+<script>
+import AutoComplete from "primevue/autocomplete";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faSearch,
+  faBars,
+  faClose,
+  faBookmark,
+  faHeart,
+} from "@fortawesome/free-solid-svg-icons";
+import { mapState, mapActions, mapMutations } from "vuex";
 
+library.add(faSearch);
+library.add(faBars);
+library.add(faClose);
+library.add(faBookmark);
+library.add(faHeart);
 
+export default {
+  components: {
+    FontAwesomeIcon,
+    AutoComplete,
+  },
 
+  data() {
+    return {
+      isSearchActive: false,
+      showResults: false,
+      searchQuery: "",
+      isMenuOpen: false,
+    };
+  },
+
+  computed: {
+    ...mapState(["movies", "searchQuery", "filteredMovies"]),
+
+    filteredMoviesList() {
+      return this.filteredMovies.slice(0, 3);
+    },
+  },
+
+  methods: {
+    ...mapActions(["searchMovies"]),
+    ...mapMutations(["setSearchQuery"]),
+    toggleResults() {
+      this.showResults = !this.showResults;
+    },
+    // Convert minutes to hours and minutes format
+    convertMinutesToHours(minutes) {
+      const hours = Math.floor(minutes / 60);
+      const remainingMinutes = minutes % 60;
+      return `${hours}h ${remainingMinutes}min`;
+    },
+    handleInput() {
+      const delayInMilliseconds = 500;
+
+      // Обнуляем предыдущий таймер, чтобы избежать ненужных вызовов
+      if (this.timerId) {
+        clearTimeout(this.timerId);
+      }
+
+      // Запускаем новый таймер с задержкой
+      this.timerId = setTimeout(() => {
+        this.showResults = true;
+        this.setSearchQuery(this.searchQuery);
+        this.searchMovies();
+      }, delayInMilliseconds);
+    },
+
+    handleEnter() {
+      if (event.key === "Enter") {
+        this.$router.push({ path: `/search` });
+      }
+    },
+    clearSearchQuery() {
+      this.searchQuery = ""; // Очистка значения searchQuery
+    },
+    handleBlur() {
+      this.showResults = false;
+    },
+    selectMovie(movie) {
+      this.searchQuery = movie.name;
+      this.showResults = false;
+      this.$router.push({ path: `/movie/${movie.id}` });
+    },
+
+    navigateToLikePage() {
+      this.$router.push({ name: "bookmarks-ratings" });
+    },
+    // Perform the movie search
+    performSearch() {
+      this.searchMovies();
+      this.$emit("search", this.searchQuery);
+    },
+    // Toggle the search box
+    toggleSearch() {
+      this.isSearchActive = !this.isSearchActive;
+    },
+    // Toggle the menu
+    toggleMenu() {
+      this.isMenuOpen = !this.isMenuOpen;
+    },
+  },
+  mounted() {
+    this.searchMovies();
+  },
+};
+</script>
 
 <style lang="scss" scoped>
-
-
 .text {
   margin-right: 5px;
   opacity: 0.5;
   line-height: 24px;
 }
-
-
 
 .row {
   display: flex;
@@ -129,19 +254,17 @@
   margin-right: 10px;
   display: flex;
   flex-flow: row wrap;
-
 }
-
 
 .dropdown-image {
   width: 35%;
   margin-right: 6px;
 }
 
-.dropdown-name {}
+.dropdown-name {
+}
 
 .dropdown-shortDesc {
-
   white-space: wrap;
 }
 
@@ -215,7 +338,6 @@
   align-items: center;
   z-index: 5;
 
-  /* Apply styles when the header is active */
   &.active {
     background-color: #020c1b;
   }
@@ -227,6 +349,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  height: 100%;
 }
 
 /* Logo */
@@ -246,9 +369,6 @@
     font-family: cursive;
   }
 }
-
-
-
 
 .group {
   display: flex;
@@ -291,8 +411,6 @@
   }
 }
 
-
-
 /* Search box */
 .searchBox {
   position: absolute;
@@ -309,7 +427,6 @@
     right: 0;
   }
 }
-
 
 /* Menu items */
 .menuItems {
@@ -338,7 +455,7 @@
 
       /* Underline animation */
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         width: 100%;
         height: 2px;
@@ -408,8 +525,6 @@
     margin-right: 10px;
   }
 
-  .searchBar {}
-
   .bookmarks_icon {
     .menuItem {
       display: none;
@@ -438,7 +553,6 @@
     width: 80%;
     background: #fff;
     border-radius: 2px;
-
     left: 0;
     transform-origin: center;
     transition: transform 0.3s cubic-bezier(0.55, 0.055, 0.675, 0.19),
@@ -477,13 +591,11 @@
     &.active {
       right: 40px;
     }
-
   }
 
   .closehBtn {
     position: relative;
     margin-bottom: 5px;
-
   }
 
   .toggleMenu.active {
@@ -492,7 +604,6 @@
 
   .toggleMenu {
     display: block;
-
   }
 
   .header .menuItems {
@@ -528,127 +639,5 @@
   .searchBtn {
     left: 0;
   }
-
-
-
-
-
-
-  .bookmarks_icon {
-    .menuItem {
-      display: none;
-    }
-  }
 }
 </style>
-
-
-<script>
-import AutoComplete from 'primevue/autocomplete';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faSearch, faBars, faClose, faBookmark, faHeart } from '@fortawesome/free-solid-svg-icons';
-import { mapState, mapActions,mapMutations } from 'vuex';
-
-library.add(faSearch);
-library.add(faBars);
-library.add(faClose);
-library.add(faBookmark);
-library.add(faHeart);
-
-export default {
-  components: {
-    FontAwesomeIcon,
-    AutoComplete
-  },
-
-  data() {
-    return {
-      isSearchActive: false,
-      showResults: false,
-      searchQuery: '',
-      isMenuOpen: false,
-    };
-  },
-
-  computed: {
-    ...mapState([
-    'movies', 
-    'searchQuery', 
-    'filteredMovies'
-  ]),
-
-    filteredMoviesList() {
-      return this.filteredMovies.slice(0, 3);
-    },
-  },
-
-  methods: {
-    ...mapActions(['searchMovies']),
-    ...mapMutations(['setSearchQuery']),
-    toggleResults() {
-    this.showResults = !this.showResults;
-  },
-    // Convert minutes to hours and minutes format
-    convertMinutesToHours(minutes) {
-      const hours = Math.floor(minutes / 60);
-      const remainingMinutes = minutes % 60;
-      return `${hours}h ${remainingMinutes}min`;
-    },
-    handleInput() {
-     
-      const delayInMilliseconds = 500;
-
-      // Обнуляем предыдущий таймер, чтобы избежать ненужных вызовов
-      if (this.timerId) {
-        clearTimeout(this.timerId);
-      }
-
-      // Запускаем новый таймер с задержкой
-      this.timerId = setTimeout(() => {
-        this.showResults = true; 
-        this.setSearchQuery(this.searchQuery);
-        this.searchMovies();
-      }, delayInMilliseconds);
-    },
-  
-
-    handleEnter() {
-      if (event.key === 'Enter') {
-        this.$router.push({ path: `/search` });
-      }
-    },
-    clearSearchQuery() {
-      this.searchQuery = ''; // Очистка значения searchQuery
-    },
-    handleBlur() {
-      this.showResults = false;
-    },
-    selectMovie(movie) {
-      this.searchQuery = movie.name;
-      this.showResults = false;
-      this.$router.push({ path: `/movie/${movie.id}` });
-    },
-
-    navigateToLikePage() {
-      this.$router.push({ name: 'bookmarks-ratings' });
-    },
-    // Perform the movie search
-    performSearch() {
-      this.searchMovies();
-      this.$emit('search', this.searchQuery);
-    },
-    // Toggle the search box
-    toggleSearch() {
-      this.isSearchActive = !this.isSearchActive;
-    },
-     // Toggle the menu
-    toggleMenu() {
-      this.isMenuOpen = !this.isMenuOpen;
-    },
-  },
-  mounted() {
-    this.searchMovies();
-  },
-};
-</script>

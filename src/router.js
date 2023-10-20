@@ -1,10 +1,10 @@
 // router.js
 import { createRouter, createWebHistory } from 'vue-router';
-import MyHeader from './components/Header/MyHeader.vue';
+import MainHeader from './components/Header/MainHeader.vue';
 import MovieMain from './Pages/MainMain/MovieMain.vue';
 import MovieList from './components/MovieList.vue';
 import LikePage from './Pages/LikePage/LikePage.vue';
-import MyMovies from './Pages/Explore/MyMovies.vue';
+import MovieCollection from './Pages/Explore/MovieCollection.vue';
 import MoviePage from './Pages/MoviePage/MoviePage.vue';
 
 const routes = [
@@ -13,7 +13,7 @@ const routes = [
     name: 'movies-main',
     components: {
       default: MovieMain,
-      header: MyHeader,
+      header: MainHeader,
     },
   },
 
@@ -22,7 +22,7 @@ const routes = [
     name: 'movies-list',
     components: {
       default: MovieList,
-      header: MyHeader,
+      header: MainHeader,
     },
   },
 
@@ -33,16 +33,16 @@ const routes = [
    
     path: '/:type',
     components: {
-      default: MyMovies,
-      header: MyHeader,
+      default: MovieCollection,
+      header: MainHeader,
     },
   },
   {
    
     path: '/:genres',
     components: {
-      default: MyMovies,
-      header: MyHeader,
+      default: MovieCollection,
+      header: MainHeader,
     },
   },
   
@@ -51,7 +51,7 @@ const routes = [
   name: 'movie-details',
   components: {
     default: MoviePage,
-    header: MyHeader, 
+    header: MainHeader, 
    
     
   },
@@ -62,7 +62,7 @@ const routes = [
   path: '/bookmarks-ratings',
   components: {
     default: LikePage,
-    header: MyHeader, 
+    header: MainHeader, 
    
     
   },

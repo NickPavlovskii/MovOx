@@ -1,42 +1,46 @@
 <template>
   <div>
     <ContentWrapper @search="performSearch" class="ContentWrapper" />
-    <MySocial />
+    <SocialLinksPanel />
+    <!-- Блок с индикатором загрузки, отображается во время загрузки данных -->
     <div v-if="isLoading" class="loader">
-      <MyLoader />
+      <BaseLoader />
     </div>
+    <!-- Блок контента, отображаемый после окончания загрузки -->
     <div v-else>
       <div>
+        <!-- Компонент WatchNow для предложения "Смотреть сейчас" -->
         <WatchNow />
+        <!-- Компонент TopMovie для отображения лучшего фильма -->
         <TopMovie />
+        <!-- Компонент ClapperboardIcon для отображения иконки киноплёнки -->
         <ClapperboardIcon />
       </div>
+      <!-- Компонент MovieList для отображения списка фильмов -->
       <MovieList />
     </div>
   </div>
 </template>
 
 <script>
-import MySocial from '../../components/MySocial.vue';
-import MovieList from '../../components/MovieList.vue';
-import ContentWrapper from '../../components/main/ContentWrapper.vue';
-import TopMovie from '../../components/main/TopMovie.vue';
-import WatchNow from '../../components/main/WatchNow.vue';
-import MyLoader from '../../components/MyLoader.vue';
-import ClapperboardIcon from '../../components/ClapperboardIcon.vue';
-import {  mapActions} from 'vuex';
-
-
+import BaseLoader from "../../components/BaseLoader.vue";
+import SocialLinksPanel from "../../components/SocialLinksPanel.vue";
+import MovieList from "../../components/MovieList.vue";
+import ContentWrapper from "../../components/main/ContentWrapper.vue";
+import TopMovie from "../../components/main/TopMovie.vue";
+import WatchNow from "../../components/main/WatchNow.vue";
+import ClapperboardIcon from "../../components/ClapperboardIcon.vue";
+import { mapActions } from "vuex";
 
 export default {
   components: {
+    SocialLinksPanel,
+    BaseLoader,
     ContentWrapper,
     MovieList,
     TopMovie,
     WatchNow,
-    MyLoader,
-    MySocial,
-    ClapperboardIcon
+    ClapperboardIcon,
   },
   data() {
     return {
@@ -44,26 +48,16 @@ export default {
     };
   },
   methods: {
-   
-    ...mapActions(['fetchMovies', 'searchMovies']),
-    
+    ...mapActions(["fetchMovies", "searchMovies"]),
 
-   // эмитация загрузки данных 
     async searchMovies() {
-      this.isLoading = true; // Set isLoading to true before starting the request
-      await this.$store.dispatch('searchMovies');
-      this.isLoading = false; // Set isLoading to false after the request is completed
+      this.isLoading = true;
+      await this.$store.dispatch("searchMovies");
+      this.isLoading = false;
     },
-   
   },
-    mounted() {
-      this.searchMovies();
-      this.$store.dispatch('movies/fetchMovieList');
-    }
-
-  };
+};
 </script>
-
 
 <style scoped>
 .loader {
@@ -75,19 +69,8 @@ export default {
   color: #333;
 }
 
-
 .ContentWrapper {
   text-align: center;
   margin: 0 auto;
 }
 </style>
-
-
-
-
-
-
-
-
-
-

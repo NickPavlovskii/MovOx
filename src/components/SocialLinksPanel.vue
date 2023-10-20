@@ -44,14 +44,40 @@
         </li>
       </ul>
     </nav>
-
   </div>
 </template>
-  
+
+<script>
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faGithub,
+  faInstagram,
+  faDiscord,
+  faWhatsapp,
+  faVk,
+  faTelegram,
+  faGitlab,
+} from "@fortawesome/free-brands-svg-icons";
+
+library.add(
+  faGithub,
+  faInstagram,
+  faDiscord,
+  faWhatsapp,
+  faVk,
+  faTelegram,
+  faGitlab
+);
+
+export default {
+  components: {
+    FontAwesomeIcon,
+  },
+};
+</script>
+
 <style scoped>
-
-
-
 .social {
   z-index: 999;
   position: fixed;
@@ -61,7 +87,6 @@
   color: #fff;
   text-decoration: none;
 }
-
 
 @media (max-width: 1000px) {
   .social {
@@ -96,8 +121,6 @@
 }
 
 .social ul li i:hover .icn {
-
-
   transform: rotate(360deg);
   transition: all 1s;
 }
@@ -116,23 +139,8 @@
 }
 
 body {
-  background: #25343F;
+  background: #25343f;
   color: #fff;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
 }
 </style>
-  
-<script>
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faGithub, faInstagram, faDiscord, faWhatsapp, faVk, faTelegram, faGitlab } from '@fortawesome/free-brands-svg-icons';
-
-library.add(faGithub, faInstagram, faDiscord, faWhatsapp, faVk, faTelegram, faGitlab);
-
-export default {
-  components: {
-    FontAwesomeIcon,
-  },
-}
-</script>
-  
