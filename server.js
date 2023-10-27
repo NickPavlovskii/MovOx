@@ -1,32 +1,43 @@
 const express = require('express');
-const cors = require('cors'); // Подключите cors
+const fs = require('fs');
 const app = express();
-const port = 3001;
-
-const moviesData = require('./src/components/kinopoisk.json'); // Подключаем файл с данными фильмов
-const movies = moviesData.docs; // Извлеките массив фильмов из 'docs'
-
-app.use(cors()); // Используйте cors middleware
-app.use(express.json());
-
-// Получить список всех фильмов
+const port = 3000;
+const cors = require('cors');
+app.use(cors());
+// Маршрут для получения списка фильмов
 app.get('/movies', (req, res) => {
-  res.json(movies);
+  fs.readFile('./src/components/kinopoisk.json', 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    } else {
+      const moviesData = JSON.parse(data);
+      res.json(moviesData.docs);
+    }
+  });
 });
 
-// Получить информацию о фильме по идентификатору
+
+// Маршрут для получения фильма по ID
 app.get('/movies/:id', (req, res) => {
-  const movieId = req.params.id;
-  const movie = movies.find((movie) => movie.id === movieId);
-
-  if (movie) {
-    res.json(movie);
-  } else {
-    res.status(404).json({ error: 'Фильм не найден' });
-  }
+  const movieId = req.params.id.toString(); // Преобразуем id в строку
+  fs.readFile('./src/components/kinopoisk.json', 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    } else {
+      const moviesData = JSON.parse(data);
+      const movie = moviesData.docs.find((movie) => movie.id.toString() === movieId);
+      if (movie) {
+        res.json(movie);
+      } else {
+        res.status(404).send('Movie not found');
+      }
+    }
+  });
 });
 
-// Запустить сервер
+
 app.listen(port, () => {
   console.log(`Сервер запущен на порту ${port}`);
 });

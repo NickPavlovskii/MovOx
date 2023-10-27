@@ -1,7 +1,7 @@
 // store/modules/sorting.js
 export default {
   state: {
-    movies: require('../../components/kinopoisk.json').docs,
+    movies: [],
     currentPage: 0,
     selectedSortOption: 'Сортировать по', // Текущий выбранный вариант сортировки
     sortOrder: 'asc', // Текущий порядок сортировки
@@ -17,7 +17,15 @@ export default {
       return state.sortOrder;
     },
 
-
+    async fetchMovies({ commit }) {
+      try {
+        const response = await fetch('http://localhost:3000/movies/'); // Это отправит GET-запрос на сервер
+        const moviesData = await response.json();
+        commit('setMovies', moviesData);
+      } catch (error) {
+        console.error(error);
+      }
+    },
     sortedMovies(state) {
       const moviesList = state.movies.slice(); 
       const sortOption = state.selectedSortOption;
@@ -50,6 +58,9 @@ export default {
     },
   },
   mutations: {
+     setMovies(state, movies) {
+    state.movies = movies;
+  },
     SET_SORT_ORDER(state, order) {
       state.sortOrder = order;
     },

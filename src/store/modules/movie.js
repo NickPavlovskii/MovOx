@@ -1,20 +1,10 @@
 // store/modules/movie.js
 const state = {
   rating: null,
-  movies: require('../../components/kinopoisk.json').docs,
+  movies: [],
   searchQuery: '',
   filteredMovies: [],
   itemsPerPage: 21,
-};
-
-// Функция для имитации асинхронного получения данных о фильмах
-const fetchMoviesData = () => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const moviesData = require('../../components/kinopoisk.json');
-      resolve(moviesData.docs);
-    }, 200);
-  });
 };
 
 
@@ -46,11 +36,15 @@ const mutations = {
 const actions = {
 
 
-      // Получение фильмов из JSON и установка списка
-      async fetchMovie({ commit }) {
-        const moviesData = await fetchMoviesData();
-        commit('setMovies', moviesData);
-      },
+  async fetchMovies({ commit }) {
+    try {
+      const response = await fetch('http://localhost:3000/movies/'); // Это отправит GET-запрос на сервер
+      const moviesData = await response.json();
+      commit('setMovies', moviesData);
+    } catch (error) {
+      console.error(error);
+    }
+  },
       // Поиск фильмов и установка отфильтрованного списка
       async searchMovies({ commit, state }) {
         const movies = state.movies; // Извлекаем фильмы из состояния

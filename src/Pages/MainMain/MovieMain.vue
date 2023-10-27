@@ -3,11 +3,9 @@
     <ContentWrapper @search="performSearch" class="ContentWrapper" />
     <SocialLinksPanel />
     <!-- Блок с индикатором загрузки, отображается во время загрузки данных -->
-    <div v-if="isLoading" class="loader">
-      <BaseLoader />
-    </div>
+   
     <!-- Блок контента, отображаемый после окончания загрузки -->
-    <div v-else>
+    <div >
       <div>
         <!-- Компонент WatchNow для предложения "Смотреть сейчас" -->
         <WatchNow />
@@ -23,7 +21,7 @@
 </template>
 
 <script>
-import BaseLoader from "../../components/BaseLoader.vue";
+// import BaseLoader from "../../components/BaseLoader.vue";
 import SocialLinksPanel from "../../components/SocialLinksPanel.vue";
 import MovieList from "../../components/MovieList.vue";
 import ContentWrapper from "../../components/main/ContentWrapper.vue";
@@ -34,8 +32,8 @@ import { mapActions, mapState } from "vuex";
 
 export default {
   components: {
+    // BaseLoader,
     SocialLinksPanel,
-    BaseLoader,
     ContentWrapper,
     MovieList,
     TopMovie,
