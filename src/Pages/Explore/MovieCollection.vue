@@ -220,6 +220,7 @@ export default {
       },
     };
   },
+  
   computed: {
     ...mapState(["movie","sorting"]),
     ...mapGetters(["getMovieById", "sortedMovies"]),
@@ -282,7 +283,7 @@ export default {
   },
   methods: {
     ...mapMutations(["updateSelectedSortOption", "SET_SORT_ORDER"]),
-    ...mapActions(["fetchMovies", "searchMovies", "updateSortOrder"]),
+    ...mapActions(["movie", "fetchMovies", "searchMovies", "updateSortOrder"]),
 
     // Сортировка фильмов в соответствии с выбранной опцией сортировки и порядком
     sortMovies() {
@@ -333,6 +334,17 @@ export default {
     setCurrentPage(pageNumber) {
       this.currentPage = pageNumber;
     },
+    async fetchMovieData() {
+      const movieId = this.$route.params.id;
+      this.movie = this.$store.getters["getMovieById"](movieId); // Используем геттер getMovieById из модуля movie
+      if (!this.movie) {
+        await this.$store.dispatch("movie/fetchMovie", movieId); // Используем действие fetchMovie из модуля movie
+        this.movie = this.$store.getters["movie/getMovieById"](movieId); // Обновляем this.movie после загрузки
+      }
+    },
+  },
+  created() {
+    this.fetchMovieData();
   },
 };
 </script>

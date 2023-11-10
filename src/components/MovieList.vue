@@ -129,7 +129,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["movie", "sorting", "filteredMovies"]),
+    ...mapState(["movie", "sorting"]),
     ...mapGetters(["getMovieById", "sortedMovies"]),
 
     sortOrder() {

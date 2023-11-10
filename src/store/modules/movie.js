@@ -14,6 +14,7 @@ const mutations = {
      // Установка списка фильмов
   setMovies(state, movies) {
     state.movies = movies;
+    this.$store.dispatch('fetchMovies', this.$route.path);
   },
   updateRating(state, { movieId, rating }) {
     const movie = state.movies.find(movie => movie.id === movieId);
@@ -37,8 +38,10 @@ const actions = {
 
 
   async fetchMovies({ commit }) {
+
     try {
-      const response = await fetch('http://localhost:3000/movies/'); // Это отправит GET-запрос на сервер
+   
+      const response = await fetch(`http://localhost:3000/movies`); // Используйте текущий путь страницы
       const moviesData = await response.json();
       commit('setMovies', moviesData);
     } catch (error) {
