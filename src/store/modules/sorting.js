@@ -3,8 +3,8 @@ export default {
   state: {
     movies: require('../../components/kinopoisk.json').docs,
     currentPage: 0,
-    selectedSortOption: 'Сортировать по', // Текущий выбранный вариант сортировки
-    sortOrder: 'asc', // Текущий порядок сортировки
+    selectedSortOption: 'Сортировать по',
+    sortOrder: 'asc',
     sortOptions: [
       { value: "Сортировать по", label: "Сортировать по" },
       { value: "year", label: "Год" },

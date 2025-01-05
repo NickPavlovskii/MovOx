@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <!-- Блок с детальной информацией о фильме -->
     <div class="detailsBanner">
       <div class="backdrop-img">
         <div class="lazy-load-image-background">
@@ -8,18 +7,14 @@
         </div>
       </div>
       <div class="opacity-layer"></div>
-      <!-- Блок с содержимым баннера -->
       <div class="content">
-        <!-- Левая часть баннера с постером и возможностью оценки фильма -->
         <div class="left">
           <img :src="movieData.poster.url" alt="Movie Poster" class="posterImg" />
           <div style="display: flex; flex-direction: column">
-            <!-- Блок с оценкой фильма -->
             <div style="display: flex; flex-direction: column">
               <h3 style="margin: 25px -2px -2px -2px">Поставьте оценку</h3>
               <span class="text">Это улучшит ваши рекомендации</span>
             </div>
-            <!-- Компонент для выбора оценки (звезды) -->
             <div style="display: flex">
               <img
                 src="https://primefaces.org/cdn/primevue/images/rating/cancel.png"
@@ -36,7 +31,6 @@
                 :cancel="false"
               />
             </div>
-            <!-- Кнопка "Смотреть позже" (добавление фильма в закладки) -->
             <div style="display: flex; justify-content: flex-end">
               <button
                 :class="{ active: isBookmarked }"
@@ -60,23 +54,18 @@
             </div>
           </div>
         </div>
-        <!-- Правая часть баннера с основной информацией о фильме -->
         <div class="right">
           <h1 class="title">{{ movieData.name }}</h1>
-          <!-- Альтернативное название фильма -->
           <h4 class="subtitle">{{ movieData.alternativeName }}</h4>
-          <!-- Жанры фильма -->
           <div class="genres">
             <div v-for="genre in  movieData.genres" :key="genre">
               <span class="genre">{{ genre }}</span>
             </div>
           </div>
-          <!-- Описание фильма -->
           <div class="overview">
             <h2 class="heading">О фильме</h2>
             <p class="description">{{  movieData.description }}</p>
           </div>
-          <!-- Дополнительная информация о фильме -->
           <div class="right-rows">
             <div class="row">
               <div class="info">
@@ -96,7 +85,6 @@
                 </div>
               </div>
             </div>
-            <!-- Информация о стране, длительности и годе выпуска -->
             <div class="row" style="position: relative; bottom: 30px">
               <div class="info">
                 <div class="infoItem">
@@ -180,7 +168,6 @@
                 </div>
               </div>
             </div>
-            <!-- Доступность фильма на различных платформах (если есть) -->
             <div class="watchability" v-if=" movieData.watchability.items != null">
               <p class="watchability-heading">Доступно на:</p>
               <ul class="watchability-list">
@@ -225,7 +212,6 @@
           </li>
         </ul>
       </div>
-      <!-- реккомендации -->
       <RecommendSection class="MyRecom" />
     </div>
   </div>

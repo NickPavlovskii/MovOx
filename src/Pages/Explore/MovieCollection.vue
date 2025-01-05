@@ -229,7 +229,6 @@ export default {
     },
 
     sortOptions() {
-      // Получите sortOptions из хранилища
       return this.sorting.sortOptions;
     },
     selectedSortOption: {
@@ -240,7 +239,6 @@ export default {
         this.updateSelectedSortOption(option);
       },
     },
-    // Фильтрация фильмов в зависимости от текущего пути маршрута
     filteredM() {
       const routePath = this.$route.path;
       const validGenres = [
@@ -266,7 +264,6 @@ export default {
         return false;
       });
     },
-    // Общее количество фильмов
     totalMovies() {
       return this.movie.movies.length;
     },
@@ -284,7 +281,6 @@ export default {
     ...mapMutations(["updateSelectedSortOption", "SET_SORT_ORDER"]),
     ...mapActions(["fetchMovies", "searchMovies", "updateSortOrder"]),
 
-    // Сортировка фильмов в соответствии с выбранной опцией сортировки и порядком
     sortMovies() {
       this.displayedMovies.sort((a, b) => {
         const aValue = this.getPropertyValue(a, this.selectedSortOption);
@@ -304,7 +300,7 @@ export default {
         }
       });
     },
-    // Обновление порядка сортировки и применение сортировки
+
     updateSortOrder(order) {
       this.sorting.sortOrder = order;
       this.sortMovies();

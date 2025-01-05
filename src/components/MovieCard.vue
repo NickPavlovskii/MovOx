@@ -76,7 +76,6 @@ export default {
   },
   data() {
     return {
-
       circleProgressStyleObject: {
         gradient: {
           angle: 90,
@@ -98,7 +97,6 @@ export default {
     const bookmarkKey = `bookmark_${this.movie.id}`;
     const ratingKey = `rating_${this.movie.id}`;
 
-    // Проверяем сохраненные значения в локальном хранилище
     if (localStorage.getItem(bookmarkKey) === "true") {
       this.isBookmarked = true;
     }
@@ -164,7 +162,7 @@ export default {
 }
 
 .bookmark:hover {
-  color: #ff0000; /* Цвет активного состояния */
+  color: #ff0000;
 }
 .movie-poster {
   position: relative;

@@ -9,7 +9,7 @@
 
 <script>
 
-import "../style/PrimeVue.css"; // Подключение файла стилей
+import "../style/PrimeVue.css";
 import MainHeader from "./components/Header/MainHeader.vue";
 import MainFooter from "./components/Footer/MainFooter.vue";
 
@@ -26,32 +26,26 @@ export default {
   },
   data() {
     return {
-      currentPage: 1, // Замените значение текущей страницы на свои данные
-      totalPages: 1, // Замените значение общего количества страниц на свои данные
+      currentPage: 1,
+      totalPages: 1,
     };
   },
   methods: {
     ...mapActions([ 'movie',"fetchMovies", "selectMovie", "searchMovies"]),
 
     changePage(page) {
-      // Обработка изменения страницы
       this.currentPage = page;
-      // Загрузка данных для новой страницы
     },
     updateSearchQuery(query) {
-      this.$store.commit("setSearchQuery", query); // Использовать мутацию setSearchQuery из хранилища Vuex
+      this.$store.commit("setSearchQuery", query);
       this.currentPage = 1;
-      this.searchMovies(); // Вызвать действие searchMovies из хранилища Vuex
+      this.searchMovies();
     },
   },
 };
 </script>
 
-
-
 <style>
-
-
 #app {
   background: #04152d;
 }

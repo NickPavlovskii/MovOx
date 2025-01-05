@@ -5,13 +5,13 @@ import store from './store/store';
 
 import PrimeVue from 'primevue/config';
 
-import "primevue/resources/themes/saga-blue/theme.css"; //theme
-import "primevue/resources/primevue.min.css"; //core CSS
+import "primevue/resources/themes/saga-blue/theme.css";
+import "primevue/resources/primevue.min.css";
 
 const app = createApp(App);
 
 app.use(router);
-app.use(store); // Use the Vuex store
+app.use(store);
 app.use(PrimeVue);
 
 app.mount('#app');

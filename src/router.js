@@ -25,10 +25,6 @@ const routes = [
       header: MainHeader,
     },
   },
-
- 
-
-
   {
    
     path: '/:type',
@@ -47,7 +43,7 @@ const routes = [
   },
   
   {
-  path: '/movies/:id', // Add a dynamic parameter for the movie ID
+  path: '/movies/:id',
   name: 'movie-details',
   components: {
     default: MoviePage,
@@ -77,7 +73,6 @@ const router = createRouter({
   routes,
 });
 router.afterEach(() => {
-  // Прокрутка страницы в начало при каждом переходе через роутер
   window.scrollTo(0, 0);
 });
 export default router;

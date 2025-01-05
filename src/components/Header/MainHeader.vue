@@ -168,7 +168,6 @@ export default {
     toggleResults() {
       this.showResults = !this.showResults;
     },
-    // Convert minutes to hours and minutes format
     convertMinutesToHours(minutes) {
       const hours = Math.floor(minutes / 60);
       const remainingMinutes = minutes % 60;
@@ -177,12 +176,10 @@ export default {
     handleInput() {
       const delayInMilliseconds = 500;
 
-      // Обнуляем предыдущий таймер, чтобы избежать ненужных вызовов
       if (this.timerId) {
         clearTimeout(this.timerId);
       }
 
-      // Запускаем новый таймер с задержкой
       this.timerId = setTimeout(() => {
         this.showResults = true;
         this.setSearchQuery(this.searchQuery);
@@ -196,7 +193,7 @@ export default {
       }
     },
     clearSearchQuery() {
-      this.searchQuery = ""; // Очистка значения searchQuery
+      this.searchQuery = "";
     },
     handleBlur() {
       this.showResults = false;
@@ -210,16 +207,13 @@ export default {
     navigateToLikePage() {
       this.$router.push({ name: "bookmarks-ratings" });
     },
-    // Perform the movie search
     performSearch() {
       this.searchMovies();
       this.$emit("search", this.searchQuery);
     },
-    // Toggle the search box
     toggleSearch() {
       this.isSearchActive = !this.isSearchActive;
     },
-    // Toggle the menu
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen;
     },

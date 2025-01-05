@@ -154,12 +154,10 @@ export default {
     },
 
     moviess() {
-      const sortedMovies = this.sortedMovies; // Call the getter function
+      const sortedMovies = this.sortedMovies;
 
-      // Calculate the starting index of the current page
       const startIndex = this.currentPage * this.movie.itemsPerPage;
 
-      // Return a subset of the sorted movies as per pagination
       return sortedMovies.slice(
         startIndex,
         startIndex + this.movie.itemsPerPage
@@ -167,17 +165,13 @@ export default {
     },
     displayedMovies() {
       const sortedMovies = this.sortedMovies;
-      // Фильтрация фильмов
       const filteredMovies = sortedMovies.filter((movie) => {
-        // Ваш код фильтрации, например, по searchQuery
         return movie.name
           .toLowerCase()
           .includes(this.movie.searchQuery.toLowerCase());
       });
-      // Calculate the starting index of the current page
       const startIndex = this.currentPage * this.movie.itemsPerPage;
 
-      // Return a subset of the sorted movies as per pagination
       return filteredMovies.slice(
         startIndex,
         startIndex + this.movie.itemsPerPage
@@ -207,7 +201,7 @@ export default {
       this.currentPage = 0;
     },
     setSortOrder(order) {
-      this.$store.commit("sorting/SET_SORT_ORDER", order); // Устанавливаем сортировку через мутацию
+      this.$store.commit("sorting/SET_SORT_ORDER", order);
     },
     onPageChange(pageNumber) {
       this.currentPage = pageNumber;
@@ -247,10 +241,10 @@ export default {
     },
     async fetchMovieData() {
       const movieId = this.$route.params.id;
-      this.movie = this.$store.getters["getMovieById"](movieId); // Используем геттер getMovieById из модуля movie
+      this.movie = this.$store.getters["getMovieById"](movieId);
       if (!this.movie) {
-        await this.$store.dispatch("movie/fetchMovie", movieId); // Используем действие fetchMovie из модуля movie
-        this.movie = this.$store.getters["movie/getMovieById"](movieId); // Обновляем this.movie после загрузки
+        await this.$store.dispatch("movie/fetchMovie", movieId);
+        this.movie = this.$store.getters["movie/getMovieById"](movieId);
       }
     },
   },

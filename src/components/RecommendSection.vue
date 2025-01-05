@@ -53,7 +53,6 @@ export default {
   computed: {
     ...mapState(["movie"]),
     recommendedMovies() {
-      // Получаем список фильмов с закладками или лайками
       const bookmarkedMovies = this.movie.movies.filter((movie) => {
         const bookmarkKey = `bookmark_${movie.id}`;
         const hasBookmark = localStorage.getItem(bookmarkKey) === "true";
@@ -64,7 +63,6 @@ export default {
         return hasBookmark || hasLike;
       });
 
-      // Получаем все жанры и страны из фильмов с закладками или лайками
       const genres = [
         ...new Set(bookmarkedMovies.flatMap((movie) => movie.genres)),
       ];
@@ -81,7 +79,6 @@ export default {
         ),
       ];
 
-      // Группируем все фильмы по жанрам
       const groupedMoviesByGenres = {};
       this.movie.movies.forEach((movie) => {
         movie.genres.forEach((genre) => {
@@ -92,7 +89,6 @@ export default {
         });
       });
 
-      // Группируем все фильмы по странам
       const groupedMoviesByCountries = {};
       this.movie.movies.forEach((movie) => {
         const country = movie.country;
@@ -102,7 +98,6 @@ export default {
         groupedMoviesByCountries[country].push(movie);
       });
 
-      // Группируем все фильмы по актерам
       const groupedMoviesByActors = {};
       this.movie.movies.forEach((movie) => {
         if (movie.cast && Array.isArray(movie.cast)) {
@@ -115,7 +110,6 @@ export default {
         }
       });
 
-      // Выбираем наиболее популярные жанры, страны и актеров
       const popularGenres = genres.sort(
         (a, b) =>
           groupedMoviesByGenres[b].length - groupedMoviesByGenres[a].length
@@ -130,7 +124,6 @@ export default {
           groupedMoviesByActors[b].length - groupedMoviesByActors[a].length
       );
 
-      // Получаем 10 похожих фильмов из списка всех фильмов
       const recommendedMovies = [];
       [popularGenres, popularCountries, popularActors].forEach((category) => {
         category.forEach((item) => {
@@ -144,7 +137,6 @@ export default {
         });
       });
 
-      // Получаем 10 случайных фильмов из списка рекомендаций
       const randomMovies = recommendedMovies
         .sort(() => 0.5 - Math.random())
         .slice(0, 10);
@@ -162,7 +154,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setMovies"]), // Добавлено использование мутации setMovies
+    ...mapMutations(["setMovies"]),
     scrollLeft() {
       const carousel = this.$el.querySelector(".carousel");
       const firstImg = carousel.querySelectorAll("img")[0];
@@ -251,15 +243,12 @@ export default {
 
 .container {
   max-width: 960px;
-
   padding: 20px;
-
   color: #fff;
 }
 
 .wrapper {
   height: 100%;
-
   color: #fff;
   max-width: 960px;
   margin: 0 auto;

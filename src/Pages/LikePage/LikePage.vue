@@ -220,7 +220,6 @@ td {
   }
 }
 
-/* Стили для кнопки удаления */
 img[src="https://primefaces.org/cdn/primevue/images/rating/cancel.png"]
 {
   cursor: pointer;

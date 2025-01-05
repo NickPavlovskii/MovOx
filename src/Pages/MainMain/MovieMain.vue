@@ -2,7 +2,6 @@
   <div>
     <ContentWrapper @search="performSearch" class="ContentWrapper" />
     <SocialLinksPanel />
-    <!-- Блок с индикатором загрузки, отображается во время загрузки данных -->
     <div v-if="isLoading" class="loader">
       <BaseLoader />
     </div>
@@ -48,9 +47,8 @@ export default {
     };
   },
   async beforeMount() {
-    // Имитация загрузки данных (задержка в 2 секунды)
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    this.isLoading = false; // Закончили имитацию загрузки, скрываем лоадер
+    this.isLoading = false;
   },
   computed: {
     ...mapState(["movie"]),
@@ -61,17 +59,17 @@ export default {
     async searchMoviesWithLoader() {
       this.isLoading = true;
 
-      // Задержка выполнения на 2 секунды (2000 миллисекунд)
+      // Задержка выполнения на 2 секунды 
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      await this.$store.dispatch("movie/searchMovies"); // Выполняем поиск
+      await this.$store.dispatch("movie/searchMovies");
 
       this.isLoading = false; // Отключаем лоадер
     },
     mounted() {
       // Имитация задержки загрузки на 2 секунды (можно заменить на реальную логику загрузки)
       setTimeout(() => {
-        this.isLoading = false; // Выключаем лоадер после загрузки
+        this.isLoading = false;
       }, 2000);
     },
   },

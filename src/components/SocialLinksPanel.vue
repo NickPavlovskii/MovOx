@@ -3,42 +3,86 @@
     <nav class="social">
       <ul>
         <li>
-          <a href="https://vk.com/o_0niklad0_o">
+          <a
+            href="https://vk.com/o_0niklad0_o"
+            aria-label="Vk Profile"
+          >
             Vk
-            <i class="vk">
-              <font-awesome-icon icon="fa-brands fa-vk icn" class="icn" />
+            <i>
+              <font-awesome-icon
+                icon="fa-brands fa-vk icn"
+                class="icn"
+              />
             </i>
           </a>
         </li>
         <li>
-          <a href="https://t.me/N1klad">
-            telegram
+          <a
+            href="https://t.me/N1klad"
+            aria-label="Telegram Profile"
+          >
+            Telegram
             <i>
-              <font-awesome-icon icon="fa-brands fa-telegram icn" class="icn" />
+              <font-awesome-icon
+                icon="fa-brands fa-telegram icn"
+                class="icn"
+              />
             </i>
           </a>
         </li>
         <li>
-          <a href="">
-            whatsapp
+          <a
+            href="https://wa.me/"
+            aria-label="WhatsApp"
+          >
+            WhatsApp
             <i>
-              <font-awesome-icon icon="fa-brands fa-whatsapp" class="icn" />
+              <font-awesome-icon
+                icon="fa-brands fa-whatsapp"
+                class="icn"
+              />
             </i>
           </a>
         </li>
         <li>
-          <a href="https://www.instagram.com/o__niklad__o/?hl=ru">
-            github
+          <a
+            href="https://www.instagram.com/o__niklad__o/?hl=ru"
+            aria-label="Instagram Profile"
+          >
+            Instagram
             <i>
-              <font-awesome-icon icon="fa-brands fa-github" class="icn" />
+              <font-awesome-icon
+                icon="fa-brands fa-instagram"
+                class="icn"
+              />
             </i>
           </a>
         </li>
         <li>
-          <a href="https://t.me/N1klad">
-            gitlab
+          <a
+            href="https://github.com/o-niklad"
+            aria-label="GitHub Profile"
+          >
+            GitHub
             <i>
-              <font-awesome-icon icon="fa-brands fa-gitlab icn" class="icn" />
+              <font-awesome-icon
+                icon="fa-brands fa-github"
+                class="icn"
+              />
+            </i>
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://gitlab.com/o-niklad"
+            aria-label="GitLab Profile"
+          >
+            GitLab
+            <i>
+              <font-awesome-icon
+                icon="fa-brands fa-gitlab"
+                class="icn"
+              />
             </i>
           </a>
         </li>
